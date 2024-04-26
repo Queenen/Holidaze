@@ -1,7 +1,11 @@
+import "./app.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import AppRouter from "./AppRouter";
+
 function App() {
   return (
     <>
-      <h1>Hello</h1>
+      <AppRouter />
     </>
   );
 }
