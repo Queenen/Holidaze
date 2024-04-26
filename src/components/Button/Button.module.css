@@ -1,0 +1,12 @@
+.button {
+  background-color: var(--button);
+  letter-spacing: 0.2rem;
+  height: 60px;
+  width: 100%;
+  font-size: 16px;
+  box-shadow: 5px 5px 10px black;
+}
+
+.button:hover {
+  background-color: var(--hover);
+}
