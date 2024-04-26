@@ -1,0 +1,19 @@
+:root {
+  --primary: #f2f2f2;
+  --secondary: #def0e0;
+  --smoky: #f9f9f9;
+  --disabled: #d0d0d0;
+  --darkgray: #8b8b8b;
+  --button: #11dd31;
+  --hover: #2a8e3a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 3rem;
+}
+
+p {
+  margin: 0 !important;
+}
