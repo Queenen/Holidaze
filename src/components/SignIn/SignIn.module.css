@@ -1,0 +1,50 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1050;
+  overflow-y: scroll;
+}
+.form {
+  border: 1.5px solid black;
+  border-radius: 2rem;
+  box-shadow: 0 5px 20px black;
+  width: 100%;
+  max-width: 25rem;
+  margin: auto;
+  background-image: url("../../asset/images/form_background.webp");
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.form input {
+  border-radius: 2rem;
+  border-style: none;
+  border: 1.5px solid var(--darkgray);
+  box-shadow: 5px 5px 10px var(--disabled);
+  padding: 0 1rem;
+}
+
+.closeModal {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  cursor: pointer;
+}
+
+.toggleModal {
+  margin-top: -0.8rem;
+}
+
+.toggleModal button {
+  font-size: 0.85rem;
+}
