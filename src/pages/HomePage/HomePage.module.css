@@ -1,0 +1,26 @@
+.hero {
+  background-image: url("../../asset/images/index_hero.webp");
+  width: 100%;
+  height: 30rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.heroContent {
+  bottom: 0;
+  left: 0;
+}
+
+.heroContent a button {
+  max-width: 18rem;
+}
+
+.heroContent a {
+  text-decoration: none;
+}
+
+.topRatedVenues {
+  height: 120px;
+  background-color: var(--smoky);
+}
