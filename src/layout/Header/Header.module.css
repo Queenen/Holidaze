@@ -1,0 +1,27 @@
+.header {
+  background-color: var(--primary);
+}
+
+.logo {
+  height: 4rem;
+  width: 4rem;
+}
+
+.container {
+  max-width: 100% !important;
+}
+
+.toggleBtn,
+.closeModalBtn {
+  outline: 0 !important;
+  box-shadow: none !important;
+  border: none;
+}
+
+.closeModalBtn {
+  color: var(--button);
+}
+
+.closeModalBtn:hover {
+  color: var(--hover);
+}
