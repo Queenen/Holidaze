@@ -1,4 +1,5 @@
 import { NOROFF_API_URL } from "./config";
+import React, { useState, useEffect } from "react";
 
 // Function to register a user
 export async function registerUser(userData) {
@@ -53,3 +54,18 @@ export async function loginUser(credentials) {
     throw error;
   }
 }
+
+// Function to fetch all venues
+export const fetchData = async (endpoint, options = {}) => {
+  const url = `${NOROFF_API_URL}${endpoint}`;
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+};
