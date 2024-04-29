@@ -1,5 +1,4 @@
 import { NOROFF_API_URL } from "./config";
-import React, { useState, useEffect } from "react";
 
 // Function to register a user
 export async function registerUser(userData) {

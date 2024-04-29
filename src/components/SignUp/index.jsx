@@ -40,7 +40,7 @@ function SignUp({ closeModal, onToggleAuth }) {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const result = await registerUser(formData);
+        await registerUser(formData);
         sessionStorage.setItem("userEmail", formData.email);
         alert("You're successfully registered!");
         onToggleAuth();

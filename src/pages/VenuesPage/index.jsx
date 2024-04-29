@@ -1,4 +1,4 @@
-import styles from "./Venues.module.css";
+//import styles from "./Venues.module.css";
 
 function VenuesPage() {}
 
