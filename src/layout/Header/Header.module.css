@@ -1,5 +1,10 @@
 .header {
   background-color: var(--primary);
+  z-index: 2;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .logo {
@@ -24,4 +29,10 @@
 
 .closeModalBtn:hover {
   color: var(--hover);
+}
+
+@media (min-width: 992px) {
+  .header {
+    position: static;
+  }
 }
