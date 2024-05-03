@@ -20,7 +20,8 @@
   text-decoration: none;
 }
 
-.topRatedVenues {
-  height: 120px;
+.topRatedVenues,
+.randomVenues,
+.carouselContainer {
   background-color: var(--smoky);
 }
