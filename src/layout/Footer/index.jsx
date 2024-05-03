@@ -5,6 +5,7 @@ import logo from "../../asset/logo/Holidaze_Logo.png";
 function Footer() {
   return (
     <>
+      <div className={styles.space}></div>
       <footer
         className={`d-flex align-items-center justify-content-evenly p-3 px-md-5 ${styles.footer}`}
       >
