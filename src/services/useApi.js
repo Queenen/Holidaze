@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const useApi = (apiFunction, params) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const memoizedParams = useMemo(() => params, [params]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await apiFunction(...params);
+        const result = await apiFunction(...memoizedParams);
         setData(result.data);
       } catch (error) {
         if (error.response) {
@@ -40,7 +42,7 @@ const useApi = (apiFunction, params) => {
       }
     };
     fetchData();
-  }, [apiFunction, ...params]);
+  }, [apiFunction, memoizedParams]);
 
   return { data, loading, errorMessage };
 };
