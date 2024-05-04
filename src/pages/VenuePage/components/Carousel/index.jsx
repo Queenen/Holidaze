@@ -45,78 +45,80 @@ const VenueCarousel = ({ showEditButton = false }) => {
   };
 
   return (
-    <Carousel controls={hasMultipleMedia} indicators={hasMultipleMedia}>
-      {venue.media.map((mediaItem, index) => (
-        <Carousel.Item
-          key={index}
-          className={`position-relative ${styles.carouselItem}`}
-        >
-          <div className={styles.backgroundImageContainer}>
-            <img
-              className="d-block w-100"
-              src={mediaItem.url}
-              alt={mediaItem.alt || venue.name}
-            />
-            <div className={styles.overlay}></div>
-          </div>
-          <div className="d-flex justify-content-between position-absolute top-0 p-4 w-100">
-            <div className="d-flex gap-3 align-items-center">
-              <FontAwesomeIcon
-                icon={faStarHalfStroke}
-                color="white"
-                className={styles.icon}
+    <section>
+      <Carousel controls={hasMultipleMedia} indicators={hasMultipleMedia}>
+        {venue.media.map((mediaItem, index) => (
+          <Carousel.Item
+            key={index}
+            className={`position-relative ${styles.carouselItem}`}
+          >
+            <div className={styles.backgroundImageContainer}>
+              <img
+                className="d-block w-100"
+                src={mediaItem.url}
+                alt={mediaItem.alt || venue.name}
               />
-              <p className="fw-bold text-white">{venue.rating}</p>
+              <div className={styles.overlay}></div>
             </div>
-            <div className="d-flex gap-3 align-items-center">
-              <FontAwesomeIcon
-                icon={faUsers}
-                color="white"
-                className={styles.icon}
-              />
-              <p className="fw-bold text-white">{venue.maxGuests}</p>
-            </div>
-          </div>
-          <Carousel.Caption style={captionStyle}>
-            {showEditButton && (
-              <div className={styles.editBtn}>
-                <Button>Edit Venue</Button>
+            <div className="d-flex justify-content-between position-absolute top-0 p-4 w-100">
+              <div className="d-flex gap-3 align-items-center">
+                <FontAwesomeIcon
+                  icon={faStarHalfStroke}
+                  color="white"
+                  className={styles.icon}
+                />
+                <p className="fw-bold text-white">{venue.rating}</p>
               </div>
-            )}
-            <div className="facilities d-flex gap-4 justify-content-center my-3">
-              {venue.meta.wifi && (
+              <div className="d-flex gap-3 align-items-center">
                 <FontAwesomeIcon
-                  icon={faWifi}
+                  icon={faUsers}
                   color="white"
                   className={styles.icon}
                 />
-              )}
-              {venue.meta.parking && (
-                <FontAwesomeIcon
-                  icon={faCarSide}
-                  color="white"
-                  className={styles.icon}
-                />
-              )}
-              {venue.meta.breakfast && (
-                <FontAwesomeIcon
-                  icon={faUtensils}
-                  color="white"
-                  className={styles.icon}
-                />
-              )}
-              {venue.meta.pets && (
-                <FontAwesomeIcon
-                  icon={faPaw}
-                  color="white"
-                  className={styles.icon}
-                />
-              )}
+                <p className="fw-bold text-white">{venue.maxGuests}</p>
+              </div>
             </div>
-          </Carousel.Caption>
-        </Carousel.Item>
-      ))}
-    </Carousel>
+            <Carousel.Caption style={captionStyle}>
+              {showEditButton && (
+                <div className={styles.editBtn}>
+                  <Button>Edit Venue</Button>
+                </div>
+              )}
+              <div className="facilities d-flex gap-4 justify-content-center my-3">
+                {venue.meta.wifi && (
+                  <FontAwesomeIcon
+                    icon={faWifi}
+                    color="white"
+                    className={styles.icon}
+                  />
+                )}
+                {venue.meta.parking && (
+                  <FontAwesomeIcon
+                    icon={faCarSide}
+                    color="white"
+                    className={styles.icon}
+                  />
+                )}
+                {venue.meta.breakfast && (
+                  <FontAwesomeIcon
+                    icon={faUtensils}
+                    color="white"
+                    className={styles.icon}
+                  />
+                )}
+                {venue.meta.pets && (
+                  <FontAwesomeIcon
+                    icon={faPaw}
+                    color="white"
+                    className={styles.icon}
+                  />
+                )}
+              </div>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </section>
   );
 };
 
