@@ -35,7 +35,7 @@ const AppRouter = () => {
         }
       />
       <Route
-        path="/venue"
+        path="/venue/*"
         element={
           <Layout>
             <VenuePage />
