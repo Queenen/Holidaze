@@ -41,7 +41,7 @@ const TopRated = ({ showEditButton = true }) => {
             key={venue.id}
             className={`position-relative ${styles.carouselItem}`}
           >
-            <Link to={`/venue?name=${formattedName}`}>
+            <Link to={`/venue?name=${formattedName}&id=${venue.id}`}>
               {venue.media.length > 0 && (
                 <div className={styles.backgroundImageContainer}>
                   <img
