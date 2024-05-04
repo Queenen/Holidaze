@@ -1,12 +1,11 @@
-import React from "react";
 import { VenueCarousel } from "./components/Carousel";
+import VenueInfo from "./components/VenueInfo";
 
 const VenuePage = () => {
   return (
     <>
-      <section>
-        <VenueCarousel />
-      </section>
+      <VenueCarousel />
+      <VenueInfo />
     </>
   );
 };
