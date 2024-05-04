@@ -1,5 +1,14 @@
-//import styles from "./Venue.module.css";
+import React from "react";
+import { VenueCarousel } from "./components/Carousel";
 
-function VenuePage() {}
+const VenuePage = () => {
+  return (
+    <>
+      <section>
+        <VenueCarousel />
+      </section>
+    </>
+  );
+};
 
 export default VenuePage;
