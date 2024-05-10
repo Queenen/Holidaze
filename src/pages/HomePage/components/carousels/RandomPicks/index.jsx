@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
-import { fetchRandomVenues } from "../../../../../services/authService";
+import { fetchRandomVenues } from "../../../../../services/authService/GET/fetchSpecificVenues";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers,
