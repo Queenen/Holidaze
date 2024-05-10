@@ -49,7 +49,7 @@ export const UserProvider = ({ children }) => {
   // Log the initial role on first render
   useEffect(() => {
     console.log("Initial role:", state.role);
-  }, []);
+  }, [state.role]);
 
   return (
     <UserContext.Provider
