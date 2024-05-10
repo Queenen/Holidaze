@@ -6,10 +6,9 @@ import { useSearchParams } from "react-router-dom";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const VenuePage = () => {
+  useDocumentTitle(`Holidaze | Venue`);
   const [searchParams] = useSearchParams();
-  const venueName = searchParams.get("name");
   const venueId = searchParams.get("id");
-  useDocumentTitle(`Holidaze | ${venueName}`);
   return (
     <VenueProvider venueId={venueId}>
       <VenueCarousel />
