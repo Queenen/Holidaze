@@ -1,4 +1,3 @@
-// VenueCarousel.jsx
 import React from "react";
 import { Carousel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,28 +11,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../components/Button";
 import styles from "./Carousel.module.css";
-import { useSearchParams } from "react-router-dom";
-import { fetchVenueById } from "../../../../services/authService";
-import useApi from "../../../../services/useApi";
 import Loader from "../../../../components/Loader";
+import { useVenue } from "../../../../context/VenueContext";
 
 const VenueCarousel = ({ showEditButton = false }) => {
-  const [searchParams] = useSearchParams();
-  const venueId = searchParams.get("id");
-  const {
-    data: venue,
-    loading,
-    errorMessage,
-  } = useApi(fetchVenueById, [venueId]);
+  const { venue, loading, error } = useVenue();
 
   if (loading) {
     return <Loader />;
   }
 
-  if (errorMessage) {
+  if (error) {
     return (
       <div className={styles.errorContainer}>
-        <div className={styles.errorMsg}>{errorMessage}</div>
+        <div className={styles.errorMsg}>{error}</div>
       </div>
     );
   }
