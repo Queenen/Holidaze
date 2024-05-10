@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { RandomPicks } from "./components/carousels/RandomPicks";
 import { TopRated } from "./components/carousels/TopRated";
 import styles from "./HomePage.module.css";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 function HomePage() {
+  useDocumentTitle("Holidaze | Home");
   return (
     <>
       <section className={`position-relative ${styles.hero}`}>
