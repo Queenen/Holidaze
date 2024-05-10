@@ -9,30 +9,6 @@
   transition: top 0.3s;
 }
 
-.logo {
-  height: 4rem;
-  width: 4rem;
-}
-
-.container {
-  max-width: 100% !important;
-}
-
-.toggleBtn,
-.closeModalBtn {
-  outline: 0 !important;
-  box-shadow: none !important;
-  border: none;
-}
-
-.closeModalBtn {
-  color: var(--button);
-}
-
-.closeModalBtn:hover {
-  color: var(--hover);
-}
-
 .space {
   height: 7.5rem;
 }
