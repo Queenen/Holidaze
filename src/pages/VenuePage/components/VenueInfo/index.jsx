@@ -1,57 +1,52 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../components/Loader";
-import { fetchVenueById } from "../../../../services/authService";
-import useApi from "../../../../services/useApi";
+import { useVenue } from "../../../../context/VenueContext";
 import styles from "./VenueInfo.module.css";
 
 function VenueInfo() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get("id");
-
-  const {
-    data: venueData,
-    loading,
-    errorMessage,
-  } = useApi(fetchVenueById, [id]);
+  const { venue, loading, error } = useVenue();
 
   if (loading) {
     return <Loader />;
   }
 
-  if (errorMessage) {
+  if (error) {
     return (
       <div className={styles.errorContainer}>
-        <div className={styles.errorMsg}>{errorMessage}</div>
+        <div className={styles.errorMsg}>{error}</div>
       </div>
     );
   }
 
   return (
     <section
-      className={`d-flex justify-content-center p-4 py-5 p-md-5 ${styles.infoContainer}`}
+      className={`d-flex justify-content-center p-5 ${styles.infoContainer}`}
     >
-      {venueData ? (
-        <div className={`d-flex flex-column gap-3 ${styles.venueInfo}`}>
-          <h1 className="mb-3">{venueData.name}</h1>
-          <div className="d-flex gap-3 align-items-center">
-            <p className="fst-italic">
-              {venueData.location?.address
-                ? `${venueData.location.address}`
-                : "Unknown location"}
-            </p>
-            <FontAwesomeIcon icon={faLocationDot} />
-          </div>
-          <p>{venueData.description}</p>
+      {venue ? (
+        <div className={`d-flex flex-column gap-3 w-100 ${styles.venueInfo}`}>
+          <h1 className="mb-3">{venue.name}</h1>
+          <p className="fst-italic">
+            {" "}
+            <span className="me-2">
+              <FontAwesomeIcon icon={faLocationDot} />
+            </span>
+            {venue.location?.address
+              ? venue.location.address
+              : "Unknown location"}
+          </p>
+          <p>{venue.description}</p>
           <p>
-            <span className="fw-bold">Price:</span> $ {venueData.price} per day
+            <span className="fw-bold">Price:</span> $ {venue.price} per day
           </p>
         </div>
       ) : (
-        <div>No Venue Data</div>
+        <div>
+          <p className="text-danger">
+            No venue data available, please try again later.
+          </p>
+        </div>
       )}
     </section>
   );
