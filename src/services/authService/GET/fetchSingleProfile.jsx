@@ -44,6 +44,7 @@ export async function fetchUserByID() {
         throw new Error(`Failed to fetch user by ID: ${response.status}`);
       }
 
+      sessionStorage.removeItem("apiKey");
       const data = await response.json();
       if (data && data.data) {
         let userType = data.data.venueManager;
