@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
-import { fetchTopRatedVenues } from "../../../../../services/authService";
+import { fetchTopRatedVenues } from "../../../../../services/authService/GET/fetchSpecificVenues";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers,
