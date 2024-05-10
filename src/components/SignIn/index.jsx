@@ -3,17 +3,19 @@ import Button from "../Button";
 import styles from "./SignIn.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
-import { loginUser } from "../../services/authService";
+import { loginUser } from "../../services/authService/POST/signInUser";
+import { useUserContext } from "../../context/UserContext";
+import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
 
-function SignIn({ closeModal, setIsLoggedIn, onToggleAuth }) {
+function SignIn({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const { setGuest, setCustomer, setManager } = useUserContext();
 
   useEffect(() => {
-    // Check session storage for saved email
     const savedEmail = sessionStorage.getItem("userEmail");
     if (savedEmail) {
       setFormData((prev) => ({
@@ -43,15 +45,30 @@ function SignIn({ closeModal, setIsLoggedIn, onToggleAuth }) {
     return Object.keys(newErrors).length === 0;
   };
 
+  const determineUserRole = async () => {
+    const userProfile = await fetchUserByID();
+    if (userProfile) {
+      sessionStorage.setItem("venueManager", userProfile.venueManager);
+      if (userProfile.venueManager) {
+        setManager();
+      } else {
+        setCustomer();
+      }
+    } else {
+      console.log("Failed to fetch user profile or no profile data returned.");
+      setGuest();
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
         const response = await loginUser(formData);
-        setIsLoggedIn(true);
         sessionStorage.setItem("accessToken", response.data.accessToken);
         sessionStorage.setItem("userName", response.data.name);
         sessionStorage.setItem("userEmail", response.data.email);
+        await determineUserRole();
         closeModal();
       } catch (error) {
         setErrors((prev) => ({
