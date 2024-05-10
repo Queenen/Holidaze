@@ -1,0 +1,16 @@
+.bookingSection {
+  background-image: url("../../../../asset/images/form_background.webp");
+}
+
+.bookingSuccess {
+  max-width: 30rem;
+}
+
+.bookingSuccess a {
+  color: var(--hover);
+}
+
+.icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
