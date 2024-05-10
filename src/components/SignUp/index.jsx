@@ -3,7 +3,7 @@ import Button from "../Button";
 import styles from "./SignUp.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
-import { registerUser } from "../../services/authService";
+import { registerUser } from "../../services/authService/POST/registerUser";
 
 function SignUp({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({
@@ -18,9 +18,8 @@ function SignUp({ closeModal, onToggleAuth }) {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "radio" ? checked && value === "manager" : value,
-      venueManager:
-        name === "venueManager" ? e.target.checked : prev.venueManager,
+      [name]: type === "checkbox" ? checked && value === "manager" : value,
+      venueManager: name === "venueManager" ? checked : prev.venueManager,
     }));
   };
 
@@ -41,11 +40,17 @@ function SignUp({ closeModal, onToggleAuth }) {
     if (validateForm()) {
       try {
         await registerUser(formData);
+        sessionStorage.setItem("userName", formData.name);
         sessionStorage.setItem("userEmail", formData.email);
+        sessionStorage.setItem("venueManager", formData.venueManager);
         alert("You're successfully registered!");
         onToggleAuth();
       } catch (error) {
         console.error("Registration failed:", error);
+        setErrors({
+          ...errors,
+          apiError: "Registration failed. Please try again.",
+        });
       }
     }
   };
@@ -106,21 +111,25 @@ function SignUp({ closeModal, onToggleAuth }) {
           <div className={`d-flex flex-column gap-3 my-3 ${styles.radio}`}>
             <div className={`d-flex gap-4`}>
               <input
-                type="radio"
+                type="checkbox"
                 id="customer"
                 name="venueManager"
                 value="customer"
-                onChange={handleChange}
-                required
+                checked={!formData.venueManager}
+                onChange={() =>
+                  setFormData({ ...formData, venueManager: false })
+                }
+                disabled
               />
               <label htmlFor="customer">I would like to rent venues</label>
             </div>
             <div className={`d-flex gap-4`}>
               <input
-                type="radio"
+                type="checkbox"
                 id="manager"
                 name="venueManager"
                 value="manager"
+                checked={formData.venueManager}
                 onChange={handleChange}
                 required
               />
