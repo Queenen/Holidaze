@@ -8,29 +8,20 @@ import { useUserContext } from "../../context/UserContext";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
 
 function SignIn({ closeModal, onToggleAuth }) {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const { setGuest, setCustomer, setManager } = useUserContext();
 
   useEffect(() => {
     const savedEmail = sessionStorage.getItem("userEmail");
     if (savedEmail) {
-      setFormData((prev) => ({
-        ...prev,
-        email: savedEmail,
-      }));
+      setFormData((prev) => ({ ...prev, email: savedEmail }));
     }
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
@@ -81,7 +72,7 @@ function SignIn({ closeModal, onToggleAuth }) {
 
   return (
     <>
-      <div className={`${styles.modalBackdrop}`}>
+      <div className={styles.modalBackdrop}>
         <form
           onSubmit={handleSubmit}
           className={`gap-3 p-5 position-relative ${styles.form}`}
@@ -89,11 +80,11 @@ function SignIn({ closeModal, onToggleAuth }) {
           <FontAwesomeIcon
             icon={faCircleXmark}
             size="2x"
-            className={`${styles.closeModal}`}
+            className={styles.closeModal}
             onClick={closeModal}
           />
-          <h1 className={`mt-4`}>Welcome Back!</h1>
-          <div className={`d-flex flex-column `}>
+          <h1 className="mt-4">Welcome Back!</h1>
+          <div className="d-flex flex-column">
             <label htmlFor="email">Email</label>
             {errors.email && (
               <div className="text-danger small">{errors.email}</div>
@@ -107,7 +98,7 @@ function SignIn({ closeModal, onToggleAuth }) {
               required
             />
           </div>
-          <div className={`d-flex flex-column `}>
+          <div className="d-flex flex-column">
             <label htmlFor="password">Password</label>
             {errors.password && (
               <div className="text-danger small">{errors.password}</div>
@@ -131,7 +122,7 @@ function SignIn({ closeModal, onToggleAuth }) {
             className={`small d-flex align-items-center gap-3 ms-auto ${styles.toggleModal}`}
           >
             <p>Not registered yet?</p>
-            <button className={`btn p-0`} onClick={onToggleAuth}>
+            <button className="btn p-0" onClick={onToggleAuth}>
               Sign up <span className="text-decoration-underline">here</span>
             </button>
           </div>
