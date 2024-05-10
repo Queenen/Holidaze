@@ -4,6 +4,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../components/Loader";
 import { useVenue } from "../../../../context/VenueContext";
 import styles from "./VenueInfo.module.css";
+import TextTruncate from "../../../../components/TextTruncate";
 
 function VenueInfo() {
   const { venue, loading, error } = useVenue();
@@ -26,17 +27,24 @@ function VenueInfo() {
     >
       {venue ? (
         <div className={`d-flex flex-column gap-3 w-100 ${styles.venueInfo}`}>
-          <h1 className="mb-3">{venue.name}</h1>
-          <p className="fst-italic">
+          <h1 className="mb-3">
+            <TextTruncate text={venue.name} maxLength={15} />
+          </h1>
+          <div className="fst-italic d-flex gap-2">
             {" "}
-            <span className="me-2">
+            <span>
               <FontAwesomeIcon icon={faLocationDot} />
             </span>
-            {venue.location?.address
-              ? venue.location.address
-              : "Unknown location"}
+            {venue.location?.address ? (
+              <TextTruncate text={venue.location.address} maxLength={15} />
+            ) : (
+              "Unknown location"
+            )}
+          </div>
+          <p>
+            {" "}
+            <TextTruncate text={venue.description} maxLength={30} />
           </p>
-          <p>{venue.description}</p>
           <p>
             <span className="fw-bold">Price:</span> $ {venue.price} per day
           </p>
