@@ -34,14 +34,12 @@ const TopRated = ({ showEditButton = true }) => {
   return (
     <Carousel>
       {topRatedVenues.map((venue) => {
-        const formattedName = venue.name.replace(/\s+/g, "-").toLowerCase();
-
         return (
           <Carousel.Item
             key={venue.id}
             className={`position-relative ${styles.carouselItem}`}
           >
-            <Link to={`/venue?name=${formattedName}&id=${venue.id}`}>
+            <Link to={`/venue?id=${venue.id}`}>
               {venue.media.length > 0 && (
                 <div className={styles.backgroundImageContainer}>
                   <img
