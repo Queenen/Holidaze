@@ -25,6 +25,9 @@ function SignUp({ closeModal, onToggleAuth }) {
 
   const validateForm = () => {
     const newErrors = {};
+    if (!/^[a-zA-Z]+$/.test(formData.name)) {
+      newErrors.name = "No space or symbols allowed";
+    }
     if (!formData.email.endsWith("@stud.noroff.no")) {
       newErrors.email = "Email must end with @stud.noroff.no";
     }
@@ -71,6 +74,9 @@ function SignUp({ closeModal, onToggleAuth }) {
           <h1 className={`mt-4`}>Create Account</h1>
           <div className={`d-flex flex-column `}>
             <label htmlFor="name">Name</label>
+            {errors.name && (
+              <div className="text-danger small">{errors.name}</div>
+            )}
             <input
               type="text"
               id="name"
@@ -131,7 +137,6 @@ function SignUp({ closeModal, onToggleAuth }) {
                 value="manager"
                 checked={formData.venueManager}
                 onChange={handleChange}
-                required
               />
               <label htmlFor="manager">I would like to host venues</label>
             </div>
