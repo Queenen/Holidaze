@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useVenue } from "../../../../context/VenueContext";
 import styles from "./Booking.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,7 +7,6 @@ import {
   faUsers,
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import { useVenue } from "../../../../context/VenueContext";
 import Calendar from "../Calendar";
 import Button from "../../../../components/Button";
 import Loader from "../../../../components/Loader";
@@ -67,6 +67,10 @@ function Booking() {
         setBookingError(
           "You've already booked the venue on these specific dates!"
         );
+      } else if (error.message.includes("401")) {
+        setBookingError(
+          "You are not authorized to book a venue. Please sign in and try again."
+        );
       } else {
         setBookingError("An error occurred while booking the venue.");
       }
@@ -75,10 +79,7 @@ function Booking() {
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
+  if (loading) return <Loader />;
   if (venueError || !venue) {
     return (
       <section
@@ -110,9 +111,7 @@ function Booking() {
     );
   }
 
-  if (bookingSuccess) {
-    return <BookingSuccess />;
-  }
+  if (bookingSuccess) return <BookingSuccess />;
 
   return (
     <section
@@ -135,8 +134,7 @@ function Booking() {
         )}
         <div className="d-flex flex-column gap-2">
           <label htmlFor="guestAmount">
-            <FontAwesomeIcon icon={faUsers} className="me-2" />
-            Guests (amount)
+            <FontAwesomeIcon icon={faUsers} className="me-2" /> Guests (amount)
           </label>
           {guestError && (
             <p className="text-danger small">
@@ -155,7 +153,7 @@ function Booking() {
           />
         </div>
         <label>
-          <FontAwesomeIcon icon={faCalendar} className="me-2" />
+          <FontAwesomeIcon icon={faCalendar} className="me-2" />{" "}
           Check-in/Check-out
         </label>
         <div className="d-flex justify-content-between gap-3">
