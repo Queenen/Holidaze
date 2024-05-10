@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // Define the initial state and roles
 const initialState = {
@@ -31,6 +32,7 @@ function userReducer(state, action) {
 // Context Provider component
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
+  const location = useLocation();
 
   // Functions to change roles with logging
   const setGuest = () => {
@@ -46,10 +48,17 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: actionTypes.SET_MANAGER });
   };
 
-  // Log the initial role on first render
+  // Check session on navigation and initial load
   useEffect(() => {
-    console.log("Initial role:", state.role);
-  }, [state.role]);
+    const checkSession = () => {
+      if (!sessionStorage.getItem("accessToken")) {
+        setGuest();
+        console.log("Session expired or wiped. User set to guest.");
+      }
+    };
+
+    checkSession();
+  }, [location]);
 
   return (
     <UserContext.Provider
