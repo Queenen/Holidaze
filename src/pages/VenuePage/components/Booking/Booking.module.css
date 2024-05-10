@@ -1,0 +1,23 @@
+.bookingSection {
+  background-color: var(--secondary);
+}
+
+.bookingForm {
+  max-width: 30rem;
+}
+
+.bookingForm input {
+  border-style: none;
+  height: 40px;
+  border: 1px solid black;
+}
+
+.bookBtn button {
+  height: 40px;
+  margin: 1rem 0;
+}
+
+.icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}

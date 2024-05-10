@@ -2,7 +2,7 @@
   background-color: var(--smoky);
 }
 
-.venueInfo > * {
+.venueInfo {
   max-width: 30rem;
 }
 
