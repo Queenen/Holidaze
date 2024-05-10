@@ -5,43 +5,36 @@ import {
   faSignInAlt,
   faBars,
   faSignOutAlt,
+  faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../../asset/logo/Holidaze_Logo.png";
 import SignIn from "../../components/SignIn";
 import SignUp from "../../components/SignUp";
+import { useUserContext } from "../../context/UserContext";
 import styles from "./Header.module.css";
+import AddVenueModal from "./components/AddVenueModal";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { role, setGuest } = useUserContext();
   const [showModal, setShowModal] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const accessToken = sessionStorage.getItem("accessToken");
-      setIsLoggedIn(!!accessToken);
-    };
-
-    checkLoginStatus();
-  }, []);
+  const [showAddVenueModal, setShowAddVenueModal] = useState(false);
 
   const handleSignInOutClick = () => {
-    if (isLoggedIn) {
+    if (role !== "guest") {
       sessionStorage.clear();
-      setIsLoggedIn(false);
+      setGuest();
     } else {
       setShowModal(true);
       setShowSignUp(false);
     }
   };
 
-  const toggleSignUp = () => {
-    setShowSignUp(!showSignUp);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const toggleSignUp = () => setShowSignUp(!showSignUp);
+  const handleCloseModal = () => setShowModal(false);
+  const toggleAddVenueModal = () => setShowAddVenueModal(!showAddVenueModal);
+  const closeAddVenueModal = () => setShowAddVenueModal(false);
 
   return (
     <>
@@ -51,7 +44,7 @@ const Header = () => {
       >
         <Navbar expand="md" collapseOnSelect className="w-100">
           <Container className={`d-flex p-0 gap-4 ${styles.container}`}>
-            <Navbar.Brand href="/">
+            <Navbar.Brand as={Link} to="/">
               <img src={logo} alt="Holidaze logo" className={styles.logo} />
             </Navbar.Brand>
             <button
@@ -59,10 +52,10 @@ const Header = () => {
               onClick={handleSignInOutClick}
             >
               <FontAwesomeIcon
+                icon={role !== "guest" ? faSignOutAlt : faSignInAlt}
                 className="me-3"
-                icon={isLoggedIn ? faSignOutAlt : faSignInAlt}
               />
-              {isLoggedIn ? "Sign Out" : "Sign In"}
+              {role !== "guest" ? "Sign Out" : "Sign In"}
             </button>
             <Navbar.Toggle
               aria-controls="basic-navbar-nav"
@@ -72,10 +65,25 @@ const Header = () => {
             </Navbar.Toggle>
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav
-                className={`me-auto order-md-0 text-center ${styles.navLinks}`}
+                className={`me-auto order-md-0 text-center gap-md-4 ${styles.navLinks}`}
               >
-                <Nav.Link href="/venues">All Venues</Nav.Link>
-                {isLoggedIn && <Nav.Link href="/profile">Profile</Nav.Link>}
+                {role === "venue manager" && (
+                  <button
+                    className="nav-link p-0 border-0 bg-transparent py-2 p-md-2"
+                    onClick={toggleAddVenueModal}
+                  >
+                    <FontAwesomeIcon icon={faCirclePlus} className="me-2" />
+                    Add venue
+                  </button>
+                )}
+                <Nav.Link as={NavLink} to="/venues">
+                  All Venues
+                </Nav.Link>
+                {(role === "customer" || role === "venue manager") && (
+                  <Nav.Link as={NavLink} to="/profile">
+                    Profile
+                  </Nav.Link>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -84,13 +92,10 @@ const Header = () => {
           {showSignUp ? (
             <SignUp closeModal={handleCloseModal} onToggleAuth={toggleSignUp} />
           ) : (
-            <SignIn
-              closeModal={handleCloseModal}
-              onToggleAuth={toggleSignUp}
-              setIsLoggedIn={setIsLoggedIn}
-            />
+            <SignIn closeModal={handleCloseModal} onToggleAuth={toggleSignUp} />
           )}
         </Modal>
+        {showAddVenueModal && <AddVenueModal closeModal={closeAddVenueModal} />}
       </header>
     </>
   );
