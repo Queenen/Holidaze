@@ -20,6 +20,7 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showAddVenueModal, setShowAddVenueModal] = useState(false);
+  const userName = sessionStorage.getItem("userName");
 
   const handleSignInOutClick = () => {
     if (role !== "guest") {
@@ -80,7 +81,7 @@ const Header = () => {
                   All Venues
                 </Nav.Link>
                 {(role === "customer" || role === "venue manager") && (
-                  <Nav.Link as={NavLink} to="/profile">
+                  <Nav.Link as={NavLink} to={`/profile?name=${userName}`}>
                     Profile
                   </Nav.Link>
                 )}
