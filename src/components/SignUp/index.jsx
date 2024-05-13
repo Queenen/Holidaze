@@ -4,6 +4,7 @@ import styles from "./SignUp.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { registerUser } from "../../services/authService/POST/registerUser";
+import { useUserStatus } from "../../context/UserStatus";
 
 function SignUp({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ function SignUp({ closeModal, onToggleAuth }) {
     venueManager: false,
   });
   const [errors, setErrors] = useState({});
+  const { broadcastSessionChange } = useUserStatus();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,6 +48,7 @@ function SignUp({ closeModal, onToggleAuth }) {
         sessionStorage.setItem("userName", formData.name);
         sessionStorage.setItem("userEmail", formData.email);
         sessionStorage.setItem("venueManager", formData.venueManager);
+        broadcastSessionChange();
         alert("You're successfully registered!");
         onToggleAuth();
       } catch (error) {
