@@ -6,6 +6,7 @@ import ProfilePage from "./pages/ProfilePage";
 import VenuesPage from "./pages/VenuesPage";
 import VenuePage from "./pages/VenuePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProtectedRoute from "./context/ProtectedRoute";
 
 const AppRouter = () => {
   return (
@@ -22,7 +23,9 @@ const AppRouter = () => {
         path="/profile"
         element={
           <Layout>
-            <ProfilePage />
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
           </Layout>
         }
       />
