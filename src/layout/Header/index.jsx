@@ -4,19 +4,21 @@ import SignIn from "../../components/SignIn";
 import SignUp from "../../components/SignUp";
 import styles from "./Header.module.css";
 import AddVenueModal from "./components/AddVenueModal";
-import { useUserContext } from "../../context/UserContext";
+import { useUserStatus } from "../../context/UserStatus";
+import { useUserRole } from "../../context/UserRole";
 import NavBar from "./components/NavBar";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showAddVenueModal, setShowAddVenueModal] = useState(false);
-  const { role, setGuest } = useUserContext();
+  const { isSignedIn, broadcastSessionChange } = useUserStatus(); // Using the new hook
+  const { role } = useUserRole(); // Using the new hook
 
   const handleSignInOutClick = () => {
-    if (role !== "guest") {
+    if (isSignedIn) {
       sessionStorage.clear();
-      setGuest();
+      broadcastSessionChange(); // Notify the app of the session change
     } else {
       setShowModal(true);
       setShowSignUp(false);
