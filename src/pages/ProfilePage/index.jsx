@@ -1,5 +1,8 @@
+import HeroSection from "./components/HeroSection";
 //import styles from "./Profile.module.css";
 
-function ProfilePage() {}
+function ProfilePage() {
+  return <HeroSection />;
+}
 
 export default ProfilePage;
