@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useVenue } from "../../../../context/VenueContext";
+import { useUserStatus } from "../../../../context/UserStatus";
 import styles from "./Booking.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,18 +17,13 @@ import BookingSuccess from "../BookingSuccess";
 
 function Booking() {
   const { venue, loading, error: venueError } = useVenue();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isSignedIn } = useUserStatus();
   const [guestAmount, setGuestAmount] = useState("");
   const [guestError, setGuestError] = useState("");
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState("");
-
-  useEffect(() => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    setIsLoggedIn(!!accessToken);
-  }, []);
 
   const handleGuestChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -83,7 +79,7 @@ function Booking() {
   if (venueError || !venue) {
     return (
       <section
-        className={`p-5 d-flex justify-content-center ${styles.bookingSection}`}
+        className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
       >
         <p className="text-danger">
           <FontAwesomeIcon icon={faCircleExclamation} color="red" /> Error
@@ -93,10 +89,10 @@ function Booking() {
     );
   }
 
-  if (!isLoggedIn) {
+  if (!isSignedIn) {
     return (
       <section
-        className={`p-5 d-flex justify-content-center ${styles.bookingSection}`}
+        className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
       >
         <form
           className={`d-flex flex-column gap-3 w-100 ${styles.bookingForm}`}
@@ -115,11 +111,11 @@ function Booking() {
 
   return (
     <section
-      className={`p-5 d-flex justify-content-center ${styles.bookingSection}`}
+      className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
     >
       <form
         onSubmit={handleBookingSubmit}
-        className={`d-flex flex-column gap-3 w-100 ${styles.bookingForm}`}
+        className={`d-flex flex-column gap-3 w-100 justify-content-center  ${styles.bookingForm}`}
       >
         <h1 className="mb-3">Book venue</h1>
         {bookingError && (
