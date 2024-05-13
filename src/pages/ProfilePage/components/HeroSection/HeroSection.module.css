@@ -1,0 +1,57 @@
+.editProfile {
+  background-color: var(--secondary);
+  padding: 6rem 0 5rem 0;
+}
+
+.profileMedia {
+  position: relative;
+}
+
+.banner {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileImg {
+  width: 140px;
+  height: 140px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.profileImg img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid black;
+  object-fit: cover;
+}
+
+.profileInfo {
+  margin: 3rem auto 0 auto;
+  width: 15rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileInfo > *:nth-child(2) {
+  font-style: italic;
+}
+
+.editBtn button {
+  margin-top: 1rem;
+  width: 15rem;
+}
