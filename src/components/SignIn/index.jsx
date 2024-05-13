@@ -4,13 +4,13 @@ import styles from "./SignIn.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { loginUser } from "../../services/authService/POST/signInUser";
-import { useUserContext } from "../../context/UserContext";
+import { useUserStatus } from "../../context/UserStatus";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
 
 function SignIn({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const { setGuest, setCustomer, setManager } = useUserContext();
+  const { broadcastSessionChange } = useUserStatus();
 
   useEffect(() => {
     const savedEmail = sessionStorage.getItem("userEmail");
@@ -40,14 +40,8 @@ function SignIn({ closeModal, onToggleAuth }) {
     const userProfile = await fetchUserByID();
     if (userProfile) {
       sessionStorage.setItem("venueManager", userProfile.venueManager);
-      if (userProfile.venueManager) {
-        setManager();
-      } else {
-        setCustomer();
-      }
     } else {
       console.log("Failed to fetch user profile or no profile data returned.");
-      setGuest();
     }
   };
 
@@ -60,6 +54,7 @@ function SignIn({ closeModal, onToggleAuth }) {
         sessionStorage.setItem("userName", response.data.name);
         sessionStorage.setItem("userEmail", response.data.email);
         await determineUserRole();
+        broadcastSessionChange();
         closeModal();
       } catch (error) {
         setErrors((prev) => ({
