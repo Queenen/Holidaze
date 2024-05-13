@@ -12,8 +12,10 @@ const VenuePage = () => {
   return (
     <VenueProvider venueId={venueId}>
       <VenueCarousel />
-      <VenueInfo />
-      <Booking />
+      <div className="d-md-flex">
+        <VenueInfo />
+        <Booking />
+      </div>
     </VenueProvider>
   );
 };
