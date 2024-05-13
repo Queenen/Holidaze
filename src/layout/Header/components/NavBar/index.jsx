@@ -8,12 +8,14 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, NavLink } from "react-router-dom";
-import { useUserContext } from "../../../../context/UserContext";
+import { useUserStatus } from "../../../../context/UserStatus";
+import { useUserRole } from "../../../../context/UserRole";
 import logo from "../../../../asset/logo/Holidaze_Logo.png";
 import styles from "./NavBar.module.css";
 
 function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
-  const { role, isLoggedIn } = useUserContext();
+  const { isSignedIn } = useUserStatus(); // Using the new hook
+  const { role } = useUserRole(); // Using the new hook
   const userName = sessionStorage.getItem("userName");
   const [expanded, setExpanded] = useState(false);
   const navbarRef = useRef(null);
@@ -21,7 +23,6 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
   const toggleNavbar = () => setExpanded(!expanded);
   const closeNavbar = () => setExpanded(false);
 
-  // Handle clicking outside the navbar to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -55,10 +56,10 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
           }}
         >
           <FontAwesomeIcon
-            icon={isLoggedIn ? faSignOutAlt : faSignInAlt}
+            icon={isSignedIn ? faSignOutAlt : faSignInAlt}
             className="me-3"
           />
-          {isLoggedIn ? "Sign Out" : "Sign In"}
+          {isSignedIn ? "Sign Out" : "Sign In"}
         </button>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -72,7 +73,7 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
             className={`me-auto order-md-0 text-center gap-md-4 ${styles.navLinks}`}
             onClick={closeNavbar}
           >
-            {role === "venue manager" && (
+            {role === "manager" && (
               <button
                 className="nav-link p-0 border-0 bg-transparent py-2 p-md-2"
                 onClick={() => {
@@ -87,7 +88,7 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
             <Nav.Link as={NavLink} to="/venues">
               All Venues
             </Nav.Link>
-            {isLoggedIn && (
+            {isSignedIn && (
               <Nav.Link as={NavLink} to={`/profile?name=${userName}`}>
                 Profile
               </Nav.Link>
