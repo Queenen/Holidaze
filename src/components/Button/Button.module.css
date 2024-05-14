@@ -1,10 +1,16 @@
 .button {
   background-color: var(--button);
   letter-spacing: 0.2rem;
+  color: white;
+  border-radius: 5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0 2rem;
   height: 60px;
   width: 100%;
   font-size: 16px;
   box-shadow: 5px 5px 10px black;
+  border-style: none;
 }
 
 .button:hover {
