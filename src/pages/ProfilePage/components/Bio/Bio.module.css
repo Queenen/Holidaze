@@ -1,0 +1,7 @@
+.bioSection {
+  background-color: var(--smoky);
+}
+
+.bioSection div {
+  max-width: 25rem;
+}
