@@ -16,7 +16,7 @@ export async function fetchUserByID() {
     return null;
   }
 
-  const url = `${NOROFF_API_URL}/holidaze/profiles/${userName}`;
+  const url = `${NOROFF_API_URL}/holidaze/profiles/${userName}?_bookings=true&_venues=true`;
   const token = sessionStorage.getItem("accessToken");
 
   try {
