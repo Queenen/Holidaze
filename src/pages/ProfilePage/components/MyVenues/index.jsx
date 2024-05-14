@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const MyVenues = ({ user, showEditButton = true }) => {
   const venues = user.venues;
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   function toggleVenues() {
     setIsVisible(!isVisible);
