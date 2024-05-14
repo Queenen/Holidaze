@@ -1,0 +1,60 @@
+.carouselItem img {
+  height: 25rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.editBtn > * {
+  width: fit-content;
+  margin: 2rem 0;
+}
+
+.backgroundImageContainer {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.showBookings {
+  background-color: var(--button);
+  letter-spacing: 0.2rem;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0 2rem;
+  height: 80px;
+  width: 100%;
+  font-size: 16px;
+  border-style: none;
+  border: 1.5px solid var(--hover);
+}
+
+.showBookings:hover {
+  background-color: var(--hover);
+}
+
+.hidden {
+  display: none;
+}
+
+.emptyContent {
+  background-color: var(--smoky);
+  height: 25rem;
+  padding: 5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
+}
