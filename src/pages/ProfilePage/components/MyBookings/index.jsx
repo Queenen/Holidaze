@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const MyBookings = ({ user, showEditButton = true }) => {
   const bookings = user.bookings;
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   function toggleBookings() {
     setIsVisible(!isVisible);
@@ -77,7 +77,9 @@ const MyBookings = ({ user, showEditButton = true }) => {
                 <Carousel.Caption>
                   {showEditButton && (
                     <div className={styles.editBtn}>
-                      <Button>Edit Booking</Button>
+                      <Button id={booking.venue.id} onClick={showModal}>
+                        Edit Booking
+                      </Button>
                     </div>
                   )}
                   <h2 className="d-flex justify-content-center fs-">
