@@ -1,32 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchVenueById } from "../services/authService/GET/fetchVenueById";
+import React, { createContext, useContext } from "react";
+import { useFetchVenue } from "../services/authService/GET/fetchVenueById";
 
 const VenueContext = createContext();
 
 export const useVenue = () => useContext(VenueContext);
 
 export const VenueProvider = ({ venueId, children }) => {
-  const [venue, setVenue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Use the custom hook to manage venue data fetching
+  const { data: venue, loading, error } = useFetchVenue(venueId);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await fetchVenueById(venueId);
-        setVenue(result.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (venueId) {
-      fetchData();
-    }
-  }, [venueId]);
-
+  // Provide the fetched data through the VenueContext
   return (
     <VenueContext.Provider value={{ venue, loading, error }}>
       {children}

@@ -1,0 +1,45 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1050;
+  overflow-y: auto;
+}
+
+.formContainer {
+  max-width: 30rem;
+  background-image: url("../../asset/images/form_background.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1.5px solid black;
+  padding: 4rem;
+  position: fixed;
+}
+
+.form,
+.heading {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.closeIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  color: var(--button);
+}
+
+.closeIcon:hover {
+  cursor: pointer;
+  color: var(--hover);
+}

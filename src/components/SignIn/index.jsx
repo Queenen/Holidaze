@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Button from "../Button";
 import styles from "./SignIn.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { loginUser } from "../../services/authService/POST/signInUser";
 import { useUserStatus } from "../../context/UserStatus";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
+import { FormContainer, FormGroup } from "../Form";
+import { Input } from "../Input";
+import Button from "../Button";
 
 function SignIn({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -22,6 +22,25 @@ function SignIn({ closeModal, onToggleAuth }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validate the input dynamically
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (name === "email") {
+        if (!value.endsWith("@stud.noroff.no")) {
+          newErrors.email = "Email must end with @stud.noroff.no";
+        } else {
+          delete newErrors.email;
+        }
+      } else if (name === "password") {
+        if (value.length < 8) {
+          newErrors.password = "Password must be at least 8 characters";
+        } else {
+          delete newErrors.password;
+        }
+      }
+      return newErrors;
+    });
   };
 
   const validateForm = () => {
@@ -66,64 +85,50 @@ function SignIn({ closeModal, onToggleAuth }) {
   };
 
   return (
-    <>
-      <div className={styles.modalBackdrop}>
-        <form
-          onSubmit={handleSubmit}
-          className={`gap-3 p-5 position-relative ${styles.form}`}
-        >
-          <FontAwesomeIcon
-            icon={faCircleXmark}
-            size="2x"
-            className={styles.closeModal}
-            onClick={closeModal}
-          />
-          <h1 className="mt-4">Welcome Back!</h1>
-          <div className="d-flex flex-column">
-            <label htmlFor="email">Email</label>
-            {errors.email && (
-              <div className="text-danger small">{errors.email}</div>
-            )}
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="d-flex flex-column">
-            <label htmlFor="password">Password</label>
-            {errors.password && (
-              <div className="text-danger small">{errors.password}</div>
-            )}
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            {errors.apiError && (
-              <div className="text-danger small">{errors.apiError}</div>
-            )}
-          </div>
-          <div className="mt-4">
-            <Button type="submit">Sign In</Button>
-          </div>
-          <div
-            className={`small d-flex align-items-center gap-3 ms-auto ${styles.toggleModal}`}
-          >
-            <p>Not registered yet?</p>
-            <button className="btn p-0" onClick={onToggleAuth}>
-              Sign up <span className="text-decoration-underline">here</span>
-            </button>
-          </div>
-        </form>
+    <FormContainer
+      formHeading="Welcome Back!"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <Input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          handleChange={handleChange}
+          placeholder="Enter your email"
+          required
+          isLabel={true}
+          label="Email"
+          errorMessage={errors.email}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          handleChange={handleChange}
+          placeholder="Enter your password"
+          required
+          isLabel={true}
+          label="Password"
+          errorMessage={errors.password || errors.apiError}
+        />
+      </FormGroup>
+      <Button type="submit">Sign In</Button>
+      <div
+        className={`${styles.toggleModal} small d-flex align-items-center gap-3 justify-content-between`}
+      >
+        <p>Not registered yet?</p>
+        <button className="btn p-0" onClick={onToggleAuth}>
+          Sign up{" "}
+          <span className="text-decoration-underline text-success">here</span>
+        </button>
       </div>
-    </>
+    </FormContainer>
   );
 }
 

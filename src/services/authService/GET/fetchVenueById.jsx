@@ -1,25 +1,40 @@
+import { useEffect, useState } from "react";
 import { getVenueUrl } from "../../config";
 
-//Function to fetch venue by ID
-export async function fetchVenueById(venueId) {
-  try {
-    const url = getVenueUrl(venueId);
+// Custom hook to fetch venue data by ID
+export function useFetchVenue(venueId) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  useEffect(() => {
+    console.log("Fetching venue with ID:", venueId);
+    async function fetchVenue() {
+      if (!venueId) return; // Skip if no venueId is provided
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch venue with ID ${venueId}`);
+      setLoading(true);
+      try {
+        const url = getVenueUrl(venueId);
+        const response = await fetch(url, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch venue with ID ${venueId}`);
+        }
+
+        const { data } = await response.json();
+        setData(data); // Set the entire venue data
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching venue:", error);
-    throw error;
-  }
+    fetchVenue();
+  }, [venueId]);
+
+  return { data, loading, error };
 }

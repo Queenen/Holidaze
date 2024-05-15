@@ -1,13 +1,13 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function Calendar({ selectedDate, onChange }) {
+function Calendar({ selectedDate, onChange, isRequired = true }) {
   return (
     <DatePicker
       selected={selectedDate}
       onChange={onChange}
       dateFormat="yyyy-MM-dd"
-      required
+      required={isRequired}
       className="form-control rounded-5 px-3"
       popperPlacement="top"
       popperClassName="react-datepicker-top"
