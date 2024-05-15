@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "../Button";
 import styles from "./SignUp.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { registerUser } from "../../services/authService/POST/registerUser";
 import { useUserStatus } from "../../context/UserStatus";
+import { FormContainer, FormGroup } from "../Form";
+import { Input } from "../Input";
+import Button from "../Button";
 
 function SignUp({ closeModal, onToggleAuth }) {
   const [formData, setFormData] = useState({
@@ -20,9 +20,34 @@ function SignUp({ closeModal, onToggleAuth }) {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked && value === "manager" : value,
+      [name]: type === "checkbox" ? checked : value,
       venueManager: name === "venueManager" ? checked : prev.venueManager,
     }));
+
+    // Validate the input dynamically
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (name === "name") {
+        if (!/^[a-zA-Z]+$/.test(value)) {
+          newErrors.name = "No space or symbols allowed";
+        } else {
+          delete newErrors.name;
+        }
+      } else if (name === "email") {
+        if (!value.endsWith("@stud.noroff.no")) {
+          newErrors.email = "Email must end with @stud.noroff.no";
+        } else {
+          delete newErrors.email;
+        }
+      } else if (name === "password") {
+        if (value.length < 8) {
+          newErrors.password = "Password must be at least 8 characters long";
+        } else {
+          delete newErrors.password;
+        }
+      }
+      return newErrors;
+    });
   };
 
   const validateForm = () => {
@@ -62,101 +87,94 @@ function SignUp({ closeModal, onToggleAuth }) {
   };
 
   return (
-    <>
-      <div className={`${styles.modalBackdrop}`}>
-        <form
-          onSubmit={handleSubmit}
-          className={`gap-3 p-5 position-relative ${styles.form}`}
-        >
-          <FontAwesomeIcon
-            icon={faCircleXmark}
-            size="2x"
-            className={`${styles.closeModal}`}
-            onClick={closeModal}
-          />
-          <h1 className={`mt-4`}>Create Account</h1>
-          <div className={`d-flex flex-column `}>
-            <label htmlFor="name">Name</label>
-            {errors.name && (
-              <div className="text-danger small">{errors.name}</div>
-            )}
+    <FormContainer
+      formHeading="Create Account"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          handleChange={handleChange}
+          placeholder="Enter your name"
+          required
+          isLabel={true}
+          label="Name"
+          errorMessage={errors.name}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          handleChange={handleChange}
+          placeholder="Enter your email"
+          required
+          isLabel={true}
+          label="Email"
+          errorMessage={errors.email}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          handleChange={handleChange}
+          placeholder="Enter your password"
+          required
+          isLabel={true}
+          label="Password"
+          errorMessage={errors.password}
+        />
+      </FormGroup>
+      <FormGroup>
+        <div className={`d-flex flex-column gap-3 my-3 ${styles.radio}`}>
+          <div className={`d-flex gap-4`}>
             <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
+              type="checkbox"
+              id="customer"
+              name="customer"
+              value="customer"
+              checked={true}
+              onChange={() => setFormData({ ...formData, venueManager: false })}
+              disabled
             />
+            <label htmlFor="customer">I would like to rent venues</label>
           </div>
-          <div className={`d-flex flex-column `}>
-            <label htmlFor="email">Email</label>
-            {errors.email && (
-              <div className="text-danger small">{errors.email}</div>
-            )}
+          <div className={`d-flex gap-4`}>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="checkbox"
+              id="manager"
+              name="venueManager"
+              value="manager"
+              checked={formData.venueManager}
               onChange={handleChange}
-              required
             />
+            <label htmlFor="manager">I would like to host venues</label>
           </div>
-          <div className={`d-flex flex-column `}>
-            <label htmlFor="password">Password</label>
-            {errors.password && (
-              <div className="text-danger small">{errors.password}</div>
-            )}
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={`d-flex flex-column gap-3 my-3 ${styles.radio}`}>
-            <div className={`d-flex gap-4`}>
-              <input
-                type="checkbox"
-                id="customer"
-                name="venueManager"
-                value="customer"
-                checked={!formData.venueManager}
-                onChange={() =>
-                  setFormData({ ...formData, venueManager: false })
-                }
-                disabled
-              />
-              <label htmlFor="customer">I would like to rent venues</label>
-            </div>
-            <div className={`d-flex gap-4`}>
-              <input
-                type="checkbox"
-                id="manager"
-                name="venueManager"
-                value="manager"
-                checked={formData.venueManager}
-                onChange={handleChange}
-              />
-              <label htmlFor="manager">I would like to host venues</label>
-            </div>
-          </div>
-
-          <Button type="submit">Sign Up</Button>
-          <div
-            className={`small d-flex align-items-center gap-3 ms-auto ${styles.toggleModal}`}
-          >
-            <p>Already registered?</p>
-            <button className={`btn p-0`} onClick={onToggleAuth}>
-              Sign in <span className="text-decoration-underline">here</span>
-            </button>
-          </div>
-        </form>
+        </div>
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      <Button type="submit">Sign Up</Button>
+      <div
+        className={`${styles.toggleModal} small d-flex align-items-center gap-3 justify-content-between`}
+      >
+        <p>Already registered?</p>
+        <button className="btn p-0" onClick={onToggleAuth}>
+          Sign in{" "}
+          <span className="text-decoration-underline text-success">here</span>
+        </button>
       </div>
-    </>
+    </FormContainer>
   );
 }
 
