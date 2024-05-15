@@ -1,5 +1,6 @@
 .bioSection {
   background-color: var(--smoky);
+  height: 480px;
 }
 
 .bioSection div {

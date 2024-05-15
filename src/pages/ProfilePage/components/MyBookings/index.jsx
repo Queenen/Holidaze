@@ -17,13 +17,9 @@ import EditBooking from "../EditBooking";
 
 const MyBookings = ({ user, showEditButton = true }) => {
   const bookings = user.bookings;
-<<<<<<< Updated upstream
-  const [isVisible, setIsVisible] = useState(false);
-=======
   const [isVisible, setIsVisible] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
->>>>>>> Stashed changes
 
   function toggleBookings() {
     setIsVisible(!isVisible);
@@ -96,10 +92,6 @@ const MyBookings = ({ user, showEditButton = true }) => {
                 </div>
                 <Carousel.Caption>
                   {showEditButton && (
-<<<<<<< Updated upstream
-                    <div className={styles.editBtn}>
-                      <Button>Edit Booking</Button>
-=======
                     <div
                       className={styles.editBtn}
                       onClick={(e) => e.stopPropagation()}
@@ -107,7 +99,6 @@ const MyBookings = ({ user, showEditButton = true }) => {
                       <Button onClick={(e) => handleEditBooking(e, booking.id)}>
                         Edit Booking
                       </Button>
->>>>>>> Stashed changes
                     </div>
                   )}
                   <h2 className="d-flex justify-content-center fs-">

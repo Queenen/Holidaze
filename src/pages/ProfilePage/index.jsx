@@ -45,10 +45,16 @@ function ProfilePage() {
 
   return (
     <>
-      <HeroSection user={user} />
-      <Bio bio={user.bio} />
-      <MyVenues user={user} />
-      <MyBookings user={user} />
+      <div className="d-md-flex flex-wrap">
+        <div className="d-md-flex flex-column col-md-6">
+          <HeroSection user={user} />
+          <Bio bio={user.bio} />
+        </div>
+        <div className="d-md-flex flex-column col-md-6">
+          <MyVenues user={user} />
+          <MyBookings user={user} />
+        </div>
+      </div>
     </>
   );
 }

@@ -1,6 +1,7 @@
 .editProfile {
   background-color: var(--secondary);
   padding: 6rem 0 5rem 0;
+  height: 480px;
 }
 
 .profileMedia {
