@@ -6,11 +6,19 @@
   font-weight: bold;
   text-transform: uppercase;
   padding: 0 2rem;
-  height: 60px;
   width: 100%;
   font-size: 16px;
   box-shadow: 5px 5px 10px black;
   border-style: none;
+  margin-top: 1.5rem;
+}
+
+.bigBtn {
+  height: 60px;
+}
+
+.smallBtn {
+  height: 40px;
 }
 
 .button:hover {
