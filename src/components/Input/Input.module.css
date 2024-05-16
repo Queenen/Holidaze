@@ -1,11 +1,13 @@
 .input,
-.textarea,
 .select,
 .option {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem !important;
 }
 
 .textarea {
-  height: 140px;
+  height: 160px;
   resize: none;
+  overflow: auto;
+  border-radius: 1rem;
+  padding: 1rem;
 }
