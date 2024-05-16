@@ -14,6 +14,26 @@ export const Input = ({
   errorMessage,
   ...props
 }) => {
+  if (type === "checkbox") {
+    return (
+      <div className="d-flex align-content-center gap-3">
+        {errorMessage && (
+          <div className="text-danger small mb-1">{errorMessage}</div>
+        )}
+        <input
+          className={`${styles.input} form-control rounded-5 m-0`}
+          type={type}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          id={id}
+          required={required}
+          {...props}
+        />
+        {isLabel && <label htmlFor={id}>{label}</label>}
+      </div>
+    );
+  }
   return (
     <div className="d-flex flex-column">
       {isLabel && (
@@ -60,7 +80,7 @@ Input.defaultProps = {
 
 // TextArea Component
 export const TextArea = ({
-  textAreaValue,
+  value,
   handleChange,
   placeholder,
   id,
@@ -68,6 +88,7 @@ export const TextArea = ({
   isLabel,
   label,
   errorMessage,
+  name,
   ...props
 }) => {
   return (
@@ -82,11 +103,12 @@ export const TextArea = ({
       )}
       <textarea
         className={`${styles.textarea} form-control rounded-5`}
-        value={textAreaValue}
+        value={value}
         onChange={handleChange}
         placeholder={placeholder}
         id={id}
         required={required}
+        name={name}
         {...props}
       ></textarea>
     </div>
@@ -94,7 +116,6 @@ export const TextArea = ({
 };
 
 TextArea.propTypes = {
-  textAreaValue: PropTypes.string,
   handleChange: PropTypes.func,
   placeholder: PropTypes.string,
   id: PropTypes.string,
