@@ -8,7 +8,7 @@ function Bio(props) {
     >
       <div>
         <h1 className="mb-5 fs-2">Biography</h1>
-        <p>{bio}</p>
+        <p className="text-break">{bio}</p>
       </div>
     </section>
   );
