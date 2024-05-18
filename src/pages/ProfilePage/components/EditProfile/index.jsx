@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../../components/Button";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { editProfile } from "../../../../services/authService/PUT/editProfile";
+import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
 
 function EditProfile({ closeModal }) {
   const [errors, setErrors] = useState({});
@@ -17,6 +18,24 @@ function EditProfile({ closeModal }) {
   });
 
   const { broadcastSessionChange } = useUserStatus();
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      const fetchedUser = await fetchUserByID();
+      if (fetchedUser) {
+        setFormData({
+          bio: fetchedUser.bio || "",
+          venueManager: fetchedUser.venueManager || false,
+          bannerUrl: fetchedUser.banner.url || "",
+          bannerAlt: fetchedUser.banner.alt || "",
+          avatarUrl: fetchedUser.avatar.url || "",
+          avatarAlt: fetchedUser.avatar.alt || "",
+        });
+      }
+    };
+
+    loadUserData();
+  }, []);
 
   const isValidImageUrl = (url) => {
     try {
@@ -180,6 +199,7 @@ function EditProfile({ closeModal }) {
       }));
     }
   };
+
   return (
     <FormContainer
       formHeading="Edit Profile"
