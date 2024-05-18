@@ -28,6 +28,14 @@ const VenueCarousel = ({ showEditButton = false }) => {
     );
   }
 
+  if (!venue) {
+    return (
+      <div className={styles.errorContainer}>
+        <div className={styles.errorMsg}>Venue data is not available.</div>
+      </div>
+    );
+  }
+
   const hasMultipleMedia = venue.media.length > 1;
 
   return (
