@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,6 +21,12 @@ const MyBookings = ({ user, showEditButton = true }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
 
+  useEffect(() => {
+    if (bookings.length === 0) {
+      setIsVisible(false);
+    }
+  }, [bookings.length]);
+
   function toggleBookings() {
     setIsVisible(!isVisible);
   }
@@ -35,7 +41,7 @@ const MyBookings = ({ user, showEditButton = true }) => {
 
   function closeModal() {
     setShowModal(false);
-    setSelectedBookingId(null); // Reset the selected venue ID when the modal is closed
+    setSelectedBookingId(null); // Reset the selected booking ID when the modal is closed
   }
 
   return (
