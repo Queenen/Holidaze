@@ -43,7 +43,11 @@ export async function createVenue(venueData) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Failed to add venue: ${errorData.message}`);
+        console.log(errorData.errors); // Log the error data
+        throw {
+          message: `Failed to add venue: ${errorData.message}`,
+          errorData,
+        }; // Throw an error object containing the error data
       }
       const data = await response.json();
       return data;
