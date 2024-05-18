@@ -11,48 +11,20 @@ import ProtectedRoute from "./context/ProtectedRoute";
 const AppRouter = () => {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <HomePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <Layout>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="profile"
+          element={
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
-          </Layout>
-        }
-      />
-      <Route
-        path="/venues"
-        element={
-          <Layout>
-            <VenuesPage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/venue/*"
-        element={
-          <Layout>
-            <VenuePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="*"
-        element={
-          <Layout>
-            <NotFoundPage />
-          </Layout>
-        }
-      />
+          }
+        />
+        <Route path="venues" element={<VenuesPage />} />
+        <Route path="venue/*" element={<VenuePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 };
