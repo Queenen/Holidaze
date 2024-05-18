@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import Button from "../../../../components/Button";
-import styles from "./AddVenueModal.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { FormContainer, FormGroup } from "../../../../components/Form";
+import { Input, TextArea } from "../../../../components/Input";
 import { createVenue } from "../../../../services/authService/POST/createVenue";
 
 function AddVenueModal({ closeModal }) {
   const [formData, setFormData] = useState({
     venueName: "",
     description: "",
-    mediaUrl: "",
+    mediaUrls: "",
     mediaAlt: "",
     price: "",
     maxGuests: "",
@@ -26,9 +25,19 @@ function AddVenueModal({ closeModal }) {
     lat: "",
     lng: "",
   });
-  const [errors, setErrors] = useState({});
-  const [mediaUrls, setMediaUrls] = useState("");
-  const [mediaAlt, setMediaAlt] = useState("");
+  const [errors, setErrors] = useState({ apiErrors: [] });
+
+  const isValidImageUrl = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      return (
+        (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") &&
+        /\.(jpg|jpeg|png|gif)$/i.test(url)
+      );
+    } catch (e) {
+      return false;
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,85 +45,22 @@ function AddVenueModal({ closeModal }) {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-  };
 
-  const handleMediaUrlChange = (event) => {
-    setMediaUrls(event.target.value);
-  };
-
-  const handleMediaAltChange = (event) => {
-    setMediaAlt(event.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Prepare media data
-    const media = mediaUrls.split(",").map((url) => ({
-      url: url.trim(),
-      alt: mediaAlt, // Assuming a common alt text for all images
-    }));
-
-    // Prepare location data
-    const location = {
-      address: formData.address,
-      city: formData.city,
-      zip: formData.zip,
-      country: formData.country,
-      continent: formData.continent,
-      lat: parseFloat(formData.lat) || 0,
-      lng: parseFloat(formData.lng) || 0,
-    };
-
-    // Consolidate all data
-    const completeData = {
-      name: formData.venueName,
-      description: formData.description,
-      media,
-      price: parseFloat(formData.price),
-      maxGuests: parseInt(formData.maxGuests, 10),
-      rating: parseFloat(formData.rating) || 0,
-      meta: {
-        wifi: formData.wifi,
-        parking: formData.parking,
-        breakfast: formData.breakfast,
-        pets: formData.pets,
-      },
-      location,
-    };
-
-    if (validateForm()) {
-      try {
-        const response = await createVenue(completeData);
-        console.log("Venue added successfully:", response);
-        closeModal();
-        setFormData({
-          venueName: "",
-          description: "",
-          mediaUrl: "",
-          mediaAlt: "",
-          price: "",
-          maxGuests: "",
-          rating: "",
-          wifi: false,
-          parking: false,
-          breakfast: false,
-          pets: false,
-          address: "",
-          city: "",
-          zip: "",
-          country: "",
-          continent: "",
-          lat: "",
-          lng: "",
-        });
-      } catch (error) {
-        setErrors((prev) => ({
-          ...prev,
-          apiError: error.message || "Failed to add venue",
-        }));
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (name === "mediaUrls") {
+        const urls = value.split(",").map((url) => url.trim());
+        for (const url of urls) {
+          if (!isValidImageUrl(url)) {
+            newErrors.mediaUrls = "Please provide valid image URLs.";
+            break;
+          } else {
+            delete newErrors.mediaUrls;
+          }
+        }
       }
-    }
+      return newErrors;
+    });
   };
 
   const validateForm = () => {
@@ -135,258 +81,334 @@ function AddVenueModal({ closeModal }) {
       newErrors.lat = "Latitude must be a valid number";
     if (formData.lng && isNaN(formData.lng))
       newErrors.lng = "Longitude must be a valid number";
+    if (formData.mediaUrls && !formData.mediaAlt.trim())
+      newErrors.mediaAlt =
+        "Media alt text is required when media URLs are provided";
+
+    if (Object.keys(newErrors).length > 0) {
+      newErrors.submitBtn = "Please fix the error prompts before submitting";
+    }
 
     setErrors(newErrors);
+    console.log("Active errors:", newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      console.log("Validation failed");
+      return;
+    }
+
+    const media = formData.mediaUrls
+      .split(",")
+      .filter((url) => url.trim())
+      .map((url) => ({
+        url: url.trim(),
+        alt: formData.mediaAlt.trim(),
+      }));
+
+    const location = {
+      address: formData.address,
+      city: formData.city,
+      zip: formData.zip,
+      country: formData.country,
+      continent: formData.continent,
+      lat: parseFloat(formData.lat) || 0,
+      lng: parseFloat(formData.lng) || 0,
+    };
+
+    const completeData = {
+      name: formData.venueName,
+      description: formData.description,
+      media: media.length > 0 ? media : undefined,
+      price: parseFloat(formData.price),
+      maxGuests: parseInt(formData.maxGuests, 10),
+      rating: parseFloat(formData.rating) || 0,
+      meta: {
+        wifi: formData.wifi,
+        parking: formData.parking,
+        breakfast: formData.breakfast,
+        pets: formData.pets,
+      },
+      location: Object.values(location).some(
+        (value) => value !== "" && value !== 0
+      )
+        ? location
+        : undefined,
+    };
+
+    try {
+      const response = await createVenue(completeData);
+      console.log("Venue added successfully:", response);
+      closeModal();
+      setFormData({
+        venueName: "",
+        description: "",
+        mediaUrls: "",
+        mediaAlt: "",
+        price: "",
+        maxGuests: "",
+        rating: "",
+        wifi: false,
+        parking: false,
+        breakfast: false,
+        pets: false,
+        address: "",
+        city: "",
+        zip: "",
+        country: "",
+        continent: "",
+        lat: "",
+        lng: "",
+      });
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        apiError: error.message || "Failed to add venue",
+        apiErrors: error.errorData?.errors || [],
+      }));
+    }
+  };
+
   return (
-    <div className={`${styles.modalBackdrop}`}>
-      <form
-        onSubmit={handleSubmit}
-        className={`gap-5 p-5 position-relative ${styles.form}`}
-      >
-        <FontAwesomeIcon
-          icon={faCircleXmark}
-          size="2x"
-          className={`${styles.closeModal}`}
-          onClick={closeModal}
+    <FormContainer
+      formHeading="Add Venue"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <Input
+          type="text"
+          id="venueName"
+          name="venueName"
+          value={formData.venueName}
+          handleChange={handleChange}
+          placeholder="Enter Venue Name"
+          isLabel={true}
+          label="Venue Name"
+          required={true}
+          errorMessage={errors.venueName}
         />
-        <h1 className={`mt-4`}>Add Venue</h1>
-        <div className="d-flex flex-column gap-3">
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="venueName">Venue name*</label>
-            {errors.venueName && (
-              <div className="text-danger small">{errors.venueName}</div>
-            )}
-            <input
-              type="text"
-              id="venueName"
-              name="venueName"
-              value={formData.venueName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="description">Description*</label>
-            {errors.description && (
-              <div className="text-danger small">{errors.description}</div>
-            )}
-            <input
-              type="text"
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="price">Price*</label>
-            {errors.price && (
-              <div className="text-danger small">{errors.price}</div>
-            )}
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="maxGuests">Max Guests*</label>
-            {errors.maxGuests && (
-              <div className="text-danger small">{errors.maxGuests}</div>
-            )}
-            <input
-              type="number"
-              id="maxGuests"
-              name="maxGuests"
-              value={formData.maxGuests}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="rating">Rating</label>
-            {errors.rating && (
-              <div className="text-danger small">{errors.rating}</div>
-            )}
-            <input
-              type="number"
-              id="rating"
-              name="rating"
-              value={formData.rating}
-              onChange={handleChange}
-            />
-          </div>
+      </FormGroup>
+      <FormGroup>
+        <TextArea
+          value={formData.description}
+          handleChange={handleChange}
+          placeholder="Enter Venue Description"
+          id="description"
+          name="description"
+          isLabel={true}
+          label="Description"
+          required={true}
+          errorMessage={errors.description}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="price"
+          name="price"
+          value={formData.price}
+          handleChange={handleChange}
+          placeholder="Enter Price"
+          isLabel={true}
+          label="Price"
+          required={true}
+          errorMessage={errors.price}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="maxGuests"
+          name="maxGuests"
+          value={formData.maxGuests}
+          handleChange={handleChange}
+          placeholder="Enter Max Guests"
+          isLabel={true}
+          label="Max Guests"
+          required={true}
+          errorMessage={errors.maxGuests}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="rating"
+          name="rating"
+          value={formData.rating}
+          handleChange={handleChange}
+          placeholder="Enter Rating"
+          isLabel={true}
+          label="Rating"
+          errorMessage={errors.rating}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="text"
+          id="mediaUrls"
+          name="mediaUrls"
+          value={formData.mediaUrls}
+          handleChange={handleChange}
+          placeholder="Enter Media URLs (separated by commas)"
+          isLabel={true}
+          label="Media URLs"
+          errorMessage={errors.mediaUrls}
+        />
+        <Input
+          type="text"
+          id="mediaAlt"
+          name="mediaAlt"
+          value={formData.mediaAlt}
+          handleChange={handleChange}
+          placeholder="Enter Media Alt Text"
+          isLabel={true}
+          label="Media Alt Text"
+          errorMessage={errors.mediaAlt}
+        />
+      </FormGroup>
+      <FormGroup>
+        <h2>Facilities</h2>
+        <Input
+          className={`checkbox`}
+          type="checkbox"
+          id="wifi"
+          name="wifi"
+          handleChange={handleChange}
+          isLabel={true}
+          label="Wifi"
+          checked={formData.wifi}
+        />
+        <Input
+          className={`checkbox`}
+          type="checkbox"
+          id="parking"
+          name="parking"
+          handleChange={handleChange}
+          isLabel={true}
+          label="Parking"
+          checked={formData.parking}
+        />
+        <Input
+          className={`checkbox`}
+          type="checkbox"
+          id="breakfast"
+          name="breakfast"
+          handleChange={handleChange}
+          isLabel={true}
+          label="Breakfast"
+          checked={formData.breakfast}
+        />
+        <Input
+          className={`checkbox`}
+          type="checkbox"
+          id="pets"
+          name="pets"
+          handleChange={handleChange}
+          isLabel={true}
+          label="Pets"
+          checked={formData.pets}
+        />
+      </FormGroup>
+      <FormGroup>
+        <h2>Location</h2>
+        <Input
+          type="text"
+          id="address"
+          name="address"
+          value={formData.address}
+          handleChange={handleChange}
+          placeholder="Enter Address"
+          isLabel={true}
+          label="Address"
+          errorMessage={errors.address}
+        />
+        <Input
+          type="text"
+          id="city"
+          name="city"
+          value={formData.city}
+          handleChange={handleChange}
+          placeholder="Enter City"
+          isLabel={true}
+          label="City"
+          errorMessage={errors.city}
+        />
+        <Input
+          type="text"
+          id="zip"
+          name="zip"
+          value={formData.zip}
+          handleChange={handleChange}
+          placeholder="Enter ZIP"
+          isLabel={true}
+          label="ZIP"
+          errorMessage={errors.zip}
+        />
+        <Input
+          type="text"
+          id="country"
+          name="country"
+          value={formData.country}
+          handleChange={handleChange}
+          placeholder="Enter Country"
+          isLabel={true}
+          label="Country"
+          errorMessage={errors.country}
+        />
+        <Input
+          type="text"
+          id="continent"
+          name="continent"
+          value={formData.continent}
+          handleChange={handleChange}
+          placeholder="Enter Continent"
+          isLabel={true}
+          label="Continent"
+          errorMessage={errors.continent}
+        />
+        <Input
+          type="number"
+          id="lat"
+          name="lat"
+          value={formData.lat}
+          handleChange={handleChange}
+          placeholder="Enter Latitude"
+          isLabel={true}
+          label="Latitude"
+          errorMessage={errors.lat}
+        />
+        <Input
+          type="number"
+          id="lng"
+          name="lng"
+          value={formData.lng}
+          handleChange={handleChange}
+          placeholder="Enter Longitude"
+          isLabel={true}
+          label="Longitude"
+          errorMessage={errors.lng}
+        />
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      {errors.apiErrors.length > 0 && (
+        <div className="text-danger small my-2">
+          {errors.apiErrors.map((error, index) => (
+            <div key={index}>{error.message}</div>
+          ))}
         </div>
-        <div className="d-flex flex-column gap-3">
-          <h2>Media</h2>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="mediaUrls">Media URLs (separated by commas)</label>
-            <input
-              type="text"
-              id="mediaUrls"
-              value={mediaUrls}
-              onChange={handleMediaUrlChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="mediaAlt">Media Alt Text (common for all)</label>
-            <input
-              type="text"
-              id="mediaAlt"
-              value={mediaAlt}
-              onChange={handleMediaAltChange}
-            />
-          </div>
-        </div>
-        <div className="d-flex flex-column gap-3">
-          <h2>Facilities</h2>
-          <div className={`d-flex gap-3`}>
-            <input
-              type="checkbox"
-              id="wifi"
-              name="wifi"
-              checked={formData.wifi}
-              onChange={handleChange}
-            />
-            <label htmlFor="wifi">Wifi</label>
-          </div>
-          <div className={`d-flex gap-3`}>
-            <input
-              type="checkbox"
-              id="parking"
-              name="parking"
-              checked={formData.parking}
-              onChange={handleChange}
-            />
-            <label htmlFor="parking">Parking</label>
-          </div>
-          <div className={`d-flex gap-3`}>
-            <input
-              type="checkbox"
-              id="breakfast"
-              name="breakfast"
-              checked={formData.breakfast}
-              onChange={handleChange}
-            />
-            <label htmlFor="breakfast">Breakfast</label>
-          </div>
-          <div className={`d-flex gap-3`}>
-            <input
-              type="checkbox"
-              id="pets"
-              name="pets"
-              checked={formData.pets}
-              onChange={handleChange}
-            />
-            <label htmlFor="pets">Pets</label>
-          </div>
-        </div>
-        <div className="d-flex flex-column gap-3">
-          <h2>Location</h2>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="address">Address</label>
-            {errors.address && (
-              <div className="text-danger small">{errors.address}</div>
-            )}
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="city">City</label>
-            {errors.city && (
-              <div className="text-danger small">{errors.city}</div>
-            )}
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="zip">ZIP</label>
-            {errors.zip && (
-              <div className="text-danger small">{errors.zip}</div>
-            )}
-            <input
-              type="text"
-              id="zip"
-              name="zip"
-              value={formData.zip}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="country">Country</label>
-            {errors.country && (
-              <div className="text-danger small">{errors.country}</div>
-            )}
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="continent">Continent</label>
-            {errors.continent && (
-              <div className="text-danger small">{errors.continent}</div>
-            )}
-            <input
-              type="text"
-              id="continent"
-              name="continent"
-              value={formData.continent}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="lat">Latitude</label>
-            {errors.lat && (
-              <div className="text-danger small">{errors.lat}</div>
-            )}
-            <input
-              type="number"
-              id="lat"
-              name="lat"
-              value={formData.lat}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={`d-flex flex-column gap-2`}>
-            <label htmlFor="lng">Longitude</label>
-            {errors.lng && (
-              <div className="text-danger small">{errors.lng}</div>
-            )}
-            <input
-              type="number"
-              id="lng"
-              name="lng"
-              value={formData.lng}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div>
-          <Button type="submit">Add Venue</Button>
-        </div>
-      </form>
-    </div>
+      )}
+      <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
+        Add Venue
+      </Button>
+    </FormContainer>
   );
 }
 
