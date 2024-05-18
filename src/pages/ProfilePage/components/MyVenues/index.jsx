@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,6 +17,12 @@ import { Link } from "react-router-dom";
 const MyVenues = ({ user, showEditButton = true }) => {
   const venues = user.venues;
   const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    if (venues.length === 0) {
+      setIsVisible(false);
+    }
+  }, [venues.length]);
 
   function toggleVenues() {
     setIsVisible(!isVisible);
