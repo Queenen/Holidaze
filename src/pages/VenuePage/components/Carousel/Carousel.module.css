@@ -1,7 +1,11 @@
 .carouselItem img {
-  height: 20rem;
+  height: 25rem;
   object-fit: cover;
   width: 100%;
+}
+
+.carouselItem {
+  position: relative;
 }
 
 .icon {
@@ -12,10 +16,6 @@
 .editBtn > * {
   width: fit-content;
   margin: 2rem 0;
-}
-
-.backgroundImageContainer {
-  position: relative;
 }
 
 .overlay {
