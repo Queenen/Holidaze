@@ -1,0 +1,41 @@
+.searchBar {
+  position: relative;
+  max-width: 40rem;
+}
+
+.resultsShowing {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.results {
+  position: absolute;
+  top: 5.5rem;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  max-width: 40rem;
+  z-index: 2;
+}
+
+.results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.results li {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ddd;
+  color: black;
+  cursor: pointer;
+  line-height: 1.5rem;
+}
+
+.results li:hover {
+  background: var(--secondary);
+}

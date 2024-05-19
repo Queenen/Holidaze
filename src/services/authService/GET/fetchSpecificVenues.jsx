@@ -17,6 +17,28 @@ export const fetchTopRatedVenues = async () => {
   return [];
 };
 
+// Function to fetch 1 random venue media
+export const fetchRandomVenueMedia = async () => {
+  const endpoint = "/holidaze/venues";
+  const venues = await fetchData(endpoint);
+
+  if (venues && venues.data && Array.isArray(venues.data)) {
+    // Shuffle the array of venues
+    const shuffledVenues = shuffleArray(venues.data);
+
+    // Get the first venue
+    const randomVenue = shuffledVenues.slice(0, 1)[0];
+
+    if (randomVenue && randomVenue.media && randomVenue.media.length > 0) {
+      const firstMedia = randomVenue.media[0].url;
+      return firstMedia;
+    }
+  }
+
+  console.error("Invalid data format for venues or no media available");
+  return null; // Return null if no valid media is found
+};
+
 // Function to fetch 3 random venues
 export const fetchRandomVenues = async () => {
   const endpoint = "/holidaze/venues";
