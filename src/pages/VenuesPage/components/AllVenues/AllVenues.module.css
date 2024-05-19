@@ -1,0 +1,50 @@
+/* /src/components/AllVenues.module.css */
+
+.venuesContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.venueCard {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.venueCard:hover {
+  transform: translateY(-5px);
+}
+
+.backgroundImageContainer {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.backgroundImageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.facilities {
+  margin-top: 1rem;
+}
