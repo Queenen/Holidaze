@@ -14,6 +14,7 @@ export const Input = ({
   errorMessage,
   ...props
 }) => {
+  /// Checkbox Component
   if (type === "checkbox") {
     return (
       <div className="d-flex align-content-center gap-3">
@@ -22,6 +23,27 @@ export const Input = ({
         )}
         <input
           className={`${styles.input} form-control rounded-5 m-0`}
+          type={type}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          id={id}
+          required={required}
+          {...props}
+        />
+        {isLabel && <label htmlFor={id}>{label}</label>}
+      </div>
+    );
+  }
+  /// SearchBar Component
+  if (type === "search") {
+    return (
+      <div className="d-flex align-content-center">
+        {errorMessage && (
+          <div className="text-danger small mb-1">{errorMessage}</div>
+        )}
+        <input
+          className={`${styles.input} form-control rounded-5 m-0 w-100`}
           type={type}
           value={value}
           onChange={handleChange}
@@ -134,7 +156,7 @@ TextArea.defaultProps = {
 
 // Select Component
 export const Select = ({
-  defaultValue,
+  value,
   handleChange,
   id,
   required,
@@ -156,7 +178,7 @@ export const Select = ({
       )}
       <select
         className={`${styles.select} form-select rounded-5`}
-        defaultValue={defaultValue}
+        value={value}
         onChange={handleChange}
         id={id}
         required={required}
@@ -169,7 +191,7 @@ export const Select = ({
 };
 
 Select.propTypes = {
-  defaultValue: PropTypes.string,
+  value: PropTypes.string,
   handleChange: PropTypes.func,
   id: PropTypes.string,
   required: PropTypes.bool,
@@ -182,7 +204,7 @@ Select.propTypes = {
 Select.defaultProps = {
   required: false,
   isLabel: true,
-  defaultValue: "",
+  value: "",
   errorMessage: "",
 };
 
