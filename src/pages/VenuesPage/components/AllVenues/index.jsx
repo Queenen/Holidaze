@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import { FormContainer, FormGroup } from "../../../../components/Form";
-import { Select, Option, Input } from "../../../../components/Input";
-import Button from "../../../../components/Button";
-import { Modal } from "react-bootstrap";
 import { useFilter } from "../../../../context/FilterContext";
 import VenueCard from "../../../../components/VenueCard";
 import { fetchData } from "../../../../services/authService/GET/fetchAllVenues";
+import FilterVenues from "../FilterVenues";
 import styles from "./AllVenues.module.css";
 
 export const fetchAllVenues = async () => {
@@ -93,7 +90,7 @@ function AllVenues() {
       </div>
 
       <h2 className="fst-italic fs-5 fw-normal ms-3 mb-4">
-        Showing results by: {filter || "All"}
+        Showing results by: {filter || "default"}
       </h2>
 
       <div className={styles.venuesContainer}>
@@ -106,64 +103,16 @@ function AllVenues() {
         )}
       </div>
 
-      <Modal show={modalIsOpen} onHide={() => setIsOpen(false)}>
-        <FormContainer formHeading="Filter Venue">
-          <FormGroup>
-            <Select onChange={handleFilterChange} value={filter || ""}>
-              <Option value={""} disabled></Option>
-              <Option value={"rating"}>Best Rated</Option>
-              <Option value={"popular"}>Most Popular</Option>
-              <Option value={"recent"}>Added Recently</Option>
-            </Select>
-          </FormGroup>
-          <FormGroup>
-            <Input
-              className={`checkbox`}
-              type="checkbox"
-              id="wifi"
-              name="wifi"
-              isLabel={true}
-              label="Wifi"
-              checked={additionalFilters.wifi}
-              onChange={handleCheckboxChange}
-            />
-            <Input
-              className={`checkbox`}
-              type="checkbox"
-              id="parking"
-              name="parking"
-              isLabel={true}
-              label="Parking"
-              checked={additionalFilters.parking}
-              onChange={handleCheckboxChange}
-            />
-            <Input
-              className={`checkbox`}
-              type="checkbox"
-              id="breakfast"
-              name="breakfast"
-              isLabel={true}
-              label="Breakfast"
-              checked={additionalFilters.breakfast}
-              onChange={handleCheckboxChange}
-            />
-            <Input
-              className={`checkbox`}
-              type="checkbox"
-              id="pets"
-              name="pets"
-              isLabel={true}
-              label="Pets"
-              checked={additionalFilters.pets}
-              onChange={handleCheckboxChange}
-            />
-          </FormGroup>
-
-          <Button type="button" onClick={handleModalSave}>
-            Save Changes
-          </Button>
-        </FormContainer>
-      </Modal>
+      <FilterVenues
+        modalIsOpen={modalIsOpen}
+        setIsOpen={setIsOpen}
+        filter={filter}
+        setFilter={setFilter}
+        additionalFilters={additionalFilters}
+        handleFilterChange={handleFilterChange}
+        handleCheckboxChange={handleCheckboxChange}
+        handleModalSave={handleModalSave}
+      />
     </section>
   );
 }
