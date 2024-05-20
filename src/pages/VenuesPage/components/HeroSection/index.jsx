@@ -8,14 +8,17 @@ function HeroSection() {
 
   useEffect(() => {
     const getBackgroundImage = async () => {
-      const mediaUrl = await fetchRandomVenueMedia();
-      if (mediaUrl) {
+      try {
+        const mediaUrl = await fetchRandomVenueMedia();
         setBackgroundImage(mediaUrl);
+      } catch (error) {
+        console.error("Error fetching background image:", error);
       }
     };
 
     getBackgroundImage();
   }, []);
+
   return (
     <section
       style={{
