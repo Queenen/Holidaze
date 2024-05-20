@@ -1,13 +1,12 @@
-import { fetchData } from "./fetchAllVenues";
+import { fetchAllVenues } from "./fetchAllVenues";
 
 // Function to fetch the 3 best-rated venues
 export const fetchTopRatedVenues = async () => {
-  const endpoint = "/holidaze/venues";
-  const venues = await fetchData(endpoint);
+  const venues = await fetchAllVenues();
 
-  if (venues && venues.data) {
+  if (Array.isArray(venues)) {
     // Sort by rating and get the top 3
-    const topRatedVenues = venues.data
+    const topRatedVenues = venues
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 3);
     return topRatedVenues;
@@ -21,15 +20,14 @@ export const fetchTopRatedVenues = async () => {
 const fallBackImage =
   "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 export const fetchRandomVenueMedia = async () => {
-  const endpoint = "/holidaze/venues";
-  const venues = await fetchData(endpoint);
+  const venues = await fetchAllVenues();
 
-  if (venues && venues.data && Array.isArray(venues.data)) {
+  if (Array.isArray(venues)) {
     // Shuffle the array of venues
-    const shuffledVenues = shuffleArray(venues.data);
+    const shuffledVenues = shuffleArray(venues);
 
     // Get the first venue
-    const randomVenue = shuffledVenues.slice(0, 1)[0];
+    const randomVenue = shuffledVenues[0];
 
     if (randomVenue && randomVenue.media && randomVenue.media.length > 0) {
       const firstMedia = randomVenue.media[0].url;
@@ -42,12 +40,11 @@ export const fetchRandomVenueMedia = async () => {
 
 // Function to fetch 3 random venues
 export const fetchRandomVenues = async () => {
-  const endpoint = "/holidaze/venues";
-  const venues = await fetchData(endpoint);
+  const venues = await fetchAllVenues();
 
-  if (venues && venues.data && Array.isArray(venues.data)) {
+  if (Array.isArray(venues)) {
     // Shuffle the array of venues
-    const shuffledVenues = shuffleArray(venues.data);
+    const shuffledVenues = shuffleArray(venues);
 
     // Get the first 3 venues
     const randomVenues = shuffledVenues.slice(0, 3);
