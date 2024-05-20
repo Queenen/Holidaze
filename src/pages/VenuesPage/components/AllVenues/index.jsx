@@ -3,15 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import { useFilter } from "../../../../context/FilterContext";
 import VenueCard from "../../../../components/VenueCard";
-import { fetchData } from "../../../../services/authService/GET/fetchAllVenues";
+import { fetchAllVenues } from "../../../../services/authService/GET/fetchAllVenues";
 import FilterVenues from "../FilterVenues";
 import styles from "./AllVenues.module.css";
-
-export const fetchAllVenues = async () => {
-  const endpoint = "/holidaze/venues?_bookings=true";
-  const response = await fetchData(endpoint);
-  return response ? response.data : null;
-};
 
 function AllVenues() {
   const [modalIsOpen, setIsOpen] = useState(false);
