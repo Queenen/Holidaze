@@ -14,3 +14,30 @@ export const fetchData = async (endpoint, options = {}) => {
     return null;
   }
 };
+
+// Function to fetch all venues across all pages
+export const fetchAllVenues = async () => {
+  const endpoint = "/holidaze/venues?_bookings=true";
+  let allVenues = [];
+  let currentPage = 1;
+  let isLastPage = false;
+
+  while (!isLastPage) {
+    try {
+      const response = await fetchData(`${endpoint}&page=${currentPage}`);
+      if (response && response.data && Array.isArray(response.data)) {
+        allVenues = [...allVenues, ...response.data];
+        isLastPage = response.meta.isLastPage;
+        currentPage += 1;
+      } else {
+        console.error("Invalid data format or no data available");
+        break;
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      break;
+    }
+  }
+
+  return allVenues;
+};
