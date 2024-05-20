@@ -12,9 +12,10 @@ import { Link } from "react-router-dom";
 import Button from "../Button";
 import TextTruncate from "../TextTruncate";
 import styles from "./VenueCard.module.css";
-import fallbackImage from "../../asset/images/missing_image.webp";
 
 const VenueCard = ({ venue, showEditButton = false }) => {
+  const fallbackImage =
+    "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
   const handleImageError = (e) => {
     e.target.src = fallbackImage;
   };
