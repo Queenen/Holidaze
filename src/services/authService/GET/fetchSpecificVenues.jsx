@@ -18,6 +18,8 @@ export const fetchTopRatedVenues = async () => {
 };
 
 // Function to fetch 1 random venue media
+const fallBackImage =
+  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 export const fetchRandomVenueMedia = async () => {
   const endpoint = "/holidaze/venues";
   const venues = await fetchData(endpoint);
@@ -35,8 +37,7 @@ export const fetchRandomVenueMedia = async () => {
     }
   }
 
-  console.error("Invalid data format for venues or no media available");
-  return null; // Return null if no valid media is found
+  return fallBackImage; // Return fallback image if no valid media is found
 };
 
 // Function to fetch 3 random venues
