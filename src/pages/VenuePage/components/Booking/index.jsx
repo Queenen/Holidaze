@@ -1,68 +1,140 @@
-import React, { useState, useEffect } from "react";
-import { useVenue } from "../../../../context/VenueContext";
+import React, { useState } from "react";
 import { useUserStatus } from "../../../../context/UserStatus";
-import styles from "./Booking.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleExclamation,
   faUsers,
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import Calendar from "../Calendar";
 import Button from "../../../../components/Button";
 import Loader from "../../../../components/Loader";
 import { bookVenue } from "../../../../services/authService/POST/bookVenue";
 import createApiKey from "../../../../services/apiAuth";
 import BookingSuccess from "../BookingSuccess";
+import { FormGroup } from "../../../../components/Form";
+import { Input } from "../../../../components/Input";
+import styles from "./Booking.module.css";
 
-function Booking() {
-  const { venue, loading, error: venueError } = useVenue();
+function Booking({ venue, loading, error: venueError }) {
   const { isSignedIn } = useUserStatus();
-  const [guestAmount, setGuestAmount] = useState("");
-  const [guestError, setGuestError] = useState("");
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [formData, setFormData] = useState({
+    checkInDate: "",
+    checkOutDate: "",
+    guests: "",
+  });
+  const [errors, setErrors] = useState({});
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState("");
 
-  const handleGuestChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    setGuestAmount(value);
-    if (venue && venue.maxGuests && value > venue.maxGuests) {
-      setGuestError(
-        `Maximum guests allowed for this venue is ${venue.maxGuests}.`
-      );
-    } else {
-      setGuestError("");
-    }
+  const venueDataId = venue.data.id;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowString = tomorrow.toISOString().split("T")[0];
+
+      if (name === "guests") {
+        if (parseInt(value, 10) > venue.data.maxGuests) {
+          newErrors.guests = `Maximum guests allowed for this venue is ${venue.data.maxGuests}.`;
+        } else {
+          delete newErrors.guests;
+        }
+      }
+
+      if (name === "checkInDate") {
+        if (value < tomorrowString) {
+          newErrors.checkInDate = "Start date cannot be earlier than tomorrow.";
+        } else if (formData.checkOutDate && value > formData.checkOutDate) {
+          newErrors.checkInDate = "Start date must be before the end date.";
+        } else {
+          delete newErrors.checkInDate;
+        }
+
+        if (formData.checkOutDate && value <= formData.checkOutDate) {
+          delete newErrors.checkOutDate;
+        }
+      }
+
+      if (name === "checkOutDate") {
+        if (value < tomorrowString) {
+          newErrors.checkOutDate = "End date cannot be earlier than tomorrow.";
+        } else if (value < formData.checkInDate) {
+          newErrors.checkOutDate = "End date must be after the start date.";
+        } else {
+          delete newErrors.checkOutDate;
+        }
+
+        if (formData.checkInDate && value >= formData.checkInDate) {
+          delete newErrors.checkInDate;
+        }
+      }
+
+      return newErrors;
+    });
   };
 
-  const handleBookingSubmit = async (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowString = tomorrow.toISOString().split("T")[0];
+
+    if (!formData.checkInDate.trim())
+      newErrors.checkInDate = "Start date is required";
+    if (formData.checkInDate < tomorrowString)
+      newErrors.checkInDate = "Start date cannot be earlier than tomorrow.";
+    if (!formData.checkOutDate.trim())
+      newErrors.checkOutDate = "End date is required";
+    if (formData.checkOutDate < tomorrowString)
+      newErrors.checkOutDate = "End date cannot be earlier than tomorrow.";
+    if (formData.checkInDate >= formData.checkOutDate)
+      newErrors.checkInDate = "Start date must be before the end date.";
+    if (!formData.guests || isNaN(formData.guests) || formData.guests <= 0)
+      newErrors.guests = "Guests must be a positive number";
+    if (parseInt(formData.guests, 10) > venue.data.maxGuests)
+      newErrors.guests = `This venue allows a max of ${venue.data.maxGuests} guests.`;
+
+    if (Object.keys(newErrors).length > 0) {
+      newErrors.submitBtn = "Please fix the error prompts before submitting";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!checkInDate || !checkOutDate || !guestAmount) {
-      console.error("All fields are required!");
+    if (!validateForm()) {
       return;
     }
 
-    try {
-      const apiKeyResponse = await createApiKey();
-      const apiKey = apiKeyResponse.data.key;
+    const bookingData = {
+      dateFrom: formData.checkInDate,
+      dateTo: formData.checkOutDate,
+      guests: parseInt(formData.guests, 10),
+      venueId: venueDataId,
+    };
 
-      const result = await bookVenue(
-        checkInDate,
-        checkOutDate,
-        guestAmount,
-        venue.id,
-        apiKey
-      );
-      console.log("Booking successful:", result);
+    try {
+      await bookVenue(bookingData);
       setBookingSuccess(true);
+      setFormData({
+        checkInDate: "",
+        checkOutDate: "",
+        guests: "",
+      });
     } catch (error) {
       console.error("Failed to book the venue:", error);
       if (error.message.includes("409")) {
-        setBookingError(
-          "You've already booked the venue on these specific dates!"
-        );
+        setBookingError("There's already a booking set for these dates!");
       } else if (error.message.includes("401")) {
         setBookingError(
           "You are not authorized to book a venue. Please sign in and try again."
@@ -95,12 +167,16 @@ function Booking() {
         className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
       >
         <form
-          className={`d-flex flex-column gap-3 w-100 ${styles.bookingForm}`}
+          className={`d-flex flex-column gap-3 w-100 justify-content-center ${styles.bookingForm}`}
         >
           <h1 className="mb-3">Book venue</h1>
           <p className="text-danger">
-            <FontAwesomeIcon icon={faCircleExclamation} color="red" /> You need
-            to be signed in to book a venue.
+            <FontAwesomeIcon
+              icon={faCircleExclamation}
+              color="red"
+              className="me-1"
+            />{" "}
+            You'll need to be signed in to book a venue.
           </p>
         </form>
       </section>
@@ -110,57 +186,68 @@ function Booking() {
   if (bookingSuccess) return <BookingSuccess />;
 
   return (
-    <section
-      className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
+    <div
+      className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center`}
     >
-      <form
-        onSubmit={handleBookingSubmit}
-        className={`d-flex flex-column gap-3 w-100 justify-content-center  ${styles.bookingForm}`}
-      >
-        <h1 className="mb-3">Book venue</h1>
-        {bookingError && (
-          <p className="text-danger">
-            <FontAwesomeIcon
-              icon={faCircleExclamation}
-              color="red"
-              className="me-1"
-            />{" "}
-            {bookingError}
-          </p>
-        )}
-        <div className="d-flex flex-column gap-2">
-          <label htmlFor="guestAmount">
-            <FontAwesomeIcon icon={faUsers} className="me-2" /> Guests (amount)
-          </label>
-          {guestError && (
-            <p className="text-danger small">
-              <FontAwesomeIcon icon={faCircleExclamation} color="red" />{" "}
-              {guestError}
-            </p>
-          )}
-          <input
-            type="number"
-            id="guestAmount"
-            value={guestAmount}
-            onChange={handleGuestChange}
-            min="1"
-            className="rounded-5 px-3"
-            required
-          />
-        </div>
-        <label>
-          <FontAwesomeIcon icon={faCalendar} className="me-2" />{" "}
-          Check-in/Check-out
-        </label>
-        <div className="d-flex justify-content-between gap-3">
-          <Calendar selectedDate={checkInDate} onChange={setCheckInDate} />
-          <Calendar selectedDate={checkOutDate} onChange={setCheckOutDate} />
-        </div>
-        <div className={styles.bookBtn}>
-          <Button type="submit">Book venue</Button>
-        </div>
-      </form>
-    </section>
+      <FormGroup>
+        <Input
+          type="date"
+          id="checkInDate"
+          name="checkInDate"
+          value={formData.checkInDate}
+          handleChange={handleChange}
+          placeholder="Enter Start Date"
+          isLabel={true}
+          label="Start Date"
+          required={true}
+          errorMessage={errors.checkInDate}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="date"
+          id="checkOutDate"
+          name="checkOutDate"
+          value={formData.checkOutDate}
+          handleChange={handleChange}
+          placeholder="Enter End Date"
+          isLabel={true}
+          label="End Date"
+          required={true}
+          errorMessage={errors.checkOutDate}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="guests"
+          name="guests"
+          value={formData.guests}
+          handleChange={handleChange}
+          placeholder="Amount of guests"
+          isLabel={true}
+          label="Guests"
+          required={true}
+          errorMessage={errors.guests}
+        />
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      {bookingError && (
+        <div className="text-danger small my-2">{bookingError}</div>
+      )}
+      <div className={styles.bookBtn}>
+        <Button
+          type="submit"
+          name="submitBtn"
+          errorMessage={errors.submitBtn}
+          onClick={handleSubmit}
+        >
+          Book Venue
+        </Button>
+      </div>
+    </div>
   );
 }
 
