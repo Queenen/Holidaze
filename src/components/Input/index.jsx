@@ -24,7 +24,7 @@ export const Input = ({
         <input
           className={`${styles.input} form-control rounded-5 m-0`}
           type={type}
-          value={value}
+          checked={value} // For checkbox, use checked instead of value
           onChange={handleChange}
           placeholder={placeholder}
           id={id}
@@ -35,6 +35,7 @@ export const Input = ({
       </div>
     );
   }
+
   /// SearchBar Component
   if (type === "search") {
     return (
@@ -56,6 +57,8 @@ export const Input = ({
       </div>
     );
   }
+
+  // General Input Component
   return (
     <div className="d-flex flex-column">
       {isLabel && (
@@ -69,7 +72,7 @@ export const Input = ({
       <input
         className={`${styles.input} form-control rounded-5`}
         type={type}
-        value={value}
+        value={type === "number" && value !== "" ? Number(value) : value} // Ensure number type value is handled properly
         onChange={handleChange}
         placeholder={placeholder}
         id={id}
@@ -82,10 +85,10 @@ export const Input = ({
 
 Input.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.string,
-  handleChange: PropTypes.func,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  handleChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   required: PropTypes.bool,
   isLabel: PropTypes.bool,
   label: PropTypes.string,
@@ -98,6 +101,7 @@ Input.defaultProps = {
   required: false,
   isLabel: true,
   errorMessage: "",
+  value: "",
 };
 
 // TextArea Component
