@@ -1,4 +1,8 @@
 import { fetchAllVenues } from "./fetchAllVenues";
+import { getValidImageUrl } from "../../../utils/imageValidation";
+
+const fallBackImage =
+  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 
 // Function to fetch the 3 best-rated venues
 export const fetchTopRatedVenues = async () => {
@@ -9,7 +13,29 @@ export const fetchTopRatedVenues = async () => {
     const topRatedVenues = venues
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 3);
-    return topRatedVenues;
+
+    // Validate media URLs and ensure required fields
+    const validatedVenues = await Promise.all(
+      topRatedVenues.map(async (venue) => {
+        let validMedia =
+          venue.media.length > 0
+            ? await getValidImageUrl(venue.media[0].url)
+            : fallBackImage;
+        return {
+          ...venue,
+          media: [
+            { url: validMedia, alt: venue.media[0]?.alt || "venue media" },
+          ],
+          name: venue.name || "Undefined",
+          description: venue.description || "No description available",
+          rating: venue.rating || "N/A",
+          maxGuests: venue.maxGuests || 0,
+          meta: venue.meta || {},
+        };
+      })
+    );
+
+    return validatedVenues;
   }
 
   console.error("No data available or data format is incorrect");
@@ -17,8 +43,6 @@ export const fetchTopRatedVenues = async () => {
 };
 
 // Function to fetch 1 random venue media
-const fallBackImage =
-  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 export const fetchRandomVenueMedia = async () => {
   const venues = await fetchAllVenues();
 
@@ -30,7 +54,7 @@ export const fetchRandomVenueMedia = async () => {
     const randomVenue = shuffledVenues[0];
 
     if (randomVenue && randomVenue.media && randomVenue.media.length > 0) {
-      const firstMedia = randomVenue.media[0].url;
+      const firstMedia = await getValidImageUrl(randomVenue.media[0].url);
       return firstMedia;
     }
   }
@@ -46,9 +70,24 @@ export const fetchRandomVenues = async () => {
     // Shuffle the array of venues
     const shuffledVenues = shuffleArray(venues);
 
-    // Get the first 3 venues
-    const randomVenues = shuffledVenues.slice(0, 3);
-    return randomVenues;
+    // Get the first 3 venues with necessary fields
+    const randomVenues = shuffledVenues.slice(0, 3).map(async (venue) => {
+      let validMedia =
+        venue.media.length > 0
+          ? await getValidImageUrl(venue.media[0].url)
+          : fallBackImage;
+      return {
+        ...venue,
+        media: [{ url: validMedia, alt: venue.media[0]?.alt || "venue media" }],
+        name: venue.name || "Undefined",
+        description: venue.description || "No description available",
+        rating: venue.rating || "N/A",
+        maxGuests: venue.maxGuests || 0,
+        meta: venue.meta || {},
+      };
+    });
+
+    return Promise.all(randomVenues);
   }
 
   console.error("Invalid data format for venues");
