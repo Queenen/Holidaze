@@ -2,8 +2,18 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Button.module.css";
 
-function Button({ children, onClick, type, size, errorMessage, name }) {
+function Button({
+  children,
+  onClick,
+  type,
+  size,
+  errorMessage,
+  name,
+  variation,
+}) {
   const buttonClass = size === "big" ? styles.bigBtn : styles.smallBtn;
+  const variationClass =
+    variation === "deleteBtn" ? styles.deleteBtn : styles.defaultBtn;
 
   return (
     <>
@@ -14,7 +24,7 @@ function Button({ children, onClick, type, size, errorMessage, name }) {
         onClick={onClick}
         type={type}
         name={name}
-        className={`${styles.button} ${buttonClass}`}
+        className={`${styles.button} ${buttonClass} ${variationClass}`}
       >
         {children}
       </button>
@@ -29,12 +39,14 @@ Button.propTypes = {
   size: PropTypes.oneOf(["big", "small"]),
   name: PropTypes.string,
   errorMessage: PropTypes.string,
+  variation: PropTypes.string,
 };
 
 Button.defaultProps = {
   type: "submit",
   size: "big",
   errorMessage: "",
+  variation: "",
 };
 
 export default Button;
