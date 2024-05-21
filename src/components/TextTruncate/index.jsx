@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./TextTruncate.module.css";
 
-const TextTruncate = ({ text, maxLength, maxLines, className }) => {
+const TextTruncate = ({ text = "", maxLength, maxLines, className }) => {
   const truncatedText = () => {
     let truncated = text;
     if (text.length > maxLength) {
