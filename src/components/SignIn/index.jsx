@@ -23,7 +23,6 @@ function SignIn({ closeModal, onToggleAuth }) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Validate the input dynamically
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       if (name === "email") {
