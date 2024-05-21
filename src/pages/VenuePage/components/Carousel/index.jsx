@@ -11,23 +11,8 @@ import {
 import Button from "../../../../components/Button";
 import styles from "./Carousel.module.css";
 import Loader from "../../../../components/Loader";
-import { useVenue } from "../../../../context/VenueContext";
 
-const VenueCarousel = ({ showEditButton = false }) => {
-  const { venue, loading, error } = useVenue();
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return (
-      <div className={styles.errorContainer}>
-        <div className={styles.errorMsg}>{error}</div>
-      </div>
-    );
-  }
-
+const VenueCarousel = ({ venue, showEditButton = false }) => {
   if (!venue) {
     return (
       <div className={styles.errorContainer}>
@@ -36,7 +21,7 @@ const VenueCarousel = ({ showEditButton = false }) => {
     );
   }
 
-  const hasMultipleMedia = venue.media.length > 1;
+  const hasMultipleMedia = venue.media?.length > 1;
 
   return (
     <section
@@ -77,7 +62,7 @@ const VenueCarousel = ({ showEditButton = false }) => {
         </div>
       )}
       <Carousel controls={hasMultipleMedia} indicators={hasMultipleMedia}>
-        {venue.media.map((mediaItem, index) => (
+        {venue.media?.map((mediaItem, index) => (
           <Carousel.Item
             key={index}
             className={`position-relative ${styles.carouselItem}`}
@@ -100,28 +85,28 @@ const VenueCarousel = ({ showEditButton = false }) => {
           hasMultipleMedia ? styles.indicatorMargin : ""
         }`}
       >
-        {venue.meta.wifi && (
+        {venue.meta?.wifi && (
           <FontAwesomeIcon
             icon={faWifi}
             color="white"
             className={styles.icon}
           />
         )}
-        {venue.meta.parking && (
+        {venue.meta?.parking && (
           <FontAwesomeIcon
             icon={faCarSide}
             color="white"
             className={styles.icon}
           />
         )}
-        {venue.meta.breakfast && (
+        {venue.meta?.breakfast && (
           <FontAwesomeIcon
             icon={faUtensils}
             color="white"
             className={styles.icon}
           />
         )}
-        {venue.meta.pets && (
+        {venue.meta?.pets && (
           <FontAwesomeIcon icon={faPaw} color="white" className={styles.icon} />
         )}
       </div>
@@ -129,4 +114,4 @@ const VenueCarousel = ({ showEditButton = false }) => {
   );
 };
 
-export { VenueCarousel };
+export default VenueCarousel;
