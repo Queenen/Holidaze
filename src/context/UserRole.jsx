@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { UserStatusContext } from "./UserStatus"; // Correctly import UserStatusContext
+import { UserStatusContext } from "./UserStatus";
 
 const UserRoleContext = createContext();
 
 export const UserRoleProvider = ({ children }) => {
-  const { isSignedIn } = useContext(UserStatusContext); // Use useContext to get isSignedIn from UserStatusContext
+  const { isSignedIn } = useContext(UserStatusContext);
   const [role, setRole] = useState("guest");
 
   useEffect(() => {
