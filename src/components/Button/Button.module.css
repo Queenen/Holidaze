@@ -1,5 +1,4 @@
 .button {
-  background-color: var(--button);
   letter-spacing: 0.2rem;
   color: white;
   border-radius: 5rem;
@@ -13,6 +12,14 @@
   margin-top: 1rem;
 }
 
+.defaultBtn {
+  background-color: var(--button);
+}
+
+.deleteBtn {
+  background-color: red;
+}
+
 .bigBtn {
   height: 60px;
 }
@@ -21,6 +28,10 @@
   height: 40px;
 }
 
-.button:hover {
+.defaultBtn:hover {
   background-color: var(--hover);
+}
+
+.deleteBtn:hover {
+  background-color: var(--deleteHover);
 }
