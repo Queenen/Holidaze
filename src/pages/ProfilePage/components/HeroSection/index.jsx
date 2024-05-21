@@ -13,9 +13,7 @@ function HeroSection(props) {
   const { isSignedIn } = useUserStatus();
 
   useEffect(() => {
-    const handleSessionChange = () => {
-      console.log("Detected session change, reloading user data");
-    };
+    const handleSessionChange = () => {};
 
     window.addEventListener("sessionStorageChange", handleSessionChange);
 
