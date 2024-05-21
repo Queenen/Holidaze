@@ -2,13 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../components/Loader";
-import { useVenue } from "../../../../context/VenueContext";
 import styles from "./VenueInfo.module.css";
 import TextTruncate from "../../../../components/TextTruncate";
 
-function VenueInfo() {
-  const { venue, loading, error } = useVenue();
-
+function VenueInfo({ venue, loading, error }) {
   if (loading) {
     return <Loader />;
   }
@@ -39,15 +36,19 @@ function VenueInfo() {
             )}
           </div>
           <p>
-            {" "}
-            <TextTruncate
-              text={venue.description}
-              maxLength={300}
-              className="lh-lg my-3"
-            />
+            {venue.description ? (
+              <TextTruncate
+                text={venue.description}
+                maxLength={800}
+                className="lh-lg my-3"
+              />
+            ) : (
+              "There's currently no description for this venue"
+            )}
           </p>
           <p className="my-3">
-            <span className="fw-bold">Price:</span> $ {venue.price} per day
+            <span className="fw-bold">Price:</span> ${" "}
+            {venue.price ? venue.price : "?"} per day
           </p>
         </div>
       ) : (
