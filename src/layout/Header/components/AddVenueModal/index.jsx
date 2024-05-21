@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../../../../components/Button";
 import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
+import { useUserStatus } from "../../../../context/UserStatus";
 import { createVenue } from "../../../../services/authService/POST/createVenue";
 
 function AddVenueModal({ closeModal }) {
@@ -25,6 +26,7 @@ function AddVenueModal({ closeModal }) {
     lat: "",
     lng: "",
   });
+  const { broadcastSessionChange } = useUserStatus();
   const [errors, setErrors] = useState({ apiErrors: [] });
 
   const isValidImageUrl = (url) => {
@@ -90,7 +92,6 @@ function AddVenueModal({ closeModal }) {
     }
 
     setErrors(newErrors);
-    console.log("Active errors:", newErrors);
 
     return Object.keys(newErrors).length === 0;
   };
@@ -99,7 +100,7 @@ function AddVenueModal({ closeModal }) {
     e.preventDefault();
 
     if (!validateForm()) {
-      console.log("Validation failed");
+      alert("Validation failed");
       return;
     }
 
@@ -143,7 +144,8 @@ function AddVenueModal({ closeModal }) {
 
     try {
       const response = await createVenue(completeData);
-      console.log("Venue added successfully:", response);
+      broadcastSessionChange();
+      alert("Venue added successfully");
       closeModal();
       setFormData({
         venueName: "",
@@ -173,10 +175,9 @@ function AddVenueModal({ closeModal }) {
       }));
     }
   };
-
   return (
     <FormContainer
-      formHeading="Add Venue"
+      formHeading="Create Venue"
       closeModal={closeModal}
       handleSubmit={handleSubmit}
     >
@@ -185,25 +186,25 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="venueName"
           name="venueName"
-          value={formData.venueName}
+          value={formData.venueName || ""}
           handleChange={handleChange}
           placeholder="Enter Venue Name"
           isLabel={true}
           label="Venue Name"
-          required={true}
+          required={false}
           errorMessage={errors.venueName}
         />
       </FormGroup>
       <FormGroup>
         <TextArea
-          value={formData.description}
+          value={formData.description || ""}
           handleChange={handleChange}
           placeholder="Enter Venue Description"
           id="description"
           name="description"
           isLabel={true}
           label="Description"
-          required={true}
+          required={false}
           errorMessage={errors.description}
         />
       </FormGroup>
@@ -212,12 +213,12 @@ function AddVenueModal({ closeModal }) {
           type="number"
           id="price"
           name="price"
-          value={formData.price}
+          value={formData.price || ""}
           handleChange={handleChange}
           placeholder="Enter Price"
           isLabel={true}
           label="Price"
-          required={true}
+          required={false}
           errorMessage={errors.price}
         />
       </FormGroup>
@@ -226,12 +227,12 @@ function AddVenueModal({ closeModal }) {
           type="number"
           id="maxGuests"
           name="maxGuests"
-          value={formData.maxGuests}
+          value={formData.maxGuests || ""}
           handleChange={handleChange}
           placeholder="Enter Max Guests"
           isLabel={true}
           label="Max Guests"
-          required={true}
+          required={false}
           errorMessage={errors.maxGuests}
         />
       </FormGroup>
@@ -240,7 +241,7 @@ function AddVenueModal({ closeModal }) {
           type="number"
           id="rating"
           name="rating"
-          value={formData.rating}
+          value={formData.rating !== undefined ? formData.rating : ""}
           handleChange={handleChange}
           placeholder="Enter Rating"
           isLabel={true}
@@ -253,7 +254,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="mediaUrls"
           name="mediaUrls"
-          value={formData.mediaUrls}
+          value={formData.mediaUrls || ""}
           handleChange={handleChange}
           placeholder="Enter Media URLs (separated by commas)"
           isLabel={true}
@@ -264,7 +265,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="mediaAlt"
           name="mediaAlt"
-          value={formData.mediaAlt}
+          value={formData.mediaAlt || ""}
           handleChange={handleChange}
           placeholder="Enter Media Alt Text"
           isLabel={true}
@@ -275,7 +276,7 @@ function AddVenueModal({ closeModal }) {
       <FormGroup>
         <h2>Facilities</h2>
         <Input
-          className={`checkbox`}
+          className="checkbox"
           type="checkbox"
           id="wifi"
           name="wifi"
@@ -285,7 +286,7 @@ function AddVenueModal({ closeModal }) {
           checked={formData.wifi}
         />
         <Input
-          className={`checkbox`}
+          className="checkbox"
           type="checkbox"
           id="parking"
           name="parking"
@@ -295,7 +296,7 @@ function AddVenueModal({ closeModal }) {
           checked={formData.parking}
         />
         <Input
-          className={`checkbox`}
+          className="checkbox"
           type="checkbox"
           id="breakfast"
           name="breakfast"
@@ -305,7 +306,7 @@ function AddVenueModal({ closeModal }) {
           checked={formData.breakfast}
         />
         <Input
-          className={`checkbox`}
+          className="checkbox"
           type="checkbox"
           id="pets"
           name="pets"
@@ -321,7 +322,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="address"
           name="address"
-          value={formData.address}
+          value={formData.address || ""}
           handleChange={handleChange}
           placeholder="Enter Address"
           isLabel={true}
@@ -332,7 +333,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="city"
           name="city"
-          value={formData.city}
+          value={formData.city || ""}
           handleChange={handleChange}
           placeholder="Enter City"
           isLabel={true}
@@ -343,7 +344,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="zip"
           name="zip"
-          value={formData.zip}
+          value={formData.zip || ""}
           handleChange={handleChange}
           placeholder="Enter ZIP"
           isLabel={true}
@@ -354,7 +355,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="country"
           name="country"
-          value={formData.country}
+          value={formData.country || ""}
           handleChange={handleChange}
           placeholder="Enter Country"
           isLabel={true}
@@ -365,7 +366,7 @@ function AddVenueModal({ closeModal }) {
           type="text"
           id="continent"
           name="continent"
-          value={formData.continent}
+          value={formData.continent || ""}
           handleChange={handleChange}
           placeholder="Enter Continent"
           isLabel={true}
@@ -376,7 +377,7 @@ function AddVenueModal({ closeModal }) {
           type="number"
           id="lat"
           name="lat"
-          value={formData.lat}
+          value={formData.lat || ""}
           handleChange={handleChange}
           placeholder="Enter Latitude"
           isLabel={true}
@@ -387,7 +388,7 @@ function AddVenueModal({ closeModal }) {
           type="number"
           id="lng"
           name="lng"
-          value={formData.lng}
+          value={formData.lng || ""}
           handleChange={handleChange}
           placeholder="Enter Longitude"
           isLabel={true}
@@ -398,7 +399,7 @@ function AddVenueModal({ closeModal }) {
       {errors.apiError && (
         <div className="text-danger small my-2">{errors.apiError}</div>
       )}
-      {errors.apiErrors.length > 0 && (
+      {errors.apiErrors && errors.apiErrors.length > 0 && (
         <div className="text-danger small my-2">
           {errors.apiErrors.map((error, index) => (
             <div key={index}>{error.message}</div>
@@ -406,7 +407,7 @@ function AddVenueModal({ closeModal }) {
         </div>
       )}
       <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
-        Add Venue
+        Create
       </Button>
     </FormContainer>
   );
