@@ -24,7 +24,6 @@ function SignUp({ closeModal, onToggleAuth }) {
       venueManager: name === "venueManager" ? checked : prev.venueManager,
     }));
 
-    // Validate the input dynamically
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       if (name === "name") {
