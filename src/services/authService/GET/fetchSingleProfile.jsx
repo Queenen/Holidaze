@@ -12,7 +12,6 @@ async function ensureApiKey() {
 export async function fetchUserByID() {
   const userName = sessionStorage.getItem("userName");
   if (!userName) {
-    console.error("No userName in sessionStorage.");
     return null;
   }
 
