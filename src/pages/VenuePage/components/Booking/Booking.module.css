@@ -1,5 +1,7 @@
-.bookingSection {
-  background-color: var(--secondary);
+.bookingContainer {
+  background-image: url("../../../../asset/images/form_background.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .bookingForm {
@@ -12,9 +14,10 @@
   border: 1px solid black;
 }
 
-.bookBtn button {
-  height: 40px;
-  margin: 1rem 0;
+.bookBtn {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 20rem;
 }
 
 .icon {
