@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../components/Button";
 import styles from "./Carousel.module.css";
-import Loader from "../../../../components/Loader";
 
 const VenueCarousel = ({ venue, showEditButton = false }) => {
   if (!venue) {

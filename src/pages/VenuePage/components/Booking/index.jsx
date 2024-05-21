@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleExclamation,
-  faUsers,
-  faCalendar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../components/Button";
 import Loader from "../../../../components/Loader";
 import { bookVenue } from "../../../../services/authService/POST/bookVenue";
-import createApiKey from "../../../../services/apiAuth";
 import BookingSuccess from "../BookingSuccess";
 import { FormGroup } from "../../../../components/Form";
 import { Input } from "../../../../components/Input";

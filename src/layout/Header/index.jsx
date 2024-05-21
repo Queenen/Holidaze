@@ -5,7 +5,6 @@ import SignUp from "../../components/SignUp";
 import styles from "./Header.module.css";
 import AddVenueModal from "./components/AddVenueModal";
 import { useUserStatus } from "../../context/UserStatus";
-import { useUserRole } from "../../context/UserRole";
 import NavBar from "./components/NavBar";
 
 const Header = () => {
@@ -13,7 +12,6 @@ const Header = () => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showAddVenueModal, setShowAddVenueModal] = useState(false);
   const { isSignedIn, broadcastSessionChange } = useUserStatus();
-  const { role } = useUserRole();
 
   const handleSignInOutClick = () => {
     if (isSignedIn) {

@@ -143,7 +143,7 @@ function AddVenueModal({ closeModal }) {
     };
 
     try {
-      const response = await createVenue(completeData);
+      await createVenue(completeData);
       broadcastSessionChange();
       alert("Venue added successfully");
       closeModal();
