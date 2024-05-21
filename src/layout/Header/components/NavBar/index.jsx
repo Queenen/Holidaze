@@ -14,8 +14,8 @@ import logo from "../../../../asset/logo/Holidaze_Logo.png";
 import styles from "./NavBar.module.css";
 
 function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
-  const { isSignedIn } = useUserStatus(); // Using the new hook
-  const { role } = useUserRole(); // Using the new hook
+  const { isSignedIn } = useUserStatus();
+  const { role } = useUserRole();
   const userName = sessionStorage.getItem("userName");
   const [expanded, setExpanded] = useState(false);
   const navbarRef = useRef(null);
