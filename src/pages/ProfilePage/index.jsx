@@ -5,11 +5,11 @@ import MyVenues from "./components/MyVenues";
 import MyBookings from "./components/MyBookings";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
 import { useUserRole } from "../../context/UserRole";
-import { UserStatusContext } from "../../context/UserStatus";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 function ProfilePage() {
+  useDocumentTitle("Holidaze | Profile");
   const { role } = useUserRole();
-  const { isSignedIn, broadcastSessionChange } = useContext(UserStatusContext);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -19,26 +19,24 @@ function ProfilePage() {
     bannerUrl: "",
     bannerAlt: "",
     venueManager: false,
-    venues: "",
-    bookings: "",
+    venues: [],
+    bookings: [],
   });
 
   const loadUserData = async () => {
     const fetchedUser = await fetchUserByID();
     if (fetchedUser) {
       setUser({
-        name: fetchedUser.name || "",
-        email: fetchedUser.email || "",
-        bio:
-          fetchedUser.bio ||
-          "There's no bio yet, please edit your profile to add one.",
+        name: fetchedUser.name || "Undefined",
+        email: fetchedUser.email || "Undefined",
+        bio: fetchedUser.bio || "",
         avatarUrl: fetchedUser.avatar.url || "",
         avatarAlt: fetchedUser.avatar.alt || "",
         bannerUrl: fetchedUser.banner.url || "",
         bannerAlt: fetchedUser.banner.alt || "",
         venueManager: fetchedUser.venueManager || false,
-        venues: fetchedUser.venues || {},
-        bookings: fetchedUser.bookings || {},
+        venues: fetchedUser.venues || [],
+        bookings: fetchedUser.bookings || [],
       });
     }
   };
