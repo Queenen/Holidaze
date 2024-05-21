@@ -1,8 +1,10 @@
 import styles from "./NotFound.module.css";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const NotFoundPage = () => {
+  useDocumentTitle("Holidaze | Not Found");
   return (
     <div
       className={`d-flex flex-column justify-content-center align-items-center ${styles.all}`}
