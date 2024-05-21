@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
-import { getVenueUrl } from "../../config";
+import { useState, useEffect } from "react";
+import { NOROFF_API_URL } from "../../config";
 
-// Custom hook to fetch venue data by ID
-export function useFetchVenue(venueId) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+// Custom hook to fetch venue by ID
+export const useFetchVenue = (venueId) => {
+  const [venue, setVenue] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Fetching venue with ID:", venueId);
-    async function fetchVenue() {
-      if (!venueId) return; // Skip if no venueId is provided
+    if (!venueId) return;
 
-      setLoading(true);
+    const fetchVenue = async () => {
       try {
-        const url = getVenueUrl(venueId);
+        const url = `${NOROFF_API_URL}/holidaze/venues/${venueId}`;
         const response = await fetch(url, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -24,17 +22,40 @@ export function useFetchVenue(venueId) {
           throw new Error(`Failed to fetch venue with ID ${venueId}`);
         }
 
-        const { data } = await response.json();
-        setData(data); // Set the entire venue data
+        const data = await response.json();
+        setVenue(data);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchVenue();
   }, [venueId]);
 
-  return { data, loading, error };
+  return { venue, loading, error };
+};
+
+// Function to fetch venue by ID
+export async function fetchVenueById(venueId) {
+  if (!venueId) return null;
+
+  try {
+    const url = `${NOROFF_API_URL}/holidaze/venues/${venueId}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch venue with ID ${venueId}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
