@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers,
@@ -12,37 +12,37 @@ import { Link } from "react-router-dom";
 import Button from "../Button";
 import TextTruncate from "../TextTruncate";
 import styles from "./VenueCard.module.css";
+import { getValidImageUrl } from "../../utils/imageValidation";
 
 const VenueCard = ({ venue, showEditButton = false }) => {
-  const fallbackImage =
-    "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
-  const handleImageError = (e) => {
-    e.target.src = fallbackImage;
-  };
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const checkImage = async () => {
+      const validImageUrl = await getValidImageUrl(
+        venue.media.length > 0 ? venue.media[0].url : ""
+      );
+      setImageUrl(validImageUrl);
+    };
+
+    checkImage();
+  }, [venue.media]);
 
   return (
     <div className={`position-relative ${styles.venueCard}`}>
       <Link to={`/venue?id=${venue.id}`}>
-        {venue.media.length > 0 ? (
-          <div className={styles.backgroundImageContainer}>
-            <img
-              className="d-block w-100"
-              src={venue.media[0].url}
-              alt={venue.media[0].alt || venue.name}
-              onError={handleImageError}
-            />
-            <div className={styles.overlay}></div>
-          </div>
-        ) : (
-          <div className={styles.backgroundImageContainer}>
-            <img
-              className="d-block w-100"
-              src={fallbackImage}
-              alt="missing media"
-            />
-            <div className={styles.overlay}></div>
-          </div>
-        )}
+        <div className={styles.backgroundImageContainer}>
+          <img
+            className="d-block w-100"
+            src={imageUrl}
+            alt={
+              venue.media.length > 0
+                ? venue.media[0].alt || venue.name
+                : "missing media"
+            }
+          />
+          <div className={styles.overlay}></div>
+        </div>
         <div className="d-flex justify-content-between position-absolute top-0 p-4 w-100">
           <div className="d-flex gap-3 align-items-center">
             <FontAwesomeIcon
