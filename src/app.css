@@ -6,6 +6,8 @@
   --darkgray: #8b8b8b;
   --button: #11dd31;
   --hover: #2a8e3a;
+  --delete: red;
+  --deleteHover: rgb(180, 24, 24);
 }
 
 * {
