@@ -161,7 +161,7 @@ function EditProfile({ closeModal }) {
     e.preventDefault();
 
     if (!validateForm()) {
-      console.log("Validation failed");
+      alert("Validation failed");
       return;
     }
 
@@ -185,12 +185,12 @@ function EditProfile({ closeModal }) {
     try {
       const success = await editProfile(dataToSend);
       if (success) {
-        console.log("Profile edited successfully. Updated data:", dataToSend);
+        alert("Profile edited successfully!");
         sessionStorage.setItem("venueManager", formData.venueManager);
         broadcastSessionChange();
         closeModal();
       } else {
-        console.error("Failed to update profile.");
+        alert("Failed to update profile.");
       }
     } catch (error) {
       setErrors((prev) => ({
