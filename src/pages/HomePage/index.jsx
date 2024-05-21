@@ -1,9 +1,12 @@
 import Button from "../../components/Button";
 import { Link } from "react-router-dom";
-import { RandomPicks } from "./components/carousels/RandomPicks";
-import { TopRated } from "./components/carousels/TopRated";
 import styles from "./HomePage.module.css";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import VenueCarousel from "../../components/Carousel";
+import {
+  fetchTopRatedVenues,
+  fetchRandomVenues,
+} from "../../services/authService/GET/fetchSpecificVenues";
 
 function HomePage() {
   useDocumentTitle("Holidaze | Home");
@@ -38,7 +41,7 @@ function HomePage() {
           <h1 className="text-center fw-bold text-uppercase p-4 p-md-5">
             Top Rated
           </h1>
-          <TopRated showEditButton={false} />
+          <VenueCarousel fetchFunction={fetchTopRatedVenues} />
         </section>
         <section
           id="randomVenues"
@@ -47,7 +50,7 @@ function HomePage() {
           <h1 className="text-center fw-bold text-uppercase p-4 p-md-5">
             Random Picks
           </h1>
-          <RandomPicks showEditButton={false} />
+          <VenueCarousel fetchFunction={fetchRandomVenues} />
         </section>
       </div>
     </>
