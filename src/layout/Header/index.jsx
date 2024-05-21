@@ -12,13 +12,13 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showAddVenueModal, setShowAddVenueModal] = useState(false);
-  const { isSignedIn, broadcastSessionChange } = useUserStatus(); // Using the new hook
-  const { role } = useUserRole(); // Using the new hook
+  const { isSignedIn, broadcastSessionChange } = useUserStatus();
+  const { role } = useUserRole();
 
   const handleSignInOutClick = () => {
     if (isSignedIn) {
       sessionStorage.clear();
-      broadcastSessionChange(); // Notify the app of the session change
+      broadcastSessionChange();
     } else {
       setShowModal(true);
       setShowSignUp(false);
