@@ -1,168 +1,257 @@
-import React, { useState } from "react";
-import styles from "./EditBooking.module.css";
+import React, { useState, useEffect } from "react";
 import Button from "../../../../components/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { editBooking } from "../../../../services/authService/PUT/editBooking"; // Import the editBooking function
+import { FormContainer, FormGroup } from "../../../../components/Form";
+import { Input } from "../../../../components/Input";
+import { useUserStatus } from "../../../../context/UserStatus";
+import { deleteBooking } from "../../../../services/authService/DELETE/deleteBooking";
+import { editBooking } from "../../../../services/authService/PUT/editBooking";
+import { fetchBookingById } from "../../../../services/authService/GET/fetchBookingById";
+import { fetchVenueById } from "../../../../services/authService/GET/fetchVenueById";
 
-function EditBooking({ closeModal, bookingId }) {
-  // Accept bookingId as a prop
-  const [formState, setFormState] = useState({
+function EditBooking({ closeModal, bookingData }) {
+  const bookingId = bookingData.bookingId;
+  const venueId = bookingData.id;
+  const [formData, setFormData] = useState({
     dateFrom: "",
     dateTo: "",
-    guestAmount: "",
+    guests: "",
   });
+  const [maxGuests, setMaxGuests] = useState(0);
+  const [errors, setErrors] = useState({ apiErrors: [] });
 
-  const [errors, setErrors] = useState({
-    dateFrom: "",
-    dateTo: "",
-    guestAmount: "",
-  });
+  const { broadcastSessionChange } = useUserStatus();
 
-  const [isGuestAmountFocused, setIsGuestAmountFocused] = useState(false);
+  useEffect(() => {
+    async function fetchBookingAndVenue() {
+      try {
+        const booking = await fetchBookingById(bookingId);
 
-  function handleFocus() {
-    setIsGuestAmountFocused(true);
-  }
+        // Convert date strings to YYYY-MM-DD format
+        const dateFrom = booking.dateFrom ? booking.dateFrom.split("T")[0] : "";
+        const dateTo = booking.dateTo ? booking.dateTo.split("T")[0] : "";
 
-  function handleBlur() {
-    setIsGuestAmountFocused(false);
-  }
+        setFormData({
+          dateFrom,
+          dateTo,
+          guests: booking.guests.toString() || "",
+        });
 
-  function handleChange(e) {
+        const venue = await fetchVenueById(venueId);
+        setMaxGuests(venue.data.maxGuests);
+      } catch (error) {
+        console.error("Failed to fetch booking data:", error);
+      }
+    }
+
+    fetchBookingAndVenue();
+  }, [bookingId, venueId]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
+
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
 
-    let newErrors = { ...errors };
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowString = tomorrow.toISOString().split("T")[0];
 
-    if (name === "guestAmount") {
-      if (value > 5) {
-        newErrors.guestAmount = "This venue allows a maximum of 5 guests.";
-      } else if (value === "0" && isGuestAmountFocused) {
-        newErrors.guestAmount = "Please enter a valid number.";
-      } else {
-        newErrors.guestAmount = "";
+      if (name === "guests") {
+        if (parseInt(value, 10) > maxGuests) {
+          newErrors.guests = `This venue allows a max of ${maxGuests} guests.`;
+        } else {
+          delete newErrors.guests;
+        }
       }
-    }
 
-    if (name === "dateFrom" || name === "dateTo") {
-      const { dateFrom, dateTo } = {
-        ...formState,
-        [name]: value,
-      };
+      if (name === "dateFrom") {
+        if (value < tomorrowString) {
+          newErrors.dateFrom = "Start date cannot be earlier than tomorrow.";
+        } else if (formData.dateTo && value > formData.dateTo) {
+          newErrors.dateFrom = "Start date must be before the end date.";
+        } else {
+          delete newErrors.dateFrom;
+        }
 
-      if (!dateFrom || !dateTo) {
-        newErrors.dateFrom = newErrors.dateTo =
-          "Please set a date for both inputs.";
-      } else if (new Date(dateTo) <= new Date(dateFrom)) {
-        newErrors.dateFrom = newErrors.dateTo =
-          "Please ensure that the check-out date is after the check-in date.";
-      } else {
-        newErrors.dateFrom = newErrors.dateTo = "";
+        if (formData.dateTo && value <= formData.dateTo) {
+          delete newErrors.dateTo;
+        }
       }
+
+      if (name === "dateTo") {
+        if (value < tomorrowString) {
+          newErrors.dateTo = "End date cannot be earlier than tomorrow.";
+        } else if (value < formData.dateFrom) {
+          newErrors.dateTo = "End date must be after the start date.";
+        } else {
+          delete newErrors.dateTo;
+        }
+
+        if (formData.dateFrom && value >= formData.dateFrom) {
+          delete newErrors.dateFrom;
+        }
+      }
+
+      return newErrors;
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowString = tomorrow.toISOString().split("T")[0];
+
+    if (!formData.dateFrom.trim())
+      newErrors.dateFrom = "Start date is required";
+    if (formData.dateFrom < tomorrowString)
+      newErrors.dateFrom = "Start date cannot be earlier than tomorrow.";
+    if (!formData.dateTo.trim()) newErrors.dateTo = "End date is required";
+    if (formData.dateTo < tomorrowString)
+      newErrors.dateTo = "End date cannot be earlier than tomorrow.";
+    if (formData.dateFrom >= formData.dateTo)
+      newErrors.dateFrom = "Start date must be before the end date.";
+    if (!formData.guests || isNaN(formData.guests) || formData.guests <= 0)
+      newErrors.guests = "Guests must be a positive number";
+    if (parseInt(formData.guests, 10) > maxGuests)
+      newErrors.guests = `This venue allows a max of ${maxGuests} guests.`;
+
+    if (Object.keys(newErrors).length > 0) {
+      newErrors.submitBtn = "Please fix the error prompts before submitting";
     }
 
     setErrors(newErrors);
-  }
+    return Object.keys(newErrors).length === 0;
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (Object.values(errors).some((error) => error !== "")) {
+    if (!validateForm()) {
       return;
     }
 
-    const { dateFrom, dateTo, guestAmount } = formState;
+    const completeData = {
+      dateFrom: formData.dateFrom,
+      dateTo: formData.dateTo,
+      guests: parseInt(formData.guests, 10),
+    };
 
     try {
-      const bookingData = {
-        dateFrom: dateFrom || null,
-        dateTo: dateTo || null,
-        guests: guestAmount ? parseInt(guestAmount, 10) : null,
-      };
-
-      const success = await editBooking(bookingId, bookingData);
-
-      if (success) {
-        alert("Booking updated successfully.");
-        closeModal();
-      } else {
-        alert("Failed to update booking.");
-      }
+      await editBooking(bookingId, completeData);
+      broadcastSessionChange();
+      closeModal();
+      setFormData({
+        dateFrom: "",
+        dateTo: "",
+        guests: "",
+      });
     } catch (error) {
-      console.error("Error updating booking:", error);
-      alert("An error occurred while updating the booking.");
+      setErrors((prev) => ({
+        ...prev,
+        apiError: error.message || "Failed to update booking",
+        apiErrors: error.errorData?.errors || [],
+      }));
     }
-  }
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you'd like to delete this booking?"
+    );
+    if (confirmed) {
+      try {
+        await deleteBooking(bookingId);
+        broadcastSessionChange();
+        alert("Booking deleted successfully");
+        closeModal();
+      } catch (error) {
+        setErrors((prev) => ({
+          ...prev,
+          apiError: error.message || "Failed to delete booking",
+          apiErrors: error.errorData?.errors || [],
+        }));
+      }
+    }
+  };
 
   return (
-    <div className={`${styles.modalBackdrop}`}>
-      <form
-        onSubmit={handleSubmit}
-        className={`gap-5 p-5 position-relative ${styles.form}`}
-      >
-        <FontAwesomeIcon
-          icon={faCircleXmark}
-          size="2x"
-          className={`${styles.closeModal}`}
-          onClick={closeModal}
+    <FormContainer
+      formHeading="Edit Booking"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <Input
+          type="date"
+          id="dateFrom"
+          name="dateFrom"
+          value={formData.dateFrom}
+          handleChange={handleChange}
+          placeholder="Enter Start Date"
+          isLabel={true}
+          label="Start Date"
+          required={true}
+          errorMessage={errors.dateFrom}
         />
-        <h1 className={`mt-4`}>Edit booking</h1>
-        <div className="d-flex flex-column gap-3">
-          <h2 className="fs-5">Booking dates</h2>
-          <div className="d-flex flex-column gap-1">
-            {errors.dateFrom && (
-              <div className="text-danger small">{errors.dateFrom}</div>
-            )}
-            <label htmlFor="dateFrom">Check-in date</label>
-            <input
-              type="date"
-              id="dateFrom"
-              name="dateFrom"
-              value={formState.dateFrom}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="d-flex flex-column gap-1">
-            {errors.dateTo && (
-              <div className="text-danger small">{errors.dateTo}</div>
-            )}
-            <label htmlFor="dateTo">Check-out date</label>
-            <input
-              type="date"
-              id="dateTo"
-              name="dateTo"
-              value={formState.dateTo}
-              onChange={handleChange}
-            />
-          </div>
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="date"
+          id="dateTo"
+          name="dateTo"
+          value={formData.dateTo}
+          handleChange={handleChange}
+          placeholder="Enter End Date"
+          isLabel={true}
+          label="End Date"
+          required={true}
+          errorMessage={errors.dateTo}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="guests"
+          name="guests"
+          value={formData.guests}
+          handleChange={handleChange}
+          placeholder="Enter Number of Guests"
+          isLabel={true}
+          label="Guests"
+          required={true}
+          errorMessage={errors.guests}
+        />
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      {errors.apiErrors && errors.apiErrors.length > 0 && (
+        <div className="text-danger small my-2">
+          {errors.apiErrors.map((error, index) => (
+            <div key={index}>{error.message}</div>
+          ))}
         </div>
-        <div className="d-flex flex-column gap-3">
-          <h2 className="fs-5">Guests (amount)</h2>
-          <div className="d-flex flex-column gap-1">
-            <label htmlFor="guestAmount">Guests</label>
-            {errors.guestAmount && (
-              <div className="text-danger small">{errors.guestAmount}</div>
-            )}
-            <input
-              type="number"
-              id="guestAmount"
-              name="guestAmount"
-              value={formState.guestAmount}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div>
-          <Button type="submit">Save Changes</Button>
-        </div>
-      </form>
-    </div>
+      )}
+      <div className="d-flex flex-wrap justify-content-between gap-3">
+        <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
+          Update
+        </Button>
+        <Button
+          type="button"
+          name="deleteBtn"
+          errorMessage={errors.submitBtn}
+          variation="deleteBtn"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </div>
+    </FormContainer>
   );
 }
 
