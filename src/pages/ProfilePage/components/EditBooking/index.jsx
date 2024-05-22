@@ -191,7 +191,7 @@ function EditBooking({ closeModal, bookingData }) {
           id="dateFrom"
           name="dateFrom"
           value={formData.dateFrom}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Start Date"
           isLabel={true}
           label="Start Date"
@@ -205,7 +205,7 @@ function EditBooking({ closeModal, bookingData }) {
           id="dateTo"
           name="dateTo"
           value={formData.dateTo}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter End Date"
           isLabel={true}
           label="End Date"
@@ -219,7 +219,7 @@ function EditBooking({ closeModal, bookingData }) {
           id="guests"
           name="guests"
           value={formData.guests}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Number of Guests"
           isLabel={true}
           label="Guests"

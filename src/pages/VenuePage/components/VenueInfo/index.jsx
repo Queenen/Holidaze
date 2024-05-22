@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../../../components/Loader";
 import styles from "./VenueInfo.module.css";
 import TextTruncate from "../../../../components/TextTruncate";
+import ViewLocationModal from "../ViewLocation";
 
 function VenueInfo({ venue, loading, error }) {
+  const [showModal, setShowModal] = useState(false);
+
   if (loading) {
     return <Loader />;
   }
@@ -18,37 +21,50 @@ function VenueInfo({ venue, loading, error }) {
     );
   }
 
+  function showLocation(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
     <section
       className={`d-flex justify-content-center p-5 col-md-6 col-lg-8 order-1 ${styles.infoContainer}`}
     >
       {venue ? (
-        <div className={`d-flex flex-column gap-3 w-100 ${styles.venueInfo}`}>
-          <TextTruncate text={venue.name} maxLength={22} className="fs-1" />
-          <div className="fst-italic d-flex gap-2 align-items-center">
+        <div className={`d-flex flex-column gap-4 w-100 ${styles.venueInfo}`}>
+          <TextTruncate text={venue.name} className="fs-1 lh-base mb-3" />
+          <div
+            className="fst-italic d-flex gap-2 align-items-center btn bg-white rounded-5"
+            onClick={showLocation}
+          >
             <span>
               <FontAwesomeIcon icon={faLocationDot} />
             </span>
             {venue.location?.address ? (
-              <TextTruncate text={venue.location.address} maxLength={22} />
+              <TextTruncate text={venue.location.address} />
             ) : (
-              "Unknown location"
+              "Undefined"
             )}
           </div>
-          <p>
+          <div className="d-flex flex-column text-break">
             {venue.description ? (
               <TextTruncate
                 text={venue.description}
-                maxLength={800}
-                className="lh-lg my-3"
+                useMaxLength
+                maxLength={400}
               />
             ) : (
-              "There's currently no description for this venue"
+              "Undefined"
             )}
-          </p>
-          <p className="my-3">
+          </div>
+          <p>
             <span className="fw-bold">Price:</span> ${" "}
-            {venue.price ? venue.price : "?"} per day
+            {venue.price ? `${venue.price}` : "0"} per day
           </p>
         </div>
       ) : (
@@ -58,6 +74,8 @@ function VenueInfo({ venue, loading, error }) {
           </p>
         </div>
       )}
+
+      {showModal && <ViewLocationModal venue={venue} onClose={closeModal} />}
     </section>
   );
 }

@@ -6,11 +6,15 @@ import VenueCard from "../../../../components/VenueCard";
 import { fetchAllVenues } from "../../../../services/authService/GET/fetchAllVenues";
 import FilterVenues from "../FilterVenues";
 import styles from "./AllVenues.module.css";
+import LoadingError from "../../../../utils/LoadingError";
+import { v4 as uuidv4 } from "uuid";
 
 function AllVenues() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { filter, setFilter } = useFilter();
   const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [additionalFilters, setAdditionalFilters] = useState({
     wifi: false,
     parking: false,
@@ -20,15 +24,18 @@ function AllVenues() {
 
   useEffect(() => {
     const fetchVenues = async () => {
+      setLoading(true);
       try {
         const fetchedVenues = await fetchAllVenues();
         if (Array.isArray(fetchedVenues)) {
           setVenues(fetchedVenues);
         } else {
-          console.error("No venues found or invalid data format.");
+          setError("No venues found or invalid data format.");
         }
       } catch (error) {
-        console.error("Error fetching venues:", error);
+        setError("Error fetching venues: " + error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -56,22 +63,6 @@ function AllVenues() {
       })
     : applyAdditionalFilters(venues);
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setAdditionalFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: checked,
-    }));
-  };
-
-  const handleModalSave = () => {
-    setIsOpen(false);
-  };
-
   return (
     <section className={`p-4 p-md-5 d-flex flex-column gap-3 my-3`}>
       <div className="d-flex justify-content-between mx-3">
@@ -87,15 +78,15 @@ function AllVenues() {
         Showing results by: {filter || "default"}
       </h2>
 
-      <div className={styles.venuesContainer}>
-        {filteredVenues.length > 0 ? (
-          filteredVenues.map((venue) => (
-            <VenueCard key={venue.id} venue={venue} />
-          ))
-        ) : (
-          <p>No venues available.</p>
-        )}
-      </div>
+      <LoadingError loading={loading} error={error}>
+        <div className={styles.venuesContainer}>
+          {filteredVenues.length > 0
+            ? filteredVenues.map((venue) => (
+                <VenueCard key={uuidv4()} venue={venue} />
+              ))
+            : !error && <p>No venues available.</p>}
+        </div>
+      </LoadingError>
 
       <FilterVenues
         modalIsOpen={modalIsOpen}
@@ -103,9 +94,7 @@ function AllVenues() {
         filter={filter}
         setFilter={setFilter}
         additionalFilters={additionalFilters}
-        handleFilterChange={handleFilterChange}
-        handleCheckboxChange={handleCheckboxChange}
-        handleModalSave={handleModalSave}
+        setAdditionalFilters={setAdditionalFilters}
       />
     </section>
   );

@@ -10,7 +10,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { useUserRole } from "../../../../context/UserRole";
-import logo from "../../../../asset/logo/Holidaze_Logo.png";
+import logo from "../../../../asset/logo/Holidaze.png";
 import styles from "./NavBar.module.css";
 
 function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
@@ -44,10 +44,11 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
       className="w-100"
       ref={navbarRef}
     >
-      <Container className={`d-flex p-0 gap-4 ${styles.container}`}>
+      <Container className={`d-flex p-0 gap-2 ${styles.container}`}>
         <Navbar.Brand as={Link} to="/" onClick={closeNavbar}>
           <img src={logo} alt="Holidaze logo" className={styles.logo} />
         </Navbar.Brand>
+
         <button
           className="btn order-md-1 ms-auto"
           onClick={() => {
@@ -70,7 +71,7 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
         </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav
-            className={`me-auto order-md-0 text-center gap-md-4 ${styles.navLinks}`}
+            className={`me-auto order-md-0 text-center gap-md-3 ${styles.navLinks}`}
             onClick={closeNavbar}
           >
             {role === "manager" && (

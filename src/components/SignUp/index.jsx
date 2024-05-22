@@ -97,7 +97,7 @@ function SignUp({ closeModal, onToggleAuth }) {
           id="name"
           name="name"
           value={formData.name}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter your name"
           required
           isLabel={true}
@@ -111,7 +111,7 @@ function SignUp({ closeModal, onToggleAuth }) {
           id="email"
           name="email"
           value={formData.email}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter your email"
           required
           isLabel={true}
@@ -125,7 +125,7 @@ function SignUp({ closeModal, onToggleAuth }) {
           id="password"
           name="password"
           value={formData.password}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter your password"
           required
           isLabel={true}

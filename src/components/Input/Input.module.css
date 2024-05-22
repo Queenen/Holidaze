@@ -4,6 +4,18 @@
   padding: 0.5rem 1rem !important;
 }
 
+input[type="search"] {
+  padding: 0.5rem 1.2rem !important;
+}
+
+input[type="search"]:focus {
+  border: 1.5px solid var(--hover);
+  -webkit-box-shadow: 0px 0px 24px -3px rgba(17, 221, 49, 0.54);
+  -moz-box-shadow: 0px 0px 24px -3px rgba(17, 221, 49, 0.54);
+  box-shadow: 0px 0px 24px -3px rgba(17, 221, 49, 0.54);
+  outline: none !important;
+}
+
 .textarea {
   height: 160px;
   resize: none;

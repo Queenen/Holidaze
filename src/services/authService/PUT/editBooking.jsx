@@ -28,9 +28,6 @@ export async function editBooking(id, bookingData) {
     if (typeof bookingData.guests === "number")
       bodyData.guests = bookingData.guests;
 
-    console.log("Request URL:", url);
-    console.log("Request Body Data:", bodyData);
-
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -54,7 +51,7 @@ export async function editBooking(id, bookingData) {
 
     const data = await response.json();
     if (data && data.data) {
-      console.log("Booking updated successfully:", data.data);
+      alert("Booking updated successfully");
       return true;
     } else {
       console.error("Booking data missing in the response:", data);

@@ -15,6 +15,7 @@
 .formContainer {
   max-width: 30rem;
   background-image: url("../../asset/images/form_background.webp");
+  background-color: var(--secondary);
   background-repeat: no-repeat;
   background-size: cover;
   border: 1.5px solid black;

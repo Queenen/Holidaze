@@ -47,10 +47,8 @@ export const fetchRandomVenueMedia = async () => {
   const venues = await fetchAllVenues();
 
   if (Array.isArray(venues)) {
-    // Shuffle the array of venues
     const shuffledVenues = shuffleArray(venues);
 
-    // Get the first venue
     const randomVenue = shuffledVenues[0];
 
     if (randomVenue && randomVenue.media && randomVenue.media.length > 0) {
@@ -59,7 +57,7 @@ export const fetchRandomVenueMedia = async () => {
     }
   }
 
-  return fallBackImage; // Return fallback image if no valid media is found
+  return fallBackImage;
 };
 
 // Function to fetch 3 random venues

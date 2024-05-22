@@ -190,7 +190,7 @@ function Booking({ venue, loading, error: venueError }) {
           id="checkInDate"
           name="checkInDate"
           value={formData.checkInDate}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Start Date"
           isLabel={true}
           label="Start Date"
@@ -204,7 +204,7 @@ function Booking({ venue, loading, error: venueError }) {
           id="checkOutDate"
           name="checkOutDate"
           value={formData.checkOutDate}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter End Date"
           isLabel={true}
           label="End Date"
@@ -218,7 +218,7 @@ function Booking({ venue, loading, error: venueError }) {
           id="guests"
           name="guests"
           value={formData.guests}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Amount of guests"
           isLabel={true}
           label="Guests"

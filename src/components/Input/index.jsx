@@ -1,11 +1,9 @@
 import styles from "./Input.module.css";
 import PropTypes from "prop-types";
 
-// Input Component
 export const Input = ({
   type,
-  value,
-  handleChange,
+  onChange,
   placeholder,
   id,
   required,
@@ -14,7 +12,8 @@ export const Input = ({
   errorMessage,
   ...props
 }) => {
-  /// Checkbox Component
+  const inputClassNames = `${styles.input} form-control rounded-5 m-0 w-100`;
+
   if (type === "checkbox") {
     return (
       <div className="d-flex align-content-center gap-3">
@@ -22,10 +21,9 @@ export const Input = ({
           <div className="text-danger small mb-1">{errorMessage}</div>
         )}
         <input
-          className={`${styles.input} form-control rounded-5 m-0`}
+          className={inputClassNames}
           type={type}
-          checked={value} // For checkbox, use checked instead of value
-          onChange={handleChange}
+          onChange={onChange}
           placeholder={placeholder}
           id={id}
           required={required}
@@ -36,7 +34,6 @@ export const Input = ({
     );
   }
 
-  /// SearchBar Component
   if (type === "search") {
     return (
       <div className="d-flex align-content-center">
@@ -44,10 +41,9 @@ export const Input = ({
           <div className="text-danger small mb-1">{errorMessage}</div>
         )}
         <input
-          className={`${styles.input} form-control rounded-5 m-0 w-100`}
+          className={inputClassNames}
           type={type}
-          value={value}
-          onChange={handleChange}
+          onChange={onChange}
           placeholder={placeholder}
           id={id}
           required={required}
@@ -58,7 +54,6 @@ export const Input = ({
     );
   }
 
-  // General Input Component
   return (
     <div className="d-flex flex-column">
       {isLabel && (
@@ -70,10 +65,9 @@ export const Input = ({
         <div className="text-danger small mb-1">{errorMessage}</div>
       )}
       <input
-        className={`${styles.input} form-control rounded-5`}
+        className={inputClassNames}
         type={type}
-        value={type === "number" && value !== "" ? Number(value) : value} // Ensure number type value is handled properly
-        onChange={handleChange}
+        onChange={onChange}
         placeholder={placeholder}
         id={id}
         required={required}
@@ -85,10 +79,9 @@ export const Input = ({
 
 Input.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  handleChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   placeholder: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   required: PropTypes.bool,
   isLabel: PropTypes.bool,
   label: PropTypes.string,
@@ -101,12 +94,10 @@ Input.defaultProps = {
   required: false,
   isLabel: true,
   errorMessage: "",
-  value: "",
 };
 
 // TextArea Component
 export const TextArea = ({
-  value,
   handleChange,
   placeholder,
   id,
@@ -129,7 +120,6 @@ export const TextArea = ({
       )}
       <textarea
         className={`${styles.textarea} form-control rounded-5`}
-        value={value}
         onChange={handleChange}
         placeholder={placeholder}
         id={id}
@@ -160,7 +150,6 @@ TextArea.defaultProps = {
 
 // Select Component
 export const Select = ({
-  value,
   handleChange,
   id,
   required,
@@ -182,7 +171,6 @@ export const Select = ({
       )}
       <select
         className={`${styles.select} form-select rounded-5`}
-        value={value}
         onChange={handleChange}
         id={id}
         required={required}
@@ -195,7 +183,6 @@ export const Select = ({
 };
 
 Select.propTypes = {
-  value: PropTypes.string,
   handleChange: PropTypes.func,
   id: PropTypes.string,
   required: PropTypes.bool,
@@ -208,14 +195,12 @@ Select.propTypes = {
 Select.defaultProps = {
   required: false,
   isLabel: true,
-  value: "",
-  errorMessage: "",
 };
 
 // Option Component
-export const Option = ({ value, children, ...props }) => {
+export const Option = ({ children, ...props }) => {
   return (
-    <option className={`${styles.option}`} value={value} {...props}>
+    <option className={`${styles.option}`} {...props}>
       {children}
     </option>
   );
@@ -223,5 +208,4 @@ export const Option = ({ value, children, ...props }) => {
 
 Option.propTypes = {
   children: PropTypes.node,
-  value: PropTypes.string,
 };

@@ -1,5 +1,7 @@
 .hero {
-  background-image: url("../../asset/images/index_hero.webp");
+  background-image: url("../../asset/images/index.webp");
+  background-position: center top !important;
+  background-color: var(--darkgray);
   width: 100%;
   height: 30rem;
   background-size: cover;

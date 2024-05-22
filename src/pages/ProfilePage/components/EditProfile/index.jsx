@@ -224,7 +224,7 @@ function EditProfile({ closeModal }) {
           type="checkbox"
           id="venueManager"
           name="venueManager"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="I'd like to host venues"
           checked={formData.venueManager}
@@ -236,7 +236,7 @@ function EditProfile({ closeModal }) {
           id="avatarUrl"
           name="avatarUrl"
           value={formData.avatarUrl}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Avatar URL"
           isLabel={true}
           label="Avatar URL"
@@ -247,7 +247,7 @@ function EditProfile({ closeModal }) {
           id="avatarAlt"
           name="avatarAlt"
           value={formData.avatarAlt}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Avatar Alt"
           isLabel={true}
           label="Avatar Alt"
@@ -260,7 +260,7 @@ function EditProfile({ closeModal }) {
           id="bannerUrl"
           name="bannerUrl"
           value={formData.bannerUrl}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Banner URL"
           isLabel={true}
           label="Banner URL"
@@ -271,7 +271,7 @@ function EditProfile({ closeModal }) {
           id="bannerAlt"
           name="bannerAlt"
           value={formData.bannerAlt}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Banner Alt"
           isLabel={true}
           label="Banner Alt"

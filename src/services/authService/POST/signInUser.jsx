@@ -11,13 +11,16 @@ export async function loginUser(credentials) {
       body: JSON.stringify(credentials),
     });
 
+    if (response.status === 401) {
+      throw new Error(
+        `Failed to sign in. Please try a different email or password`
+      );
+    }
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(`Failed to sign in: ${errorData.message}`);
     }
-
-    // Log the credentials sent to the server
-    console.log("Credentials sent to server:", credentials);
 
     const data = await response.json();
     sessionStorage.setItem("accessToken", data.data.accessToken);

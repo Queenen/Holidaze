@@ -8,12 +8,27 @@ const FilterVenues = ({
   modalIsOpen,
   setIsOpen,
   filter,
-  handleFilterChange,
+  setFilter,
   additionalFilters,
-  handleCheckboxChange,
-  handleModalSave,
+  setAdditionalFilters,
 }) => {
   const closeModal = () => setIsOpen(false);
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setAdditionalFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: checked,
+    }));
+  };
+
+  const handleModalSave = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Modal show={modalIsOpen} onHide={closeModal}>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "./MyBookings.module.css";
 import VenueCarousel from "../../../../components/Carousel";
 import EditBooking from "../EditBooking";
-import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,7 +19,8 @@ const MyBookings = ({ user, showEditButton = true }) => {
       id: booking.id,
       ...booking.venue,
       bookingId: booking.id,
-      uuid: uuidv4(),
+      dateFrom: booking.dateFrom,
+      dateTo: booking.dateTo,
     }));
   };
 
@@ -54,6 +54,8 @@ const MyBookings = ({ user, showEditButton = true }) => {
               height="25rem"
               onEditClick={handleEditBooking}
               editButtonText="Edit Booking"
+              user={user}
+              bookingCarousel={true}
             />
           ) : (
             <div className={styles.emptyContent}>

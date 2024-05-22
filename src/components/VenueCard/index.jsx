@@ -50,7 +50,9 @@ const VenueCard = ({ venue, showEditButton = false }) => {
               color="white"
               className={styles.icon}
             />
-            <p className="fw-bold text-white">{venue.rating}</p>
+            <p className="fw-bold text-white">
+              {venue.rating ? `${venue.rating}` : "N/A"}
+            </p>
           </div>
           <div className="d-flex gap-3 align-items-center">
             <FontAwesomeIcon
@@ -58,25 +60,35 @@ const VenueCard = ({ venue, showEditButton = false }) => {
               color="white"
               className={styles.icon}
             />
-            <p className="fw-bold text-white">{venue.maxGuests}</p>
+            <p className="fw-bold text-white">
+              {venue.maxGuests ? `${venue.maxGuests}` : "N/A"}
+            </p>
           </div>
         </div>
         <div
-          className={`position-absolute bottom-0 p-4 w-100 ${styles.caption}`}
+          className={`position-absolute bottom-0 p-4 px-lg-5 w-100 d-flex flex-column gap-3 ${styles.caption}`}
         >
           {showEditButton && (
             <div className={styles.editBtn}>
               <Button>Edit Venue</Button>
             </div>
           )}
-          <h2 className="d-flex justify-content-center fs-">
-            <TextTruncate text={venue.name} maxLength={18} />
+          <h2 className="d-flex justify-content-center fs-3">
+            {venue.name ? (
+              <TextTruncate text={venue.name} className="lh-base" />
+            ) : (
+              "Undefined"
+            )}
           </h2>
           <p className="d-flex justify-content-center">
-            <TextTruncate text={venue.description} maxLength={30} />
+            {venue.description ? (
+              <TextTruncate text={venue.description} />
+            ) : (
+              "Undefined"
+            )}
           </p>
           <div
-            className={`facilities d-flex gap-4 justify-content-center my-3 ${styles.facilitiesContainer}`}
+            className={`facilities d-flex gap-4 justify-content-center mt-4 ${styles.facilitiesContainer}`}
           >
             {venue.meta.wifi && (
               <FontAwesomeIcon

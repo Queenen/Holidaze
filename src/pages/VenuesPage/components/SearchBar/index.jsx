@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Input } from "../../../../components/Input";
-import searchVenue from "../../../../services/authService/GET/searchVenues";
 import styles from "./SearchBar.module.css";
+import searchVenue from "../../../../services/authService/GET/searchVenues";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Input } from "../../../../components/Input";
 
 function SearchBar() {
   const [query, setQuery] = useState("");
@@ -19,17 +21,33 @@ function SearchBar() {
     }
   }
 
+  function handleClear() {
+    setQuery("");
+    setResults([]);
+  }
+
   return (
-    <div className={` ${styles.searchBar} w-100 position-absolute top-0 p-5`}>
-      <Input
-        type="search"
-        placeholder={"Search for venues..."}
-        value={query}
-        onChange={handleChange}
-        className={`${styles.input} form-control rounded-5 m-0 w-100 ${
-          results.length > 0 ? styles.resultsShowing : ""
-        }`}
-      />
+    <div
+      className={`${styles.searchBar} ${
+        results.length > 0 ? styles.resultsShowing : ""
+      } w-100 position-absolute top-0 p-5`}
+    >
+      <div className="position-relative w-100">
+        <Input
+          type="search"
+          placeholder={"Search for venues..."}
+          value={query}
+          onChange={handleChange}
+          id="search-venues-input"
+        />
+        {query && (
+          <FontAwesomeIcon
+            icon={faTimes}
+            className={styles.clearIcon}
+            onClick={handleClear}
+          />
+        )}
+      </div>
       {results.length > 0 && (
         <div className={`${styles.results} mx-5 rounded-bottom-5`}>
           <ul>

@@ -240,7 +240,7 @@ function EditVenue({ closeModal, venueData }) {
           id="venueName"
           name="venueName"
           value={formData.venueName || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Venue Name"
           isLabel={true}
           label="Venue Name"
@@ -267,7 +267,7 @@ function EditVenue({ closeModal, venueData }) {
           id="price"
           name="price"
           value={formData.price || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Price"
           isLabel={true}
           label="Price"
@@ -281,7 +281,7 @@ function EditVenue({ closeModal, venueData }) {
           id="maxGuests"
           name="maxGuests"
           value={formData.maxGuests || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Max Guests"
           isLabel={true}
           label="Max Guests"
@@ -295,7 +295,7 @@ function EditVenue({ closeModal, venueData }) {
           id="rating"
           name="rating"
           value={formData.rating !== undefined ? formData.rating : ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Rating"
           isLabel={true}
           label="Rating"
@@ -308,7 +308,7 @@ function EditVenue({ closeModal, venueData }) {
           id="mediaUrls"
           name="mediaUrls"
           value={formData.mediaUrls || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Media URLs (separated by commas)"
           isLabel={true}
           label="Media URLs"
@@ -319,7 +319,7 @@ function EditVenue({ closeModal, venueData }) {
           id="mediaAlt"
           name="mediaAlt"
           value={formData.mediaAlt || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Media Alt Text"
           isLabel={true}
           label="Media Alt Text"
@@ -333,7 +333,7 @@ function EditVenue({ closeModal, venueData }) {
           type="checkbox"
           id="wifi"
           name="wifi"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Wifi"
           checked={formData.wifi}
@@ -343,7 +343,7 @@ function EditVenue({ closeModal, venueData }) {
           type="checkbox"
           id="parking"
           name="parking"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Parking"
           checked={formData.parking}
@@ -353,7 +353,7 @@ function EditVenue({ closeModal, venueData }) {
           type="checkbox"
           id="breakfast"
           name="breakfast"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Breakfast"
           checked={formData.breakfast}
@@ -363,7 +363,7 @@ function EditVenue({ closeModal, venueData }) {
           type="checkbox"
           id="pets"
           name="pets"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Pets"
           checked={formData.pets}
@@ -376,7 +376,7 @@ function EditVenue({ closeModal, venueData }) {
           id="address"
           name="address"
           value={formData.address || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Address"
           isLabel={true}
           label="Address"
@@ -387,7 +387,7 @@ function EditVenue({ closeModal, venueData }) {
           id="city"
           name="city"
           value={formData.city || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter City"
           isLabel={true}
           label="City"
@@ -398,7 +398,7 @@ function EditVenue({ closeModal, venueData }) {
           id="zip"
           name="zip"
           value={formData.zip || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter ZIP"
           isLabel={true}
           label="ZIP"
@@ -409,7 +409,7 @@ function EditVenue({ closeModal, venueData }) {
           id="country"
           name="country"
           value={formData.country || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Country"
           isLabel={true}
           label="Country"
@@ -420,7 +420,7 @@ function EditVenue({ closeModal, venueData }) {
           id="continent"
           name="continent"
           value={formData.continent || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Continent"
           isLabel={true}
           label="Continent"
@@ -431,7 +431,7 @@ function EditVenue({ closeModal, venueData }) {
           id="lat"
           name="lat"
           value={formData.lat || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Latitude"
           isLabel={true}
           label="Latitude"
@@ -442,7 +442,7 @@ function EditVenue({ closeModal, venueData }) {
           id="lng"
           name="lng"
           value={formData.lng || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Longitude"
           isLabel={true}
           label="Longitude"

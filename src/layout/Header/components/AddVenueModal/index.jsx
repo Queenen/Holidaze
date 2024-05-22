@@ -187,7 +187,7 @@ function AddVenueModal({ closeModal }) {
           id="venueName"
           name="venueName"
           value={formData.venueName || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Venue Name"
           isLabel={true}
           label="Venue Name"
@@ -214,7 +214,7 @@ function AddVenueModal({ closeModal }) {
           id="price"
           name="price"
           value={formData.price || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Price"
           isLabel={true}
           label="Price"
@@ -228,7 +228,7 @@ function AddVenueModal({ closeModal }) {
           id="maxGuests"
           name="maxGuests"
           value={formData.maxGuests || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Max Guests"
           isLabel={true}
           label="Max Guests"
@@ -242,7 +242,7 @@ function AddVenueModal({ closeModal }) {
           id="rating"
           name="rating"
           value={formData.rating !== undefined ? formData.rating : ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Rating"
           isLabel={true}
           label="Rating"
@@ -255,7 +255,7 @@ function AddVenueModal({ closeModal }) {
           id="mediaUrls"
           name="mediaUrls"
           value={formData.mediaUrls || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Media URLs (separated by commas)"
           isLabel={true}
           label="Media URLs"
@@ -266,7 +266,7 @@ function AddVenueModal({ closeModal }) {
           id="mediaAlt"
           name="mediaAlt"
           value={formData.mediaAlt || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Media Alt Text"
           isLabel={true}
           label="Media Alt Text"
@@ -280,7 +280,7 @@ function AddVenueModal({ closeModal }) {
           type="checkbox"
           id="wifi"
           name="wifi"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Wifi"
           checked={formData.wifi}
@@ -290,7 +290,7 @@ function AddVenueModal({ closeModal }) {
           type="checkbox"
           id="parking"
           name="parking"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Parking"
           checked={formData.parking}
@@ -300,7 +300,7 @@ function AddVenueModal({ closeModal }) {
           type="checkbox"
           id="breakfast"
           name="breakfast"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Breakfast"
           checked={formData.breakfast}
@@ -310,7 +310,7 @@ function AddVenueModal({ closeModal }) {
           type="checkbox"
           id="pets"
           name="pets"
-          handleChange={handleChange}
+          onChange={handleChange}
           isLabel={true}
           label="Pets"
           checked={formData.pets}
@@ -323,7 +323,7 @@ function AddVenueModal({ closeModal }) {
           id="address"
           name="address"
           value={formData.address || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Address"
           isLabel={true}
           label="Address"
@@ -334,7 +334,7 @@ function AddVenueModal({ closeModal }) {
           id="city"
           name="city"
           value={formData.city || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter City"
           isLabel={true}
           label="City"
@@ -345,7 +345,7 @@ function AddVenueModal({ closeModal }) {
           id="zip"
           name="zip"
           value={formData.zip || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter ZIP"
           isLabel={true}
           label="ZIP"
@@ -356,7 +356,7 @@ function AddVenueModal({ closeModal }) {
           id="country"
           name="country"
           value={formData.country || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Country"
           isLabel={true}
           label="Country"
@@ -367,7 +367,7 @@ function AddVenueModal({ closeModal }) {
           id="continent"
           name="continent"
           value={formData.continent || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Continent"
           isLabel={true}
           label="Continent"
@@ -378,7 +378,7 @@ function AddVenueModal({ closeModal }) {
           id="lat"
           name="lat"
           value={formData.lat || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Latitude"
           isLabel={true}
           label="Latitude"
@@ -389,7 +389,7 @@ function AddVenueModal({ closeModal }) {
           id="lng"
           name="lng"
           value={formData.lng || ""}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter Longitude"
           isLabel={true}
           label="Longitude"

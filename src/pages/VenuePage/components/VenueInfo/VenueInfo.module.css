@@ -2,10 +2,6 @@
   background-color: var(--smoky);
 }
 
-.infoContainer > * {
-  word-break: break-all;
-}
-
 .venueInfo {
   max-width: 30rem;
 }

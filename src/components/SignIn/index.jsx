@@ -95,7 +95,7 @@ function SignIn({ closeModal, onToggleAuth }) {
           id="email"
           name="email"
           value={formData.email}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter your email"
           required
           isLabel={true}
@@ -109,15 +109,17 @@ function SignIn({ closeModal, onToggleAuth }) {
           id="password"
           name="password"
           value={formData.password}
-          handleChange={handleChange}
+          onChange={handleChange}
           placeholder="Enter your password"
           required
           isLabel={true}
           label="Password"
-          errorMessage={errors.password || errors.apiError}
+          errorMessage={errors.password}
         />
       </FormGroup>
-      <Button type="submit">Sign In</Button>
+      <Button type="submit" errorMessage={errors.apiError}>
+        Sign In
+      </Button>
       <div
         className={`${styles.toggleModal} small d-flex align-items-center gap-3 justify-content-between`}
       >

@@ -10,3 +10,8 @@
   justify-content: center;
   color: white;
 }
+
+.bgNone {
+  background-color: var(--smoky);
+  color: transparent;
+}
