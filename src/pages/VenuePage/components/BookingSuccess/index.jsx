@@ -13,17 +13,18 @@ function BookingSuccess() {
 
   return (
     <section
-      className={`p-5 d-flex justify-content-center ${styles.bookingSection}`}
+      className={`p-5 d-flex justify-content-center col-lg-5 col-xl-4 ${styles.bookingSection}`}
     >
       <div
-        className={`d-flex flex-column gap-3 w-100 ${styles.bookingSuccess}`}
+        className={`d-flex flex-column gap-5 w-100 ${styles.bookingSuccess}`}
       >
         <div className="d-flex gap-3 mb-3 align-items-center">
           <h1>Venue booked</h1>
           <FontAwesomeIcon icon={faCalendarPlus} className={styles.icon} />
         </div>
         <p>
-          You have successfully booked the venue! You may view your booking{" "}
+          You have successfully booked this venue!
+          <br /> You may view your booking{" "}
           <Link to={`/profile?name=${userName}`}>here</Link>.
         </p>
         <p className="fst-italic">We hope you will enjoy your stay!</p>

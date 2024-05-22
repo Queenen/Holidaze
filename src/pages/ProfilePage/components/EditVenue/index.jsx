@@ -326,8 +326,7 @@ function EditVenue({ closeModal, venueData }) {
           errorMessage={errors.mediaAlt}
         />
       </FormGroup>
-      <FormGroup>
-        <h2>Facilities</h2>
+      <FormGroup isHeading groupHeading={"Facilities"}>
         <Input
           className="checkbox"
           type="checkbox"
@@ -369,8 +368,7 @@ function EditVenue({ closeModal, venueData }) {
           checked={formData.pets}
         />
       </FormGroup>
-      <FormGroup>
-        <h2>Location</h2>
+      <FormGroup isHeading groupHeading={"Location"}>
         <Input
           type="text"
           id="address"

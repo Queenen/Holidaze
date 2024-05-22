@@ -8,10 +8,10 @@ import {
   faPaw,
   faWifi,
 } from "@fortawesome/free-solid-svg-icons";
+import styles from "./VenueCard.module.css";
 import { Link } from "react-router-dom";
 import Button from "../Button";
 import TextTruncate from "../TextTruncate";
-import styles from "./VenueCard.module.css";
 import { getValidImageUrl } from "../../utils/imageValidation";
 
 const VenueCard = ({ venue, showEditButton = false }) => {
@@ -50,7 +50,7 @@ const VenueCard = ({ venue, showEditButton = false }) => {
               color="white"
               className={styles.icon}
             />
-            <p className="fw-bold text-white">
+            <p className="fw-semibold text-white focusFont">
               {venue.rating ? `${venue.rating}` : "N/A"}
             </p>
           </div>
@@ -60,27 +60,27 @@ const VenueCard = ({ venue, showEditButton = false }) => {
               color="white"
               className={styles.icon}
             />
-            <p className="fw-bold text-white">
+            <p className="fw-semibold text-white focusFont">
               {venue.maxGuests ? `${venue.maxGuests}` : "N/A"}
             </p>
           </div>
         </div>
         <div
-          className={`position-absolute bottom-0 p-4 px-lg-5 w-100 d-flex flex-column gap-3 ${styles.caption}`}
+          className={`position-absolute bottom-0 p-4 px-lg-5 d-flex flex-column gap-3 w-100 text-white`}
         >
           {showEditButton && (
             <div className={styles.editBtn}>
               <Button>Edit Venue</Button>
             </div>
           )}
-          <h2 className="d-flex justify-content-center fs-3">
+          <h2 className="d-flex justify-content-center fs-3 focusFont">
             {venue.name ? (
               <TextTruncate text={venue.name} className="lh-base" />
             ) : (
               "Undefined"
             )}
           </h2>
-          <p className="d-flex justify-content-center">
+          <p className="d-flex justify-content-center defaultFont">
             {venue.description ? (
               <TextTruncate text={venue.description} />
             ) : (

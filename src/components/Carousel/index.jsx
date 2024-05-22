@@ -110,7 +110,7 @@ const VenueCarousel = ({
                     </Button>
                   </div>
                 )}
-                <h2 className="d-flex justify-content-center fs-3">
+                <h2 className="d-flex justify-content-center fs-3 focusFont">
                   {venue.name ? (
                     <TextTruncate text={venue.name} className="lh-base" />
                   ) : (
@@ -129,7 +129,7 @@ const VenueCarousel = ({
                     </p>
                   </div>
                 ) : (
-                  <p className="d-flex justify-content-center">
+                  <p className="d-flex justify-content-center defaultFont">
                     <TextTruncate text={venue.description} />
                   </p>
                 )}

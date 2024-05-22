@@ -33,13 +33,16 @@ function VenueInfo({ venue, loading, error }) {
 
   return (
     <section
-      className={`d-flex justify-content-center p-5 col-md-6 col-lg-8 order-1 ${styles.infoContainer}`}
+      className={`d-flex justify-content-center p-5 col-md-6 col-lg-7 col-xl-8 order-1 ${styles.infoContainer}`}
     >
       {venue ? (
         <div className={`d-flex flex-column gap-4 w-100 ${styles.venueInfo}`}>
-          <TextTruncate text={venue.name} className="fs-1 lh-base mb-3" />
+          <TextTruncate
+            text={venue.name}
+            className="seasons fw-semibold fs-2"
+          />
           <div
-            className="fst-italic d-flex gap-2 align-items-center btn bg-white rounded-5"
+            className="fst-italic d-flex gap-2 my-2 align-items-center btn bg-white rounded-5 defaultFont"
             onClick={showLocation}
           >
             <span>
@@ -51,7 +54,7 @@ function VenueInfo({ venue, loading, error }) {
               "Undefined"
             )}
           </div>
-          <div className="d-flex flex-column text-break">
+          <div className="d-flex flex-column text-break defaultFont">
             {venue.description ? (
               <TextTruncate
                 text={venue.description}
@@ -62,9 +65,8 @@ function VenueInfo({ venue, loading, error }) {
               "Undefined"
             )}
           </div>
-          <p>
-            <span className="fw-bold">Price:</span> ${" "}
-            {venue.price ? `${venue.price}` : "0"} per day
+          <p className="fw-semibold">
+            Price: $ {venue.price ? `${venue.price}` : "0"} per day
           </p>
         </div>
       ) : (

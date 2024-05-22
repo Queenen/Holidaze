@@ -8,8 +8,10 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 export const FormGroup = ({ isHeading, groupHeading, children }) => {
   return (
     <div className={styles.formGroup}>
-      {isHeading && <h2 className="fs-5 fw-semibold mt-3">{groupHeading}</h2>}
-      <div className="form-group d-flex flex-column">{children}</div>
+      {isHeading && (
+        <h2 className="fs-4 fw-semibold mt-3 seasons">{groupHeading}</h2>
+      )}
+      <div className="form-group d-flex flex-column gap-2 my-3">{children}</div>
     </div>
   );
 };
@@ -53,7 +55,7 @@ const Container = ({ formHeading, closeModal, children }) => {
         className={styles.closeIcon}
         onClick={closeModal}
       />
-      <h1 className={`${styles.heading} mb-4 fs-2 fw-semibold`}>
+      <h1 className={`${styles.heading} mb-4 fs-2 fw-semibold seasons`}>
         {formHeading}
       </h1>
       {children}

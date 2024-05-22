@@ -3,6 +3,8 @@ import styles from "./HeroSection.module.css";
 import SearchBar from "../SearchBar";
 import { fetchRandomVenueMedia } from "../../../../services/authService/GET/fetchSpecificVenues";
 import LoadingError from "../../../../utils/LoadingError";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlane } from "@fortawesome/free-solid-svg-icons";
 
 function HeroSection() {
   const [backgroundImage, setBackgroundImage] = useState("");
@@ -42,8 +44,11 @@ function HeroSection() {
         }
       >
         <SearchBar className="position-absolute p-5 top-0"></SearchBar>
-        <h1 className="fs-5 fst-italic p-5 start-0 bottom-0 position-absolute">
-          Find your perfect getaway ~
+        <h1 className="fs-5 fst-italic p-5 start-0 bottom-0 position-absolute defaultFont d-flex gap-3">
+          Find your perfect getaway{" "}
+          <span>
+            <FontAwesomeIcon icon={faPlane} />
+          </span>
         </h1>
         <LoadingError loading={loading} error={error}></LoadingError>
       </div>

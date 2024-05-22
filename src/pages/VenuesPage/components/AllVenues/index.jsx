@@ -66,7 +66,7 @@ function AllVenues() {
   return (
     <section className={`p-4 p-md-5 d-flex flex-column gap-3 my-3`}>
       <div className="d-flex justify-content-between mx-3">
-        <h1>All Venues</h1>
+        <h1 className="seasons fw-semibold fs-2">All Venues</h1>
         <FontAwesomeIcon
           icon={faSort}
           size="2x"
@@ -74,7 +74,7 @@ function AllVenues() {
         />
       </div>
 
-      <h2 className="fst-italic fs-5 fw-normal ms-3 mb-4">
+      <h2 className="fst-italic fs-5 ms-3 mb-4 defaultFont">
         Showing results by: {filter || "default"}
       </h2>
 

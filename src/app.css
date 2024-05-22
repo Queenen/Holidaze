@@ -16,7 +16,36 @@
   line-height: 2rem;
 }
 
+.focusFont {
+  font-family: Josefin Sans, serif !important;
+  text-transform: capitalize !important;
+  letter-spacing: 0.1rem !important;
+}
+
+p,
+.defaultFont {
+  font-family: Josefin Sans, serif !important;
+  font-weight: 300 !important;
+  font-size: 18px !important;
+}
+
+.sourceSerif {
+  font-family: "Source Serif 4", serif !important;
+}
+
+@font-face {
+  font-family: "Seasons";
+  src: url("./asset/fonts/Fontspring-DEMO-theseasons-reg.otf")
+    format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 p,
 h1 {
   margin: 0 !important;
+}
+
+.seasons {
+  font-family: "Seasons", sans-serif;
 }

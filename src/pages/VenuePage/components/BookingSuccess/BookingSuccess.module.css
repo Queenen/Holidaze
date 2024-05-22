@@ -1,5 +1,7 @@
 .bookingSection {
   background-image: url("../../../../asset/images/form_background.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .bookingSuccess {

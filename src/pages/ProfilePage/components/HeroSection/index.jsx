@@ -47,9 +47,9 @@ function HeroSection(props) {
           ) : (
             <FontAwesomeIcon icon={faUser} />
           )}
-          <p className="bold">{user.name}</p>
+          <p className="fw-semibold">{user.name}</p>
         </div>
-        <p>{user.email}</p>
+        <p className="fst-italic">{user.email}</p>
         <div className={styles.editBtn}>
           <Button onClick={handleOpenModal}>Edit Profile</Button>
         </div>

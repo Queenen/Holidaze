@@ -12,6 +12,7 @@
 .editBtn > * {
   width: fit-content;
   margin: 2rem 0;
+  font-family: Josefin Sans, serif;
 }
 
 .backgroundImageContainer {
@@ -39,6 +40,7 @@
   font-size: 16px;
   border-style: none;
   border: 1.5px solid var(--hover);
+  font-family: Josefin Sans, serif;
 }
 
 .showVenues:hover {

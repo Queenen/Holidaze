@@ -8,7 +8,7 @@ function Footer() {
       <footer
         className={`d-flex align-items-center justify-content-evenly p-3 px-md-5 ${styles.footer}`}
       >
-        <p className="small">
+        <p>
           © Holidaze 2024. <br className="d-sm-none" />
           All rights reserved
         </p>

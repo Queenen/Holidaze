@@ -44,13 +44,13 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
       className="w-100"
       ref={navbarRef}
     >
-      <Container className={`d-flex p-0 gap-2 ${styles.container}`}>
+      <Container className={`d-flex p-0 gap-1 ${styles.container}`}>
         <Navbar.Brand as={Link} to="/" onClick={closeNavbar}>
           <img src={logo} alt="Holidaze logo" className={styles.logo} />
         </Navbar.Brand>
 
         <button
-          className="btn order-md-1 ms-auto"
+          className="btn order-md-1 ms-auto defaultFont"
           onClick={() => {
             handleSignInOutClick();
             closeNavbar();
@@ -76,7 +76,7 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
           >
             {role === "manager" && (
               <button
-                className="nav-link p-0 border-0 bg-transparent py-2 p-md-2"
+                className="nav-link p-0 border-0 bg-transparent py-2 p-md-2 defaultFont"
                 onClick={() => {
                   toggleAddVenueModal();
                   closeNavbar();
@@ -86,11 +86,15 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
                 Add Venue
               </button>
             )}
-            <Nav.Link as={NavLink} to="/venues">
+            <Nav.Link as={NavLink} to="/venues" className="defaultFont">
               All Venues
             </Nav.Link>
             {isSignedIn && (
-              <Nav.Link as={NavLink} to={`/profile?name=${userName}`}>
+              <Nav.Link
+                as={NavLink}
+                to={`/profile?name=${userName}`}
+                className="defaultFont"
+              >
                 Profile
               </Nav.Link>
             )}

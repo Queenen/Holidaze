@@ -146,7 +146,7 @@ function Booking({ venue, loading, error: venueError }) {
   if (venueError || !venue) {
     return (
       <section
-        className={`p-5 d-flex justify-content-center col-md-6 col-lg-4 order-0 ${styles.bookingSection}`}
+        className={`p-5 d-flex justify-content-center col-md-6 col-lg-5 col-xl-8 order-0 ${styles.bookingSection}`}
       >
         <p className="text-danger">
           <FontAwesomeIcon icon={faCircleExclamation} color="red" /> Error
@@ -184,6 +184,7 @@ function Booking({ venue, loading, error: venueError }) {
     <div
       className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center`}
     >
+      <h1 className="seasons fw-semibold fs-2">Book Venue</h1>
       <FormGroup>
         <Input
           type="date"
