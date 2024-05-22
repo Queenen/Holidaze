@@ -8,6 +8,8 @@ import FilterVenues from "../FilterVenues";
 import styles from "./AllVenues.module.css";
 import LoadingError from "../../../../utils/LoadingError";
 import { v4 as uuidv4 } from "uuid";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "../../../../components/Loader";
 
 function AllVenues() {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -21,6 +23,9 @@ function AllVenues() {
     breakfast: false,
     pets: false,
   });
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -53,6 +58,16 @@ function AllVenues() {
     });
   };
 
+  const fetchMoreData = () => {
+    if (venues.length <= page * 10) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setPage((prevPage) => prevPage + 1);
+    }, 500);
+  };
+
   const filteredVenues = filter
     ? applyAdditionalFilters(venues).sort((a, b) => {
         if (filter === "rating") return b.rating - a.rating;
@@ -62,6 +77,8 @@ function AllVenues() {
         return 0;
       })
     : applyAdditionalFilters(venues);
+
+  const displayedVenues = filteredVenues.slice(0, page * 10);
 
   return (
     <section className={`p-4 p-md-5 d-flex flex-column gap-3 my-3`}>
@@ -79,13 +96,21 @@ function AllVenues() {
       </h2>
 
       <LoadingError loading={loading} error={error}>
-        <div className={styles.venuesContainer}>
-          {filteredVenues.length > 0
-            ? filteredVenues.map((venue) => (
-                <VenueCard key={uuidv4()} venue={venue} />
-              ))
-            : !error && <p>No venues available.</p>}
-        </div>
+        <InfiniteScroll
+          dataLength={displayedVenues.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={<Loader />}
+          endMessage={<p>No more venues available.</p>}
+        >
+          <div className={styles.venuesContainer}>
+            {displayedVenues.length > 0
+              ? displayedVenues.map((venue) => (
+                  <VenueCard key={uuidv4()} venue={venue} />
+                ))
+              : !error && <p>No venues available.</p>}
+          </div>
+        </InfiniteScroll>
       </LoadingError>
 
       <FilterVenues
