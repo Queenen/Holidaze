@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 const LoadingError = ({ loading, error, children, height }) => {
   if (loading) return <Loader />;
 
-  if (error)
+  if (error) {
     return (
       <div
         className="d-flex gap-2 align-items-center justify-content-center p-5"
@@ -20,6 +20,7 @@ const LoadingError = ({ loading, error, children, height }) => {
         </p>
       </div>
     );
+  }
 
   return (
     <>
@@ -30,14 +31,16 @@ const LoadingError = ({ loading, error, children, height }) => {
   );
 };
 
-export default LoadingError;
-
 LoadingError.propTypes = {
-  height: PropTypes.string,
   loading: PropTypes.bool,
   error: PropTypes.string,
+  children: PropTypes.node,
+  height: PropTypes.string,
 };
 
 LoadingError.defaultProps = {
   height: "20rem",
+  error: null,
 };
+
+export default LoadingError;

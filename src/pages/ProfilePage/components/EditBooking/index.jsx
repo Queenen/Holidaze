@@ -7,6 +7,7 @@ import { deleteBooking } from "../../../../services/authService/DELETE/deleteBoo
 import { editBooking } from "../../../../services/authService/PUT/editBooking";
 import { fetchBookingById } from "../../../../services/authService/GET/fetchBookingById";
 import { fetchVenueById } from "../../../../services/authService/GET/fetchVenueById";
+import LoadingError from "../../../../utils/LoadingError";
 
 function EditBooking({ closeModal, bookingData }) {
   const bookingId = bookingData.bookingId;
@@ -17,12 +18,15 @@ function EditBooking({ closeModal, bookingData }) {
     guests: "",
   });
   const [maxGuests, setMaxGuests] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [errors, setErrors] = useState({ apiErrors: [] });
 
   const { broadcastSessionChange } = useUserStatus();
 
   useEffect(() => {
     async function fetchBookingAndVenue() {
+      setLoading(true);
       try {
         const booking = await fetchBookingById(bookingId);
 
@@ -39,7 +43,9 @@ function EditBooking({ closeModal, bookingData }) {
         const venue = await fetchVenueById(venueId);
         setMaxGuests(venue.data.maxGuests);
       } catch (error) {
-        console.error("Failed to fetch booking data:", error);
+        setError("Failed to fetch booking data: " + error.message);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -180,78 +186,86 @@ function EditBooking({ closeModal, bookingData }) {
   };
 
   return (
-    <FormContainer
-      formHeading="Edit Booking"
-      closeModal={closeModal}
-      handleSubmit={handleSubmit}
-    >
-      <FormGroup>
-        <Input
-          type="date"
-          id="dateFrom"
-          name="dateFrom"
-          value={formData.dateFrom}
-          onChange={handleChange}
-          placeholder="Enter Start Date"
-          isLabel={true}
-          label="Start Date"
-          required={true}
-          errorMessage={errors.dateFrom}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Input
-          type="date"
-          id="dateTo"
-          name="dateTo"
-          value={formData.dateTo}
-          onChange={handleChange}
-          placeholder="Enter End Date"
-          isLabel={true}
-          label="End Date"
-          required={true}
-          errorMessage={errors.dateTo}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Input
-          type="number"
-          id="guests"
-          name="guests"
-          value={formData.guests}
-          onChange={handleChange}
-          placeholder="Enter Number of Guests"
-          isLabel={true}
-          label="Guests"
-          required={true}
-          errorMessage={errors.guests}
-        />
-      </FormGroup>
-      {errors.apiError && (
-        <div className="text-danger small my-2">{errors.apiError}</div>
-      )}
-      {errors.apiErrors && errors.apiErrors.length > 0 && (
-        <div className="text-danger small my-2">
-          {errors.apiErrors.map((error, index) => (
-            <div key={index}>{error.message}</div>
-          ))}
+    <LoadingError loading={loading} error={error}>
+      <FormContainer
+        formHeading="Edit Booking"
+        closeModal={closeModal}
+        handleSubmit={handleSubmit}
+      >
+        <FormGroup>
+          <Input
+            type="date"
+            id="dateFrom"
+            name="dateFrom"
+            value={formData.dateFrom}
+            onChange={handleChange}
+            placeholder="Enter Start Date"
+            isLabel={true}
+            label="Start Date"
+            required={true}
+            errorMessage={errors.dateFrom}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="date"
+            id="dateTo"
+            name="dateTo"
+            value={formData.dateTo}
+            onChange={handleChange}
+            placeholder="Enter End Date"
+            isLabel={true}
+            label="End Date"
+            required={true}
+            errorMessage={errors.dateTo}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="number"
+            id="guests"
+            name="guests"
+            value={formData.guests}
+            onChange={handleChange}
+            placeholder="Enter Number of Guests"
+            isLabel={true}
+            label="Guests"
+            required={true}
+            errorMessage={errors.guests}
+          />
+        </FormGroup>
+        {errors.apiError && (
+          <div className="text-danger small my-2">{errors.apiError}</div>
+        )}
+        {errors.apiErrors && errors.apiErrors.length > 0 && (
+          <div className="text-danger small my-2">
+            {errors.apiErrors.map((error, index) => (
+              <div key={index}>{error.message}</div>
+            ))}
+          </div>
+        )}
+        <div className="d-flex flex-wrap justify-content-between gap-3">
+          <Button
+            type="submit"
+            name="submitBtn"
+            errorMessage={errors.submitBtn}
+            size="small"
+          >
+            Update
+          </Button>
+          <Button
+            type="button"
+            name="deleteBtn"
+            errorMessage={errors.submitBtn}
+            variation="deleteBtn"
+            onClick={handleDelete}
+            size="small"
+          >
+            Delete
+          </Button>
         </div>
-      )}
-      <div className="d-flex flex-wrap justify-content-between gap-3">
-        <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
-          Update
-        </Button>
-        <Button
-          type="button"
-          name="deleteBtn"
-          errorMessage={errors.submitBtn}
-          variation="deleteBtn"
-          onClick={handleDelete}
-        >
-          Delete
-        </Button>
-      </div>
-    </FormContainer>
+      </FormContainer>
+    </LoadingError>
   );
 }
 

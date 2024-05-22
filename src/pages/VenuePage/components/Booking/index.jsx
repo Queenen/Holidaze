@@ -182,9 +182,9 @@ function Booking({ venue, loading, error: venueError }) {
 
   return (
     <div
-      className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center`}
+      className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center justify-content-center`}
     >
-      <h1 className="seasons fw-semibold fs-2">Book Venue</h1>
+      <h1 className="seasons fw-semibold fs-2 mb-4">Book Venue</h1>
       <FormGroup>
         <Input
           type="date"
@@ -198,8 +198,6 @@ function Booking({ venue, loading, error: venueError }) {
           required={true}
           errorMessage={errors.checkInDate}
         />
-      </FormGroup>
-      <FormGroup>
         <Input
           type="date"
           id="checkOutDate"
@@ -212,8 +210,6 @@ function Booking({ venue, loading, error: venueError }) {
           required={true}
           errorMessage={errors.checkOutDate}
         />
-      </FormGroup>
-      <FormGroup>
         <Input
           type="number"
           id="guests"
@@ -239,6 +235,7 @@ function Booking({ venue, loading, error: venueError }) {
           name="submitBtn"
           errorMessage={errors.submitBtn}
           onClick={handleSubmit}
+          size="small"
         >
           Book Venue
         </Button>

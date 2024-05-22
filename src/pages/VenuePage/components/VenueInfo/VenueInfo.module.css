@@ -5,17 +5,3 @@
 .venueInfo {
   max-width: 30rem;
 }
-
-.errorContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 10rem;
-  margin: 3rem;
-  color: red;
-}
-
-.errorMsg {
-  max-width: 40rem;
-  color: red;
-}

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import styles from "./BookingSuccess.module.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -5,11 +6,21 @@ import { faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
 
 function BookingSuccess() {
-  const userName = sessionStorage.getItem("userName");
+  const [userName, setUserName] = useState(sessionStorage.getItem("userName"));
 
-  if (!userName) {
-    fetchUserByID();
-  }
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!userName) {
+        const user = await fetchUserByID();
+        if (user && user.name) {
+          setUserName(user.name);
+          sessionStorage.setItem("userName", user.name);
+        }
+      }
+    };
+
+    fetchUserName();
+  }, [userName]);
 
   return (
     <section

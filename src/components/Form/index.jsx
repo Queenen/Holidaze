@@ -11,7 +11,7 @@ export const FormGroup = ({ isHeading, groupHeading, children }) => {
       {isHeading && (
         <h2 className="fs-4 fw-semibold mt-3 seasons">{groupHeading}</h2>
       )}
-      <div className="form-group d-flex flex-column gap-2 my-3">{children}</div>
+      <div className="form-group d-flex flex-column gap-2">{children}</div>
     </div>
   );
 };

@@ -40,7 +40,7 @@ function HomePage() {
           id="topRatedVenues"
           className={`col-md-6 ${styles.topRatedVenues}`}
         >
-          <h1 className="text-center fw-bold text-uppercase p-4 p-md-5 seasons">
+          <h1 className="text-center fw-semibold p-4 p-md-5 seasons">
             Top Rated
           </h1>
           <VenueCarousel fetchFunction={fetchTopRatedVenues} />
@@ -49,7 +49,7 @@ function HomePage() {
           id="randomVenues"
           className={`col-md-6 ${styles.randomVenues}`}
         >
-          <h1 className="text-center fw-bold text-uppercase p-4 p-md-5 seasons">
+          <h1 className="text-center fw-semibold p-4 p-md-5 seasons">
             Random Picks
           </h1>
           <VenueCarousel fetchFunction={fetchRandomVenues} />

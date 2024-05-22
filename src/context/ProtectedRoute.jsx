@@ -6,8 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const { isSignedIn } = useUserStatus();
 
   if (!isSignedIn) {
-    // Redirect to the home page or another specified route if not signed in
-    return <Navigate to="*" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;

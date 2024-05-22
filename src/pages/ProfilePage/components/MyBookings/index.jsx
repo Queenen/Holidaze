@@ -24,21 +24,21 @@ const MyBookings = ({ user, showEditButton = true }) => {
     }));
   };
 
-  function toggleBookings() {
+  const toggleBookings = () => {
     setIsVisible(!isVisible);
-  }
+  };
 
-  function handleEditBooking(e, booking) {
+  const handleEditBooking = (e, booking) => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedBooking(booking);
     setShowModal(true);
-  }
+  };
 
-  function closeModal() {
+  const closeModal = () => {
     setShowModal(false);
     setSelectedBooking(null);
-  }
+  };
 
   return (
     <section className={styles.myBookings}>
@@ -64,7 +64,7 @@ const MyBookings = ({ user, showEditButton = true }) => {
                   icon={faCircleExclamation}
                   color="red"
                   className="me-1"
-                />{" "}
+                />
                 You haven't booked any venues yet.
               </p>
             </div>
