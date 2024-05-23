@@ -1,6 +1,7 @@
 import { NOROFF_API_URL } from "../../config";
 import createApiKey from "../../apiAuth";
 
+// Function to ensure the API key is available
 async function ensureApiKey() {
   if (!sessionStorage.getItem("apiKey")) {
     await createApiKey();
@@ -8,6 +9,7 @@ async function ensureApiKey() {
   return sessionStorage.getItem("apiKey");
 }
 
+// Function to edit user profile
 export async function editProfile(profileData) {
   const userName = sessionStorage.getItem("userName");
   if (!userName) {
@@ -18,14 +20,14 @@ export async function editProfile(profileData) {
   const url = `${NOROFF_API_URL}/holidaze/profiles/${userName}`;
   const token = sessionStorage.getItem("accessToken");
 
-  try {
-    if (!token) {
-      console.error("No access token available.");
-      throw new Error(
-        "You're not authorized to edit profile. Please sign in and try again."
-      );
-    }
+  if (!token) {
+    console.error("No access token available.");
+    throw new Error(
+      "You're not authorized to edit profile. Please sign in and try again."
+    );
+  }
 
+  try {
     const apiKey = await ensureApiKey();
 
     const response = await fetch(url, {
@@ -39,12 +41,19 @@ export async function editProfile(profileData) {
     });
 
     if (!response.ok) {
-      console.error(`Failed to edit profile: ${response.status}`);
-      throw new Error(`Failed to edit profile: ${response.status}`);
+      const errorText = await response.text();
+      console.error(
+        `Failed to edit profile: HTTP ${response.status}`,
+        errorText
+      );
+      throw new Error(
+        `Failed to edit profile: HTTP ${response.status} - ${errorText}`
+      );
     }
 
-    sessionStorage.removeItem("apiKey");
     const data = await response.json();
+    sessionStorage.removeItem("apiKey");
+
     if (data && data.data) {
       return true;
     } else {

@@ -8,6 +8,7 @@ export const useFetchVenue = (venueId) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Return early if no venueId is provided
     if (!venueId) return;
 
     const fetchVenue = async () => {

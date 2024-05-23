@@ -30,7 +30,11 @@
   max-width: 20rem;
 }
 
-.form,
+.form {
+  width: 100%;
+  max-width: 20rem;
+}
+
 .heading {
   width: 100%;
   max-width: 20rem;

@@ -5,6 +5,7 @@ import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { editProfile } from "../../../../services/authService/PUT/editProfile";
 import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
+import LoadingError from "../../../../utils/LoadingError";
 
 function EditProfile({ closeModal }) {
   const [errors, setErrors] = useState({});
@@ -16,21 +17,30 @@ function EditProfile({ closeModal }) {
     avatarUrl: "",
     avatarAlt: "",
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const { broadcastSessionChange } = useUserStatus();
 
   useEffect(() => {
     const loadUserData = async () => {
-      const fetchedUser = await fetchUserByID();
-      if (fetchedUser) {
-        setFormData({
-          bio: fetchedUser.bio || "",
-          venueManager: fetchedUser.venueManager || false,
-          bannerUrl: fetchedUser.banner.url || "",
-          bannerAlt: fetchedUser.banner.alt || "",
-          avatarUrl: fetchedUser.avatar.url || "",
-          avatarAlt: fetchedUser.avatar.alt || "",
-        });
+      setLoading(true);
+      try {
+        const fetchedUser = await fetchUserByID();
+        if (fetchedUser) {
+          setFormData({
+            bio: fetchedUser.bio || "",
+            venueManager: fetchedUser.venueManager || false,
+            bannerUrl: fetchedUser.banner.url || "",
+            bannerAlt: fetchedUser.banner.alt || "",
+            avatarUrl: fetchedUser.avatar.url || "",
+            avatarAlt: fetchedUser.avatar.alt || "",
+          });
+        }
+      } catch (error) {
+        setError("Failed to fetch user data: " + error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -201,90 +211,97 @@ function EditProfile({ closeModal }) {
   };
 
   return (
-    <FormContainer
-      formHeading="Edit Profile"
-      closeModal={closeModal}
-      handleSubmit={handleSubmit}
-    >
-      <FormGroup>
-        <TextArea
-          value={formData.bio}
-          handleChange={handleChange}
-          placeholder="Enter your bio"
-          id="bio"
-          name="bio"
-          isLabel={true}
-          label="Bio"
-          errorMessage={errors.bio}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Input
-          className={`checkbox`}
-          type="checkbox"
-          id="venueManager"
-          name="venueManager"
-          onChange={handleChange}
-          isLabel={true}
-          label="I'd like to host venues"
-          checked={formData.venueManager}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Input
-          type="text"
-          id="avatarUrl"
-          name="avatarUrl"
-          value={formData.avatarUrl}
-          onChange={handleChange}
-          placeholder="Enter Avatar URL"
-          isLabel={true}
-          label="Avatar URL"
-          errorMessage={errors.avatarUrl}
-        />
-        <Input
-          type="text"
-          id="avatarAlt"
-          name="avatarAlt"
-          value={formData.avatarAlt}
-          onChange={handleChange}
-          placeholder="Enter Avatar Alt"
-          isLabel={true}
-          label="Avatar Alt"
-          errorMessage={errors.avatarAlt}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Input
-          type="text"
-          id="bannerUrl"
-          name="bannerUrl"
-          value={formData.bannerUrl}
-          onChange={handleChange}
-          placeholder="Enter Banner URL"
-          isLabel={true}
-          label="Banner URL"
-          errorMessage={errors.bannerUrl}
-        />
-        <Input
-          type="text"
-          id="bannerAlt"
-          name="bannerAlt"
-          value={formData.bannerAlt}
-          onChange={handleChange}
-          placeholder="Enter Banner Alt"
-          isLabel={true}
-          label="Banner Alt"
-          errorMessage={errors.bannerAlt}
-        />
-      </FormGroup>
-      {errors.apiError && (
-        <div className="text-danger small my-2">{errors.apiError}</div>
-      )}
-      <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
-        Save Changes
-      </Button>
-    </FormContainer>
+    <LoadingError loading={loading} error={error}>
+      <FormContainer
+        formHeading="Edit Profile"
+        closeModal={closeModal}
+        handleSubmit={handleSubmit}
+      >
+        <FormGroup>
+          <TextArea
+            value={formData.bio}
+            handleChange={handleChange}
+            placeholder="Enter your bio"
+            id="bio"
+            name="bio"
+            isLabel={true}
+            label="Bio"
+            errorMessage={errors.bio}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            className={`checkbox`}
+            type="checkbox"
+            id="venueManager"
+            name="venueManager"
+            onChange={handleChange}
+            isLabel={true}
+            label="I'd like to host venues"
+            checked={formData.venueManager}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="text"
+            id="avatarUrl"
+            name="avatarUrl"
+            value={formData.avatarUrl}
+            onChange={handleChange}
+            placeholder="Enter Avatar URL"
+            isLabel={true}
+            label="Avatar URL"
+            errorMessage={errors.avatarUrl}
+          />
+          <Input
+            type="text"
+            id="avatarAlt"
+            name="avatarAlt"
+            value={formData.avatarAlt}
+            onChange={handleChange}
+            placeholder="Enter Avatar Alt"
+            isLabel={true}
+            label="Avatar Alt"
+            errorMessage={errors.avatarAlt}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="text"
+            id="bannerUrl"
+            name="bannerUrl"
+            value={formData.bannerUrl}
+            onChange={handleChange}
+            placeholder="Enter Banner URL"
+            isLabel={true}
+            label="Banner URL"
+            errorMessage={errors.bannerUrl}
+          />
+          <Input
+            type="text"
+            id="bannerAlt"
+            name="bannerAlt"
+            value={formData.bannerAlt}
+            onChange={handleChange}
+            placeholder="Enter Banner Alt"
+            isLabel={true}
+            label="Banner Alt"
+            errorMessage={errors.bannerAlt}
+          />
+        </FormGroup>
+        {errors.apiError && (
+          <div className="text-danger small my-2">{errors.apiError}</div>
+        )}
+        <Button
+          type="submit"
+          name="submitBtn"
+          errorMessage={errors.submitBtn}
+          size="small"
+        >
+          Save Changes
+        </Button>
+      </FormContainer>
+    </LoadingError>
   );
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styles from "./SignIn.module.css";
 import { loginUser } from "../../services/authService/POST/signInUser";
 import { useUserStatus } from "../../context/UserStatus";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
@@ -85,7 +84,7 @@ function SignIn({ closeModal, onToggleAuth }) {
 
   return (
     <FormContainer
-      formHeading="Welcome Back!"
+      formHeading="Welcome Back"
       closeModal={closeModal}
       handleSubmit={handleSubmit}
     >
@@ -121,10 +120,10 @@ function SignIn({ closeModal, onToggleAuth }) {
         Sign In
       </Button>
       <div
-        className={`${styles.toggleModal} small d-flex align-items-center gap-3 justify-content-between`}
+        className={`small d-flex align-items-center gap-3 justify-content-between`}
       >
         <p>Not registered yet?</p>
-        <button className="btn p-0" onClick={onToggleAuth}>
+        <button className="btn p-0 defaultFont" onClick={onToggleAuth}>
           Sign up{" "}
           <span className="text-decoration-underline text-success">here</span>
         </button>

@@ -18,6 +18,7 @@ export const UserRoleProvider = ({ children }) => {
     };
 
     handleRoleChange();
+
     window.addEventListener("sessionStorageChange", handleRoleChange);
 
     return () => {

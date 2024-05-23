@@ -23,10 +23,7 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
   const hasMultipleMedia = venue.media?.length > 1;
 
   return (
-    <section
-      className={styles.venueCarouselSection}
-      style={{ position: "relative" }}
-    >
+    <section className={styles.venueCarouselSection}>
       <div
         className={`${styles.overlayIcons} d-flex justify-content-between position-absolute top-0 p-4 w-100`}
       >
@@ -48,15 +45,7 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
         </div>
       </div>
       {showEditButton && (
-        <div
-          className={styles.editBtn}
-          style={{
-            position: "absolute",
-            zIndex: 5,
-            right: "20px",
-            top: "20px",
-          }}
-        >
+        <div className={styles.editBtn}>
           <Button>Edit Venue</Button>
         </div>
       )}

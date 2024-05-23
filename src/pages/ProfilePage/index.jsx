@@ -4,13 +4,11 @@ import Bio from "./components/Bio";
 import MyVenues from "./components/MyVenues";
 import MyBookings from "./components/MyBookings";
 import { fetchUserByID } from "../../services/authService/GET/fetchSingleProfile";
-import { useUserRole } from "../../context/UserRole";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import LoadingError from "../../utils/LoadingError";
 
 function ProfilePage() {
   useDocumentTitle("Holidaze | Profile");
-  const { role } = useUserRole();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -71,7 +69,7 @@ function ProfilePage() {
         </LoadingError>
       </div>
       <div className="d-md-flex flex-column col-md-6">
-        {role === "manager" && <MyVenues user={user} />}
+        {user.venueManager && <MyVenues user={user} />}
         <MyBookings user={user} />
       </div>
     </div>

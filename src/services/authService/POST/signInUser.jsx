@@ -13,7 +13,7 @@ export async function loginUser(credentials) {
 
     if (response.status === 401) {
       throw new Error(
-        `Failed to sign in. Please try a different email or password`
+        `Failed to sign in. Please try a different email or password.`
       );
     }
 

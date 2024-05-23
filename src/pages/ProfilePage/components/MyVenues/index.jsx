@@ -21,21 +21,21 @@ const MyVenues = ({ user, showEditButton = true }) => {
     }));
   };
 
-  function toggleVenues() {
+  const toggleVenues = () => {
     setIsVisible(!isVisible);
-  }
+  };
 
-  function handleEditVenue(e, venue) {
+  const handleEditVenue = (e, venue) => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedVenue(venue);
     setShowModal(true);
-  }
+  };
 
-  function closeModal() {
+  const closeModal = () => {
     setShowModal(false);
     setSelectedVenue(null);
-  }
+  };
 
   return (
     <section className={styles.myVenues}>
@@ -60,7 +60,7 @@ const MyVenues = ({ user, showEditButton = true }) => {
                   icon={faCircleExclamation}
                   color="red"
                   className="me-1"
-                />{" "}
+                />
                 You haven't added any venues yet.
               </p>
             </div>
