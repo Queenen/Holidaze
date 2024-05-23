@@ -5,8 +5,6 @@ import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { editProfile } from "../../../../services/authService/PUT/editProfile";
 import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
-import LoadingError from "../../../../utils/LoadingError";
-import { getValidImageUrl } from "../../../../utils/imageValidation";
 
 function EditProfile({ closeModal }) {
   const [errors, setErrors] = useState({});
@@ -18,35 +16,35 @@ function EditProfile({ closeModal }) {
     avatarUrl: "",
     avatarAlt: "",
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const { broadcastSessionChange } = useUserStatus();
 
   useEffect(() => {
     const loadUserData = async () => {
-      setLoading(true);
-      try {
-        const fetchedUser = await fetchUserByID();
-        if (fetchedUser) {
-          setFormData({
-            bio: fetchedUser.bio || "",
-            venueManager: fetchedUser.venueManager || false,
-            bannerUrl: fetchedUser.banner.url || "",
-            bannerAlt: fetchedUser.banner.alt || "",
-            avatarUrl: fetchedUser.avatar.url || "",
-            avatarAlt: fetchedUser.avatar.alt || "",
-          });
-        }
-      } catch (error) {
-        setError("Failed to fetch user data: " + error.message);
-      } finally {
-        setLoading(false);
+      const fetchedUser = await fetchUserByID();
+      if (fetchedUser) {
+        setFormData({
+          bio: fetchedUser.bio || "",
+          venueManager: fetchedUser.venueManager || false,
+          bannerUrl: fetchedUser.banner.url || "",
+          bannerAlt: fetchedUser.banner.alt || "",
+          avatarUrl: fetchedUser.avatar.url || "",
+          avatarAlt: fetchedUser.avatar.alt || "",
+        });
       }
     };
 
     loadUserData();
   }, []);
+
+  const isValidImageUrl = (url) => {
+    try {
+      new URL(url);
+      return /\.(jpg|jpeg|png|gif)$/i.test(url);
+    } catch (e) {
+      return false;
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -57,61 +55,48 @@ function EditProfile({ closeModal }) {
 
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
-      if (
-        name === "bannerUrl" ||
-        name === "bannerAlt" ||
-        name === "avatarUrl" ||
-        name === "avatarAlt"
-      ) {
-        getValidImageUrl(value).then((isValid) => {
-          if (name === "bannerUrl") {
-            if (value.trim() && !formData.bannerAlt.trim()) {
-              newErrors.bannerAlt =
-                "Please add an alt description for the banner.";
-            } else {
-              delete newErrors.bannerAlt;
-            }
-            if (value.trim() && !isValid) {
-              newErrors.bannerUrl =
-                "Please provide a valid image URL for the banner.";
-            } else {
-              delete newErrors.bannerUrl;
-            }
-          }
+      if (name === "bannerUrl") {
+        if (value.trim() && !formData.bannerAlt.trim()) {
+          newErrors.bannerAlt = "Please add an alt description for the banner.";
+        } else {
+          delete newErrors.bannerAlt;
+        }
+        if (value.trim() && !isValidImageUrl(value.trim())) {
+          newErrors.bannerUrl =
+            "Please provide a valid image URL for the banner.";
+        } else {
+          delete newErrors.bannerUrl;
+        }
+      }
 
-          if (name === "bannerAlt") {
-            if (value.trim() && !formData.bannerUrl.trim()) {
-              newErrors.bannerUrl = "Please provide a URL for the banner.";
-            } else {
-              delete newErrors.bannerUrl;
-            }
-          }
+      if (name === "bannerAlt") {
+        if (value.trim() && !formData.bannerUrl.trim()) {
+          newErrors.bannerUrl = "Please provide a URL for the banner.";
+        } else {
+          delete newErrors.bannerUrl;
+        }
+      }
 
-          if (name === "avatarUrl") {
-            if (value.trim() && !formData.avatarAlt.trim()) {
-              newErrors.avatarAlt =
-                "Please add an alt description for the avatar.";
-            } else {
-              delete newErrors.avatarAlt;
-            }
-            if (value.trim() && !isValid) {
-              newErrors.avatarUrl =
-                "Please provide a valid image URL for the avatar.";
-            } else {
-              delete newErrors.avatarUrl;
-            }
-          }
+      if (name === "avatarUrl") {
+        if (value.trim() && !formData.avatarAlt.trim()) {
+          newErrors.avatarAlt = "Please add an alt description for the avatar.";
+        } else {
+          delete newErrors.avatarAlt;
+        }
+        if (value.trim() && !isValidImageUrl(value.trim())) {
+          newErrors.avatarUrl =
+            "Please provide a valid image URL for the avatar.";
+        } else {
+          delete newErrors.avatarUrl;
+        }
+      }
 
-          if (name === "avatarAlt") {
-            if (value.trim() && !formData.avatarUrl.trim()) {
-              newErrors.avatarUrl = "Please provide a URL for the avatar.";
-            } else {
-              delete newErrors.avatarUrl;
-            }
-          }
-
-          setErrors(newErrors);
-        });
+      if (name === "avatarAlt") {
+        if (value.trim() && !formData.avatarUrl.trim()) {
+          newErrors.avatarUrl = "Please provide a URL for the avatar.";
+        } else {
+          delete newErrors.avatarUrl;
+        }
       }
 
       if (name === "bio") {
@@ -126,11 +111,8 @@ function EditProfile({ closeModal }) {
     });
   };
 
-  const validateForm = async () => {
+  const validateForm = () => {
     const newErrors = {};
-
-    const avatarUrlValid = await getValidImageUrl(formData.avatarUrl.trim());
-    const bannerUrlValid = await getValidImageUrl(formData.bannerUrl.trim());
 
     if (formData.avatarUrl.trim() && !formData.avatarAlt.trim()) {
       newErrors.avatarAlt = "Please add an alt description for the avatar.";
@@ -140,7 +122,10 @@ function EditProfile({ closeModal }) {
       newErrors.avatarUrl = "Please provide a URL for the avatar.";
     }
 
-    if (formData.avatarUrl.trim() && !avatarUrlValid) {
+    if (
+      formData.avatarUrl.trim() &&
+      !isValidImageUrl(formData.avatarUrl.trim())
+    ) {
       newErrors.avatarUrl = "Please provide a valid image URL for the avatar.";
     }
 
@@ -152,7 +137,10 @@ function EditProfile({ closeModal }) {
       newErrors.bannerUrl = "Please provide a URL for the banner.";
     }
 
-    if (formData.bannerUrl.trim() && !bannerUrlValid) {
+    if (
+      formData.bannerUrl.trim() &&
+      !isValidImageUrl(formData.bannerUrl.trim())
+    ) {
       newErrors.bannerUrl = "Please provide a valid image URL for the banner.";
     }
 
@@ -172,7 +160,7 @@ function EditProfile({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!(await validateForm())) {
+    if (!validateForm()) {
       alert("Validation failed");
       return;
     }
@@ -213,92 +201,90 @@ function EditProfile({ closeModal }) {
   };
 
   return (
-    <LoadingError loading={loading} error={error}>
-      <FormContainer
-        formHeading="Edit Profile"
-        closeModal={closeModal}
-        handleSubmit={handleSubmit}
-      >
-        <FormGroup>
-          <TextArea
-            value={formData.bio}
-            handleChange={handleChange}
-            placeholder="Enter your bio"
-            id="bio"
-            name="bio"
-            isLabel={true}
-            label="Bio"
-            errorMessage={errors.bio}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            className={`checkbox`}
-            type="checkbox"
-            id="venueManager"
-            name="venueManager"
-            onChange={handleChange}
-            isLabel={true}
-            label="I'd like to host venues"
-            checked={formData.venueManager}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="text"
-            id="avatarUrl"
-            name="avatarUrl"
-            value={formData.avatarUrl}
-            onChange={handleChange}
-            placeholder="Enter Avatar URL"
-            isLabel={true}
-            label="Avatar URL"
-            errorMessage={errors.avatarUrl}
-          />
-          <Input
-            type="text"
-            id="avatarAlt"
-            name="avatarAlt"
-            value={formData.avatarAlt}
-            onChange={handleChange}
-            placeholder="Enter Avatar Alt"
-            isLabel={true}
-            label="Avatar Alt"
-            errorMessage={errors.avatarAlt}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="text"
-            id="bannerUrl"
-            name="bannerUrl"
-            value={formData.bannerUrl}
-            onChange={handleChange}
-            placeholder="Enter Banner URL"
-            isLabel={true}
-            label="Banner URL"
-            errorMessage={errors.bannerUrl}
-          />
-          <Input
-            type="text"
-            id="bannerAlt"
-            name="bannerAlt"
-            value={formData.bannerAlt}
-            onChange={handleChange}
-            placeholder="Enter Banner Alt"
-            isLabel={true}
-            label="Banner Alt"
-            errorMessage={errors.bannerAlt}
-          />
-        </FormGroup>
-        {errors.apiError && (
-          <div className="text-danger small my-2">{errors.apiError}</div>
-        )}
-        <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
-          Save Changes
-        </Button>
-      </FormContainer>
-    </LoadingError>
+    <FormContainer
+      formHeading="Edit Profile"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <TextArea
+          value={formData.bio}
+          handleChange={handleChange}
+          placeholder="Enter your bio"
+          id="bio"
+          name="bio"
+          isLabel={true}
+          label="Bio"
+          errorMessage={errors.bio}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          className={`checkbox`}
+          type="checkbox"
+          id="venueManager"
+          name="venueManager"
+          onChange={handleChange}
+          isLabel={true}
+          label="I'd like to host venues"
+          checked={formData.venueManager}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="text"
+          id="avatarUrl"
+          name="avatarUrl"
+          value={formData.avatarUrl}
+          onChange={handleChange}
+          placeholder="Enter Avatar URL"
+          isLabel={true}
+          label="Avatar URL"
+          errorMessage={errors.avatarUrl}
+        />
+        <Input
+          type="text"
+          id="avatarAlt"
+          name="avatarAlt"
+          value={formData.avatarAlt}
+          onChange={handleChange}
+          placeholder="Enter Avatar Alt"
+          isLabel={true}
+          label="Avatar Alt"
+          errorMessage={errors.avatarAlt}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="text"
+          id="bannerUrl"
+          name="bannerUrl"
+          value={formData.bannerUrl}
+          onChange={handleChange}
+          placeholder="Enter Banner URL"
+          isLabel={true}
+          label="Banner URL"
+          errorMessage={errors.bannerUrl}
+        />
+        <Input
+          type="text"
+          id="bannerAlt"
+          name="bannerAlt"
+          value={formData.bannerAlt}
+          onChange={handleChange}
+          placeholder="Enter Banner Alt"
+          isLabel={true}
+          label="Banner Alt"
+          errorMessage={errors.bannerAlt}
+        />
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
+        Save Changes
+      </Button>
+    </FormContainer>
   );
 }
 

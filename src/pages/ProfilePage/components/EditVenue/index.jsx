@@ -6,7 +6,6 @@ import { Input, TextArea } from "../../../../components/Input";
 import { editVenue } from "../../../../services/authService/PUT/editVenue";
 import { deleteVenue } from "../../../../services/authService/DELETE/deleteVenue";
 import { getValidImageUrl } from "../../../../utils/imageValidation";
-import LoadingError from "../../../../utils/LoadingError";
 
 function EditVenue({ closeModal, venueData }) {
   const [formData, setFormData] = useState({
@@ -229,257 +228,252 @@ function EditVenue({ closeModal, venueData }) {
       }
     }
   };
-
   return (
-    <LoadingError loading={false} error={errors.apiError}>
-      <FormContainer
-        formHeading="Edit Venue"
-        closeModal={closeModal}
-        handleSubmit={handleSubmit}
-      >
-        <FormGroup>
-          <Input
-            type="text"
-            id="venueName"
-            name="venueName"
-            value={formData.venueName || ""}
-            onChange={handleChange}
-            placeholder="Enter Venue Name"
-            isLabel={true}
-            label="Venue Name"
-            required={false}
-            errorMessage={errors.venueName}
-          />
-        </FormGroup>
-        <FormGroup>
-          <TextArea
-            value={formData.description || ""}
-            handleChange={handleChange}
-            placeholder="Enter Venue Description"
-            id="description"
-            name="description"
-            isLabel={true}
-            label="Description"
-            required={false}
-            errorMessage={errors.description}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price || ""}
-            onChange={handleChange}
-            placeholder="Enter Price"
-            isLabel={true}
-            label="Price"
-            required={false}
-            errorMessage={errors.price}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="number"
-            id="maxGuests"
-            name="maxGuests"
-            value={formData.maxGuests || ""}
-            onChange={handleChange}
-            placeholder="Enter Max Guests"
-            isLabel={true}
-            label="Max Guests"
-            required={false}
-            errorMessage={errors.maxGuests}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="number"
-            id="rating"
-            name="rating"
-            value={formData.rating !== undefined ? formData.rating : ""}
-            onChange={handleChange}
-            placeholder="Enter Rating"
-            isLabel={true}
-            label="Rating"
-            errorMessage={errors.rating}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            type="text"
-            id="mediaUrls"
-            name="mediaUrls"
-            value={formData.mediaUrls || ""}
-            onChange={handleChange}
-            placeholder="Enter Media URLs (separated by commas)"
-            isLabel={true}
-            label="Media URLs"
-            errorMessage={errors.mediaUrls}
-          />
-          <Input
-            type="text"
-            id="mediaAlt"
-            name="mediaAlt"
-            value={formData.mediaAlt || ""}
-            onChange={handleChange}
-            placeholder="Enter Media Alt Text"
-            isLabel={true}
-            label="Media Alt Text"
-            errorMessage={errors.mediaAlt}
-          />
-        </FormGroup>
-        <FormGroup isHeading groupHeading={"Facilities"}>
-          <Input
-            className="checkbox"
-            type="checkbox"
-            id="wifi"
-            name="wifi"
-            onChange={handleChange}
-            isLabel={true}
-            label="Wifi"
-            checked={formData.wifi}
-          />
-          <Input
-            className="checkbox"
-            type="checkbox"
-            id="parking"
-            name="parking"
-            onChange={handleChange}
-            isLabel={true}
-            label="Parking"
-            checked={formData.parking}
-          />
-          <Input
-            className="checkbox"
-            type="checkbox"
-            id="breakfast"
-            name="breakfast"
-            onChange={handleChange}
-            isLabel={true}
-            label="Breakfast"
-            checked={formData.breakfast}
-          />
-          <Input
-            className="checkbox"
-            type="checkbox"
-            id="pets"
-            name="pets"
-            onChange={handleChange}
-            isLabel={true}
-            label="Pets"
-            checked={formData.pets}
-          />
-        </FormGroup>
-        <FormGroup isHeading groupHeading={"Location"}>
-          <Input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address || ""}
-            onChange={handleChange}
-            placeholder="Enter Address"
-            isLabel={true}
-            label="Address"
-            errorMessage={errors.address}
-          />
-          <Input
-            type="text"
-            id="city"
-            name="city"
-            value={formData.city || ""}
-            onChange={handleChange}
-            placeholder="Enter City"
-            isLabel={true}
-            label="City"
-            errorMessage={errors.city}
-          />
-          <Input
-            type="text"
-            id="zip"
-            name="zip"
-            value={formData.zip || ""}
-            onChange={handleChange}
-            placeholder="Enter ZIP"
-            isLabel={true}
-            label="ZIP"
-            errorMessage={errors.zip}
-          />
-          <Input
-            type="text"
-            id="country"
-            name="country"
-            value={formData.country || ""}
-            onChange={handleChange}
-            placeholder="Enter Country"
-            isLabel={true}
-            label="Country"
-            errorMessage={errors.country}
-          />
-          <Input
-            type="text"
-            id="continent"
-            name="continent"
-            value={formData.continent || ""}
-            onChange={handleChange}
-            placeholder="Enter Continent"
-            isLabel={true}
-            label="Continent"
-            errorMessage={errors.continent}
-          />
-          <Input
-            type="number"
-            id="lat"
-            name="lat"
-            value={formData.lat || ""}
-            onChange={handleChange}
-            placeholder="Enter Latitude"
-            isLabel={true}
-            label="Latitude"
-            errorMessage={errors.lat}
-          />
-          <Input
-            type="number"
-            id="lng"
-            name="lng"
-            value={formData.lng || ""}
-            onChange={handleChange}
-            placeholder="Enter Longitude"
-            isLabel={true}
-            label="Longitude"
-            errorMessage={errors.lng}
-          />
-        </FormGroup>
-        {errors.apiError && (
-          <div className="text-danger small my-2">{errors.apiError}</div>
-        )}
-        {errors.apiErrors && errors.apiErrors.length > 0 && (
-          <div className="text-danger small my-2">
-            {errors.apiErrors.map((error, index) => (
-              <div key={index}>{error.message}</div>
-            ))}
-          </div>
-        )}
-        <div className="d-flex flex-wrap justify-content-between gap-3">
-          <Button
-            type="submit"
-            name="submitBtn"
-            errorMessage={errors.submitBtn}
-          >
-            Update
-          </Button>
-          <Button
-            type="button"
-            name="deleteBtn"
-            errorMessage={errors.deleteBtn}
-            variation="deleteBtn"
-            onClick={handleDelete}
-          >
-            Delete
-          </Button>
+    <FormContainer
+      formHeading="Edit Venue"
+      closeModal={closeModal}
+      handleSubmit={handleSubmit}
+    >
+      <FormGroup>
+        <Input
+          type="text"
+          id="venueName"
+          name="venueName"
+          value={formData.venueName || ""}
+          onChange={handleChange}
+          placeholder="Enter Venue Name"
+          isLabel={true}
+          label="Venue Name"
+          required={false}
+          errorMessage={errors.venueName}
+        />
+      </FormGroup>
+      <FormGroup>
+        <TextArea
+          value={formData.description || ""}
+          handleChange={handleChange}
+          placeholder="Enter Venue Description"
+          id="description"
+          name="description"
+          isLabel={true}
+          label="Description"
+          required={false}
+          errorMessage={errors.description}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="price"
+          name="price"
+          value={formData.price || ""}
+          onChange={handleChange}
+          placeholder="Enter Price"
+          isLabel={true}
+          label="Price"
+          required={false}
+          errorMessage={errors.price}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="maxGuests"
+          name="maxGuests"
+          value={formData.maxGuests || ""}
+          onChange={handleChange}
+          placeholder="Enter Max Guests"
+          isLabel={true}
+          label="Max Guests"
+          required={false}
+          errorMessage={errors.maxGuests}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="number"
+          id="rating"
+          name="rating"
+          value={formData.rating !== undefined ? formData.rating : ""}
+          onChange={handleChange}
+          placeholder="Enter Rating"
+          isLabel={true}
+          label="Rating"
+          errorMessage={errors.rating}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Input
+          type="text"
+          id="mediaUrls"
+          name="mediaUrls"
+          value={formData.mediaUrls || ""}
+          onChange={handleChange}
+          placeholder="Enter Media URLs (separated by commas)"
+          isLabel={true}
+          label="Media URLs"
+          errorMessage={errors.mediaUrls}
+        />
+        <Input
+          type="text"
+          id="mediaAlt"
+          name="mediaAlt"
+          value={formData.mediaAlt || ""}
+          onChange={handleChange}
+          placeholder="Enter Media Alt Text"
+          isLabel={true}
+          label="Media Alt Text"
+          errorMessage={errors.mediaAlt}
+        />
+      </FormGroup>
+      <FormGroup>
+        <h2>Facilities</h2>
+        <Input
+          className="checkbox"
+          type="checkbox"
+          id="wifi"
+          name="wifi"
+          onChange={handleChange}
+          isLabel={true}
+          label="Wifi"
+          checked={formData.wifi}
+        />
+        <Input
+          className="checkbox"
+          type="checkbox"
+          id="parking"
+          name="parking"
+          onChange={handleChange}
+          isLabel={true}
+          label="Parking"
+          checked={formData.parking}
+        />
+        <Input
+          className="checkbox"
+          type="checkbox"
+          id="breakfast"
+          name="breakfast"
+          onChange={handleChange}
+          isLabel={true}
+          label="Breakfast"
+          checked={formData.breakfast}
+        />
+        <Input
+          className="checkbox"
+          type="checkbox"
+          id="pets"
+          name="pets"
+          onChange={handleChange}
+          isLabel={true}
+          label="Pets"
+          checked={formData.pets}
+        />
+      </FormGroup>
+      <FormGroup>
+        <h2>Location</h2>
+        <Input
+          type="text"
+          id="address"
+          name="address"
+          value={formData.address || ""}
+          onChange={handleChange}
+          placeholder="Enter Address"
+          isLabel={true}
+          label="Address"
+          errorMessage={errors.address}
+        />
+        <Input
+          type="text"
+          id="city"
+          name="city"
+          value={formData.city || ""}
+          onChange={handleChange}
+          placeholder="Enter City"
+          isLabel={true}
+          label="City"
+          errorMessage={errors.city}
+        />
+        <Input
+          type="text"
+          id="zip"
+          name="zip"
+          value={formData.zip || ""}
+          onChange={handleChange}
+          placeholder="Enter ZIP"
+          isLabel={true}
+          label="ZIP"
+          errorMessage={errors.zip}
+        />
+        <Input
+          type="text"
+          id="country"
+          name="country"
+          value={formData.country || ""}
+          onChange={handleChange}
+          placeholder="Enter Country"
+          isLabel={true}
+          label="Country"
+          errorMessage={errors.country}
+        />
+        <Input
+          type="text"
+          id="continent"
+          name="continent"
+          value={formData.continent || ""}
+          onChange={handleChange}
+          placeholder="Enter Continent"
+          isLabel={true}
+          label="Continent"
+          errorMessage={errors.continent}
+        />
+        <Input
+          type="number"
+          id="lat"
+          name="lat"
+          value={formData.lat || ""}
+          onChange={handleChange}
+          placeholder="Enter Latitude"
+          isLabel={true}
+          label="Latitude"
+          errorMessage={errors.lat}
+        />
+        <Input
+          type="number"
+          id="lng"
+          name="lng"
+          value={formData.lng || ""}
+          onChange={handleChange}
+          placeholder="Enter Longitude"
+          isLabel={true}
+          label="Longitude"
+          errorMessage={errors.lng}
+        />
+      </FormGroup>
+      {errors.apiError && (
+        <div className="text-danger small my-2">{errors.apiError}</div>
+      )}
+      {errors.apiErrors && errors.apiErrors.length > 0 && (
+        <div className="text-danger small my-2">
+          {errors.apiErrors.map((error, index) => (
+            <div key={index}>{error.message}</div>
+          ))}
         </div>
-      </FormContainer>
-    </LoadingError>
+      )}
+      <div className="d-flex flex-wrap justify-content-between gap-3">
+        <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
+          Update
+        </Button>
+        <Button
+          type="button"
+          name="deleteBtn"
+          errorMessage={errors.deleteBtn}
+          variation="deleteBtn"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </div>
+    </FormContainer>
   );
 }
 
