@@ -4,10 +4,6 @@
   background-size: cover;
 }
 
-.bookingForm {
-  max-width: 30rem;
-}
-
 .bookingForm input {
   border-style: none;
   height: 40px;
@@ -15,7 +11,7 @@
 }
 
 .bookBtn {
-  margin-top: 1rem;
   width: 100%;
+  margin-top: 1rem;
   max-width: 20rem;
 }

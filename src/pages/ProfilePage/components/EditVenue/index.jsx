@@ -474,7 +474,6 @@ function EditVenue({ closeModal, venueData }) {
             errorMessage={errors.deleteBtn}
             variation="deleteBtn"
             onClick={handleDelete}
-            size="small"
           >
             Delete
           </Button>

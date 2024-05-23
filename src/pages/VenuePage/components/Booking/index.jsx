@@ -171,7 +171,7 @@ function Booking({ venue, loading, error: venueError }) {
               color="red"
               className="me-1"
             />{" "}
-            You'll need to be signed in to book a venue.
+            Please sign in before you book a venue
           </p>
         </form>
       </section>
@@ -182,7 +182,7 @@ function Booking({ venue, loading, error: venueError }) {
 
   return (
     <div
-      className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center justify-content-center`}
+      className={` ${styles.bookingContainer} container-fluid p-5 position-relative d-flex flex-column align-items-center justify-content-center w-100`}
     >
       <h1 className="seasons fw-semibold fs-2 mb-5">Book Venue</h1>
       <FormGroup>
@@ -235,7 +235,6 @@ function Booking({ venue, loading, error: venueError }) {
           name="submitBtn"
           errorMessage={errors.submitBtn}
           onClick={handleSubmit}
-          size="small"
         >
           Book Venue
         </Button>

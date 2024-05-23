@@ -5,6 +5,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import searchVenue from "../../../../services/authService/GET/searchVenues";
 import { Input } from "../../../../components/Input";
 import styles from "./SearchBar.module.css";
+import TextTruncate from "../../../../components/TextTruncate";
 
 function SearchBar() {
   const [query, setQuery] = useState("");
@@ -57,7 +58,9 @@ function SearchBar() {
           <ul>
             {results.map((venue) => (
               <Link to={`/venue?id=${venue.id}`} key={venue.id}>
-                <li>{venue.name}</li>
+                <li>
+                  <TextTruncate text={venue.name} useMaxLength maxLength={30} />
+                </li>
               </Link>
             ))}
           </ul>

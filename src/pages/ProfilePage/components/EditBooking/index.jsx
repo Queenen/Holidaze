@@ -249,7 +249,6 @@ function EditBooking({ closeModal, bookingData }) {
             type="submit"
             name="submitBtn"
             errorMessage={errors.submitBtn}
-            size="small"
           >
             Update
           </Button>
@@ -259,7 +258,6 @@ function EditBooking({ closeModal, bookingData }) {
             errorMessage={errors.submitBtn}
             variation="deleteBtn"
             onClick={handleDelete}
-            size="small"
           >
             Delete
           </Button>

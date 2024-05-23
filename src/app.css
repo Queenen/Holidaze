@@ -20,6 +20,7 @@
   font-family: Josefin Sans, serif !important;
   text-transform: capitalize !important;
   letter-spacing: 0.1rem !important;
+  margin-top: 0.25rem !important;
 }
 
 p,
@@ -44,4 +45,5 @@ h1 {
 
 .seasons {
   font-family: "Seasons", sans-serif;
+  font-weight: 600;
 }

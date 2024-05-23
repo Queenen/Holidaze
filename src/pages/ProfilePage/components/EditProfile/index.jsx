@@ -292,12 +292,7 @@ function EditProfile({ closeModal }) {
         {errors.apiError && (
           <div className="text-danger small my-2">{errors.apiError}</div>
         )}
-        <Button
-          type="submit"
-          name="submitBtn"
-          errorMessage={errors.submitBtn}
-          size="small"
-        >
+        <Button type="submit" name="submitBtn" errorMessage={errors.submitBtn}>
           Save Changes
         </Button>
       </FormContainer>

@@ -27,7 +27,7 @@ function HomePage() {
           </div>
           <Link
             to="/venues"
-            className="col-md-5 d-flex align-self-md-center justify-content-md-end"
+            className="col-md-5 d-flex align-self-md-end justify-content-md-end"
           >
             <Button>View all venues</Button>
           </Link>

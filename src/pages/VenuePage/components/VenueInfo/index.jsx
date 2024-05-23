@@ -25,9 +25,7 @@ function VenueInfo({ venue, loading, error }) {
         className={`d-flex justify-content-center p-5 col-md-6 col-lg-7 col-xl-8 order-1 ${styles.infoContainer}`}
       >
         {venue ? (
-          <div
-            className={`d-flex flex-column gap-4 w-100 text-capitalize ${styles.venueInfo}`}
-          >
+          <div className={`d-flex flex-column gap-4 w-100 ${styles.venueInfo}`}>
             {venue.name ? (
               <TextTruncate
                 text={venue.name}

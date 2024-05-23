@@ -59,7 +59,9 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
             color="white"
             className={styles.icon}
           />
-          <p className="fw-bold text-white">{venue.rating}</p>
+          <p className="fw-bold text-white focusFont">
+            {venue.rating ? `${venue.rating}` : "N/A"}
+          </p>
         </div>
         <div className="d-flex gap-3 align-items-center">
           <FontAwesomeIcon
@@ -67,7 +69,9 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
             color="white"
             className={styles.icon}
           />
-          <p className="fw-bold text-white">{venue.maxGuests}</p>
+          <p className="fw-bold text-white">
+            {venue.maxGuests ? `${venue.maxGuests}` : "N/A"}
+          </p>
         </div>
       </div>
       {showEditButton && (

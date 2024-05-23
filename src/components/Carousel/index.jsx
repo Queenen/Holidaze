@@ -92,7 +92,7 @@ const VenueCarousel = ({
                     color="white"
                     className={styles.icon}
                   />
-                  <p className="fw-bold text-white">
+                  <p className="fw-semibold text-white focusFont">
                     {venue.rating ? `${venue.rating}` : "N/A"}
                   </p>
                 </div>
