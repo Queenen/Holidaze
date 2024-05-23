@@ -1,8 +1,13 @@
 # Holidaze
 
-<a href="https://ibb.co/p34zPsR"><img src="https://i.ibb.co/p34zPsR/holidaze-Pic.png" alt="index" border="0"></a>
+<img src="https://i.ibb.co/gDtT7XP/holidaze-Pic.png" alt="holidaze-Pic" border="0" width="100%">
 <a href="https://ibb.co/WpD8ZWM"><img src="https://i.ibb.co/WpD8ZWM/holidaze-Pic2.png" alt="venues" border="0"></a>
 <a href="https://ibb.co/0KhQkb2"><img src="https://i.ibb.co/0KhQkb2/holidaze-Pic3.png" alt="venue" border="0"></a>
+<a href="https://ibb.co/0tk9Zmr"><img src="https://i.ibb.co/0tk9Zmr/holidaze-Pic4.png" alt="profile" border="0"></a>
+<a href="https://ibb.co/hCPrVm9"><img src="https://i.ibb.co/hCPrVm9/holidaze-Pic5.png" alt="create" border="0"></a>
+
+<br/>
+<br/>
 
 Holidaze is a comprehensive web application that simplifies the process of finding, booking, and managing venues for various events and occasions. Users can browse through a list of available venues, search for specific venues based on their preferences, and view detailed information about each venue's amenities, pricing, and availability calendar. Registered customers with a valid stud.noroff.no email can create bookings for their desired venues and manage their upcoming and past bookings seamlessly. Additionally, Holidaze allows users with a stud.noroff.no email to register as venue managers, enabling them to create, update, and delete their own venue listings, as well as view and manage bookings for their managed venues. The application offers a user-friendly interface for both customers and venue managers, providing features such as user authentication, avatar updates, and logout functionality, ensuring a secure and personalized experience.
 
@@ -72,17 +77,18 @@ To get a local copy of the project up and running, follow these steps:
 ## Project Structure
 
 - `src/`: Contains the source code for the React application.
+- - `asset/`: Location of media and font files.
   - `components/`: Reusable React components.
+  - `context/`: Contains React Context providers and related files for state management.
+  - `hooks/`: Custom React hooks used throughout the application.
+  - `layout/`: Layout components that define the overall structure and UI elements shared across multiple pages.
   - `pages/`: Top-level pages for different routes.
   - `services/`: Helper functions and API calls.
   - `utils/`: Utility functions.
   - `App.jsx`: The main entry point of the application.
-  - `main.jsx`: The entry point for the Vite build process.
+  - `AppRouter.jsx`: The main router component responsible for handling client-side routing within the application.
+  - `index.jsx`: The entry point for the Vite build process.
 - `public/`: Contains the HTML entry point and other static assets.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
@@ -91,3 +97,5 @@ This project is licensed under the [MIT License](LICENSE).
 - [React Router](https://reactrouter.com/)
 - [React Bootstrap](https://react-bootstrap.github.io/)
 - [Font Awesome](https://fontawesome.com/)
+- [ChatGPT](https://chatgpt.com/)
+- [Claude](https://claude.ai/)
