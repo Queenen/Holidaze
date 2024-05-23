@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,9 +10,34 @@ import {
   faWifi,
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../../components/Button";
+import { getValidImageUrl } from "../../../../utils/imageValidation";
 import styles from "./Carousel.module.css";
 
+const fallbackImage =
+  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
+
 const VenueCarousel = ({ venue, showEditButton = false }) => {
+  const [mediaUrls, setMediaUrls] = useState([]);
+
+  useEffect(() => {
+    const validateMediaUrls = async () => {
+      const validatedMedia = await Promise.all(
+        venue.media.map(async (mediaItem) => {
+          const validImageUrl = await getValidImageUrl(mediaItem.url);
+          return {
+            ...mediaItem,
+            url: validImageUrl,
+          };
+        })
+      );
+      setMediaUrls(validatedMedia);
+    };
+
+    if (venue && venue.media) {
+      validateMediaUrls();
+    }
+  }, [venue]);
+
   if (!venue) {
     return (
       <div className={styles.errorContainer}>
@@ -20,7 +46,7 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
     );
   }
 
-  const hasMultipleMedia = venue.media?.length > 1;
+  const hasMultipleMedia = mediaUrls.length > 1;
 
   return (
     <section className={styles.venueCarouselSection}>
@@ -50,7 +76,7 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
         </div>
       )}
       <Carousel controls={hasMultipleMedia} indicators={hasMultipleMedia}>
-        {venue.media?.map((mediaItem, index) => (
+        {mediaUrls.map((mediaItem, index) => (
           <Carousel.Item
             key={index}
             className={`position-relative ${styles.carouselItem}`}
@@ -58,7 +84,7 @@ const VenueCarousel = ({ venue, showEditButton = false }) => {
             <div className={styles.backgroundImageContainer}>
               <img
                 className="d-block w-100"
-                src={mediaItem.url}
+                src={mediaItem.url || fallbackImage}
                 alt={mediaItem.alt || venue.name}
               />
               <div className={styles.overlay}></div>

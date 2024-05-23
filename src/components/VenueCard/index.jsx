@@ -13,9 +13,12 @@ import { Link } from "react-router-dom";
 import Button from "../Button";
 import TextTruncate from "../TextTruncate";
 import { getValidImageUrl } from "../../utils/imageValidation";
+const fallbackImage =
+  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 
 const VenueCard = ({ venue, showEditButton = false }) => {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(fallbackImage);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkImage = async () => {
@@ -23,6 +26,7 @@ const VenueCard = ({ venue, showEditButton = false }) => {
         venue.media.length > 0 ? venue.media[0].url : ""
       );
       setImageUrl(validImageUrl);
+      setIsLoading(false);
     };
 
     checkImage();
@@ -32,15 +36,23 @@ const VenueCard = ({ venue, showEditButton = false }) => {
     <div className={`position-relative ${styles.venueCard}`}>
       <Link to={`/venue?id=${venue.id}`}>
         <div className={styles.backgroundImageContainer}>
-          <img
-            className="d-block w-100"
-            src={imageUrl}
-            alt={
-              venue.media.length > 0
-                ? venue.media[0].alt || venue.name
-                : "missing media"
-            }
-          />
+          {isLoading ? (
+            <img
+              className="d-block w-100"
+              src={fallbackImage}
+              alt="Loading..."
+            />
+          ) : (
+            <img
+              className="d-block w-100"
+              src={imageUrl}
+              alt={
+                venue.media.length > 0
+                  ? venue.media[0].alt || venue.name
+                  : "missing media"
+              }
+            />
+          )}
           <div className={styles.overlay}></div>
         </div>
         <div className="d-flex justify-content-between position-absolute top-0 p-4 w-100">

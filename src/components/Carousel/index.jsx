@@ -12,9 +12,13 @@ import {
 import { Link } from "react-router-dom";
 import Button from "../Button";
 import TextTruncate from "../TextTruncate";
+import { getValidImageUrl } from "../../utils/imageValidation";
 import styles from "./VenueCarousel.module.css";
 import { v4 as uuidv4 } from "uuid";
 import LoadingError from "../../utils/LoadingError";
+
+const fallbackImage =
+  "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?crop=entropy&fit=crop&h=900&q=80&w=1600";
 
 const VenueCarousel = ({
   fetchFunction,
@@ -33,7 +37,18 @@ const VenueCarousel = ({
       setLoading(true);
       try {
         const fetchedVenues = await fetchFunction();
-        setVenues(fetchedVenues);
+        const updatedVenues = await Promise.all(
+          fetchedVenues.map(async (venue) => {
+            const validImageUrl = await getValidImageUrl(
+              venue.media.length > 0 ? venue.media[0].url : ""
+            );
+            return {
+              ...venue,
+              media: [{ url: validImageUrl }],
+            };
+          })
+        );
+        setVenues(updatedVenues);
       } catch (error) {
         setError("Error fetching venues: " + error.message);
       } finally {
@@ -61,17 +76,15 @@ const VenueCarousel = ({
               to={`/venue?id=${venue.id}`}
               onClick={(e) => e.stopPropagation()}
             >
-              {venue.media.length > 0 && (
-                <div className={styles.backgroundImageContainer}>
-                  <img
-                    className="d-block w-100"
-                    src={venue.media[0]?.url}
-                    alt={venue.media[0]?.alt || venue.name}
-                    style={{ height: "100%", objectFit: "cover" }}
-                  />
-                  <div className={styles.overlay}></div>
-                </div>
-              )}
+              <div className={styles.backgroundImageContainer}>
+                <img
+                  className="d-block w-100"
+                  src={venue.media[0].url || fallbackImage}
+                  alt={venue.media[0].alt || venue.name || "venue media"}
+                  style={{ height: "100%", objectFit: "cover" }}
+                />
+                <div className={styles.overlay}></div>
+              </div>
               <div className="d-flex justify-content-between position-absolute top-0 p-4 w-100">
                 <div className="d-flex gap-3 align-items-center">
                   <FontAwesomeIcon
