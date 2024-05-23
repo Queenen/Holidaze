@@ -175,6 +175,7 @@ function AddVenueModal({ closeModal }) {
       }));
     }
   };
+
   return (
     <FormContainer
       formHeading="Create Venue"

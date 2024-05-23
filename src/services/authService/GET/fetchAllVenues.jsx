@@ -1,6 +1,6 @@
 import { NOROFF_API_URL } from "../../config";
 
-// Function to fetch all venues
+// Function to fetch data from a specific endpoint
 export const fetchData = async (endpoint, options = {}) => {
   const url = `${NOROFF_API_URL}${endpoint}`;
   try {

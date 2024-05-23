@@ -51,9 +51,3 @@
 .profileInfo > *:nth-child(2) {
   font-style: italic;
 }
-
-.editBtn button {
-  margin-top: 1rem;
-  width: 15rem;
-  font-family: Josefin Sans, serif;
-}

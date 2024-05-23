@@ -40,31 +40,10 @@
   outline: 1px solid slategrey;
 }
 
-.results::before,
-.results::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  height: 20px;
-  width: 20px;
-}
-
-.results::before {
-  left: 0;
-  border-bottom-left-radius: 0.5rem;
-}
-
-.results::after {
-  right: 0;
-  border-bottom-right-radius: 0.5rem;
-}
-
 .results ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-bottom-left-radius: inherit;
-  border-bottom-right-radius: inherit;
 }
 
 .results a {

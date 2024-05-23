@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styles from "./SignUp.module.css";
 import { registerUser } from "../../services/authService/POST/registerUser";
 import { useUserStatus } from "../../context/UserStatus";
 import { FormContainer, FormGroup } from "../Form";
@@ -134,7 +133,7 @@ function SignUp({ closeModal, onToggleAuth }) {
         />
       </FormGroup>
       <FormGroup>
-        <div className={`d-flex flex-column gap-3 my-3 ${styles.radio}`}>
+        <div className={`d-flex flex-column gap-3 my-3`}>
           <div className={`d-flex gap-4`}>
             <input
               type="checkbox"
@@ -165,10 +164,10 @@ function SignUp({ closeModal, onToggleAuth }) {
       )}
       <Button type="submit">Sign Up</Button>
       <div
-        className={`${styles.toggleModal} small d-flex align-items-center gap-3 justify-content-between`}
+        className={`small d-flex align-items-center gap-3 justify-content-between`}
       >
         <p>Already registered?</p>
-        <button className="btn p-0" onClick={onToggleAuth}>
+        <button className="btn p-0 defaultFont" onClick={onToggleAuth}>
           Sign in{" "}
           <span className="text-decoration-underline text-success">here</span>
         </button>

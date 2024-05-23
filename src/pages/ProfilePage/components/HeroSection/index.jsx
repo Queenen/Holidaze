@@ -7,8 +7,7 @@ import { faUserTie, faUser } from "@fortawesome/free-solid-svg-icons";
 import EditProfile from "../EditProfile";
 import { useUserStatus } from "../../../../context/UserStatus";
 
-function HeroSection(props) {
-  const { user } = props;
+function HeroSection({ user }) {
   const [showModal, setShowModal] = useState(false);
   const { isSignedIn } = useUserStatus();
 
@@ -22,13 +21,8 @@ function HeroSection(props) {
     };
   }, [isSignedIn]);
 
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <section className={styles.editProfile}>
@@ -42,11 +36,7 @@ function HeroSection(props) {
       </div>
       <div className={styles.profileInfo}>
         <div className="d-flex align-items-center gap-2">
-          {user.venueManager ? (
-            <FontAwesomeIcon icon={faUserTie} />
-          ) : (
-            <FontAwesomeIcon icon={faUser} />
-          )}
+          <FontAwesomeIcon icon={user.venueManager ? faUserTie : faUser} />
           <p className="fw-semibold">{user.name}</p>
         </div>
         <p className="fst-italic">{user.email}</p>

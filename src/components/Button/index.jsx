@@ -33,13 +33,13 @@ function Button({
 }
 
 Button.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
   type: PropTypes.oneOf(["button", "submit", "reset"]),
   size: PropTypes.oneOf(["big", "small"]),
   name: PropTypes.string,
   errorMessage: PropTypes.string,
-  variation: PropTypes.string,
+  variation: PropTypes.oneOf(["", "deleteBtn"]),
 };
 
 Button.defaultProps = {

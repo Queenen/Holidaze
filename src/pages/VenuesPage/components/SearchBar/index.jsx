@@ -1,30 +1,34 @@
 import { useState } from "react";
-import styles from "./SearchBar.module.css";
-import searchVenue from "../../../../services/authService/GET/searchVenues";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import searchVenue from "../../../../services/authService/GET/searchVenues";
 import { Input } from "../../../../components/Input";
+import styles from "./SearchBar.module.css";
 
 function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
-  async function handleChange(event) {
+  const handleChange = async (event) => {
     const query = event.target.value;
     setQuery(query);
     if (query.length > 2) {
-      const venues = await searchVenue(query);
-      setResults(venues.data || []);
+      try {
+        const response = await searchVenue(query);
+        setResults(response.data || []);
+      } catch (error) {
+        console.error("Error searching venues:", error);
+      }
     } else {
       setResults([]);
     }
-  }
+  };
 
-  function handleClear() {
+  const handleClear = () => {
     setQuery("");
     setResults([]);
-  }
+  };
 
   return (
     <div
@@ -35,7 +39,7 @@ function SearchBar() {
       <div className="position-relative w-100">
         <Input
           type="search"
-          placeholder={"Search for venues..."}
+          placeholder="Search for venues..."
           value={query}
           onChange={handleChange}
           id="search-venues-input"

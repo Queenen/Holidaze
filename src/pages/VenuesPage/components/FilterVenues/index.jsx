@@ -43,7 +43,7 @@ const FilterVenues = ({
         </FormGroup>
         <FormGroup>
           <Input
-            className={`checkbox`}
+            className="checkbox"
             type="checkbox"
             id="wifi"
             name="wifi"
@@ -53,7 +53,7 @@ const FilterVenues = ({
             onChange={handleCheckboxChange}
           />
           <Input
-            className={`checkbox`}
+            className="checkbox"
             type="checkbox"
             id="parking"
             name="parking"
@@ -63,7 +63,7 @@ const FilterVenues = ({
             onChange={handleCheckboxChange}
           />
           <Input
-            className={`checkbox`}
+            className="checkbox"
             type="checkbox"
             id="breakfast"
             name="breakfast"
@@ -73,7 +73,7 @@ const FilterVenues = ({
             onChange={handleCheckboxChange}
           />
           <Input
-            className={`checkbox`}
+            className="checkbox"
             type="checkbox"
             id="pets"
             name="pets"
@@ -83,7 +83,6 @@ const FilterVenues = ({
             onChange={handleCheckboxChange}
           />
         </FormGroup>
-
         <Button type="button" onClick={handleModalSave}>
           Save Changes
         </Button>

@@ -29,10 +29,6 @@ p,
   font-size: 18px !important;
 }
 
-.sourceSerif {
-  font-family: "Source Serif 4", serif !important;
-}
-
 @font-face {
   font-family: "Seasons";
   src: url("./asset/fonts/Fontspring-DEMO-theseasons-reg.otf")

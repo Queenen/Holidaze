@@ -135,28 +135,28 @@ const VenueCarousel = ({
                 )}
 
                 <div className="facilities d-flex gap-4 justify-content-center mb-3 mt-4">
-                  {venue.meta.wifi && (
+                  {venue.meta?.wifi && (
                     <FontAwesomeIcon
                       icon={faWifi}
                       color="white"
                       className={styles.icon}
                     />
                   )}
-                  {venue.meta.parking && (
+                  {venue.meta?.parking && (
                     <FontAwesomeIcon
                       icon={faCarSide}
                       color="white"
                       className={styles.icon}
                     />
                   )}
-                  {venue.meta.breakfast && (
+                  {venue.meta?.breakfast && (
                     <FontAwesomeIcon
                       icon={faUtensils}
                       color="white"
                       className={styles.icon}
                     />
                   )}
-                  {venue.meta.pets && (
+                  {venue.meta?.pets && (
                     <FontAwesomeIcon
                       icon={faPaw}
                       color="white"

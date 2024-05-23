@@ -5,30 +5,27 @@ import { useSearchParams } from "react-router-dom";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import VenueCarousel from "./components/Carousel";
 import { useFetchVenue } from "../../services/authService/GET/fetchVenueById";
-import Loader from "../../components/Loader";
+import LoadingError from "../../utils/LoadingError";
 
 const VenuePage = () => {
-  useDocumentTitle(`Holidaze | Venue`);
+  useDocumentTitle("Holidaze | Venue");
   const [searchParams] = useSearchParams();
   const venueId = searchParams.get("id");
 
   const { venue, loading, error } = useFetchVenue(venueId);
 
-  if (loading) return <Loader />;
-  if (error) return <div>Error: {error}</div>;
-
   return (
-    <div>
+    <LoadingError loading={loading} error={error}>
       {venue && (
         <>
           <VenueCarousel venue={venue.data} />
           <div className="d-md-flex">
-            <VenueInfo venue={venue.data} loading={loading} error={error} />
-            <Booking venue={venue} loading={loading} error={error} />
+            <VenueInfo venue={venue.data} />
+            <Booking venue={venue} />
           </div>
         </>
       )}
-    </div>
+    </LoadingError>
   );
 };
 

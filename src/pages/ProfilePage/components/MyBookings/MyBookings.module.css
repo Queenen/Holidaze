@@ -4,28 +4,10 @@
   width: 100%;
 }
 
-.icon {
-  width: 1.8rem;
-  height: 1.8rem;
-}
-
 .editBtn > * {
   width: fit-content;
   margin: 2rem 0;
   font-family: Josefin Sans, serif;
-}
-
-.backgroundImageContainer {
-  position: relative;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .showBookings {
@@ -45,10 +27,6 @@
 
 .showBookings:hover {
   background-color: var(--hover);
-}
-
-.hidden {
-  display: none;
 }
 
 .emptyContent {
