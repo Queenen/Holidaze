@@ -6,6 +6,7 @@ import { Input, TextArea } from "../../../../components/Input";
 import { editProfile } from "../../../../services/authService/PUT/editProfile";
 import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
 import LoadingError from "../../../../utils/LoadingError";
+import { getValidImageUrl } from "../../../../utils/imageValidation";
 
 function EditProfile({ closeModal }) {
   const [errors, setErrors] = useState({});
@@ -47,15 +48,6 @@ function EditProfile({ closeModal }) {
     loadUserData();
   }, []);
 
-  const isValidImageUrl = (url) => {
-    try {
-      new URL(url);
-      return /\.(jpg|jpeg|png|gif)$/i.test(url);
-    } catch (e) {
-      return false;
-    }
-  };
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -65,48 +57,61 @@ function EditProfile({ closeModal }) {
 
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
-      if (name === "bannerUrl") {
-        if (value.trim() && !formData.bannerAlt.trim()) {
-          newErrors.bannerAlt = "Please add an alt description for the banner.";
-        } else {
-          delete newErrors.bannerAlt;
-        }
-        if (value.trim() && !isValidImageUrl(value.trim())) {
-          newErrors.bannerUrl =
-            "Please provide a valid image URL for the banner.";
-        } else {
-          delete newErrors.bannerUrl;
-        }
-      }
+      if (
+        name === "bannerUrl" ||
+        name === "bannerAlt" ||
+        name === "avatarUrl" ||
+        name === "avatarAlt"
+      ) {
+        getValidImageUrl(value).then((isValid) => {
+          if (name === "bannerUrl") {
+            if (value.trim() && !formData.bannerAlt.trim()) {
+              newErrors.bannerAlt =
+                "Please add an alt description for the banner.";
+            } else {
+              delete newErrors.bannerAlt;
+            }
+            if (value.trim() && !isValid) {
+              newErrors.bannerUrl =
+                "Please provide a valid image URL for the banner.";
+            } else {
+              delete newErrors.bannerUrl;
+            }
+          }
 
-      if (name === "bannerAlt") {
-        if (value.trim() && !formData.bannerUrl.trim()) {
-          newErrors.bannerUrl = "Please provide a URL for the banner.";
-        } else {
-          delete newErrors.bannerUrl;
-        }
-      }
+          if (name === "bannerAlt") {
+            if (value.trim() && !formData.bannerUrl.trim()) {
+              newErrors.bannerUrl = "Please provide a URL for the banner.";
+            } else {
+              delete newErrors.bannerUrl;
+            }
+          }
 
-      if (name === "avatarUrl") {
-        if (value.trim() && !formData.avatarAlt.trim()) {
-          newErrors.avatarAlt = "Please add an alt description for the avatar.";
-        } else {
-          delete newErrors.avatarAlt;
-        }
-        if (value.trim() && !isValidImageUrl(value.trim())) {
-          newErrors.avatarUrl =
-            "Please provide a valid image URL for the avatar.";
-        } else {
-          delete newErrors.avatarUrl;
-        }
-      }
+          if (name === "avatarUrl") {
+            if (value.trim() && !formData.avatarAlt.trim()) {
+              newErrors.avatarAlt =
+                "Please add an alt description for the avatar.";
+            } else {
+              delete newErrors.avatarAlt;
+            }
+            if (value.trim() && !isValid) {
+              newErrors.avatarUrl =
+                "Please provide a valid image URL for the avatar.";
+            } else {
+              delete newErrors.avatarUrl;
+            }
+          }
 
-      if (name === "avatarAlt") {
-        if (value.trim() && !formData.avatarUrl.trim()) {
-          newErrors.avatarUrl = "Please provide a URL for the avatar.";
-        } else {
-          delete newErrors.avatarUrl;
-        }
+          if (name === "avatarAlt") {
+            if (value.trim() && !formData.avatarUrl.trim()) {
+              newErrors.avatarUrl = "Please provide a URL for the avatar.";
+            } else {
+              delete newErrors.avatarUrl;
+            }
+          }
+
+          setErrors(newErrors);
+        });
       }
 
       if (name === "bio") {
@@ -121,8 +126,11 @@ function EditProfile({ closeModal }) {
     });
   };
 
-  const validateForm = () => {
+  const validateForm = async () => {
     const newErrors = {};
+
+    const avatarUrlValid = await getValidImageUrl(formData.avatarUrl.trim());
+    const bannerUrlValid = await getValidImageUrl(formData.bannerUrl.trim());
 
     if (formData.avatarUrl.trim() && !formData.avatarAlt.trim()) {
       newErrors.avatarAlt = "Please add an alt description for the avatar.";
@@ -132,10 +140,7 @@ function EditProfile({ closeModal }) {
       newErrors.avatarUrl = "Please provide a URL for the avatar.";
     }
 
-    if (
-      formData.avatarUrl.trim() &&
-      !isValidImageUrl(formData.avatarUrl.trim())
-    ) {
+    if (formData.avatarUrl.trim() && !avatarUrlValid) {
       newErrors.avatarUrl = "Please provide a valid image URL for the avatar.";
     }
 
@@ -147,10 +152,7 @@ function EditProfile({ closeModal }) {
       newErrors.bannerUrl = "Please provide a URL for the banner.";
     }
 
-    if (
-      formData.bannerUrl.trim() &&
-      !isValidImageUrl(formData.bannerUrl.trim())
-    ) {
+    if (formData.bannerUrl.trim() && !bannerUrlValid) {
       newErrors.bannerUrl = "Please provide a valid image URL for the banner.";
     }
 
@@ -170,7 +172,7 @@ function EditProfile({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!(await validateForm())) {
       alert("Validation failed");
       return;
     }
