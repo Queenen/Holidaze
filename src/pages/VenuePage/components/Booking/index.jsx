@@ -164,7 +164,7 @@ function Booking({ venue, loading, error: venueError }) {
         <form
           className={`d-flex flex-column gap-3 w-100 justify-content-center ${styles.bookingForm}`}
         >
-          <h1 className="mb-3">Book venue</h1>
+          <h1 className="seasons fw-semibold fs-2 mb-5">Book venue</h1>
           <p className="text-danger">
             <FontAwesomeIcon
               icon={faCircleExclamation}
@@ -184,7 +184,7 @@ function Booking({ venue, loading, error: venueError }) {
     <div
       className={` ${styles.bookingContainer} container py-5 position-relative d-flex flex-column align-items-center justify-content-center`}
     >
-      <h1 className="seasons fw-semibold fs-2 mb-4">Book Venue</h1>
+      <h1 className="seasons fw-semibold fs-2 mb-5">Book Venue</h1>
       <FormGroup>
         <Input
           type="date"

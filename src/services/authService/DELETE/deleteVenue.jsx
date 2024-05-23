@@ -18,7 +18,7 @@ export async function deleteVenue(id) {
   if (!token) {
     console.error("No access token available.");
     throw new Error(
-      "You're not authorized to delete venue. Please sign in and try again."
+      "You're not authorized to delete the venue. Please sign in and try again."
     );
   }
 

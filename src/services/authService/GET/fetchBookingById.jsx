@@ -9,10 +9,12 @@ async function ensureApiKey() {
   return sessionStorage.getItem("apiKey");
 }
 
+// Function to fetch a booking by ID
 export async function fetchBookingById(id) {
   const url = `${NOROFF_API_URL}/holidaze/bookings/${id}`;
   const token = sessionStorage.getItem("accessToken");
 
+  // Ensure an access token is available
   if (!token) {
     console.error("No access token available.");
     throw new Error(
@@ -30,8 +32,9 @@ export async function fetchBookingById(id) {
       },
     });
 
+    // Check for a successful response or handle errors
     if (!response.ok) {
-      const errorText = await response.text();
+      const errorText = await response.text(); // Read the response body
       console.error(
         `Failed to fetch booking: HTTP ${response.status}`,
         errorText
@@ -41,6 +44,7 @@ export async function fetchBookingById(id) {
       );
     }
 
+    // Parse and return the JSON data
     const data = await response.json();
     return data.data;
   } catch (error) {

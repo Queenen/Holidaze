@@ -1,8 +1,5 @@
-.venueCard {
-  background: #fff;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.carouselItem {
+  position: relative;
 }
 
 .backgroundImageContainer {
@@ -31,15 +28,11 @@
   height: 1.8rem;
 }
 
-.caption {
-  color: white;
-}
-
 .editBtn > * {
   width: fit-content;
   margin: 2rem 0;
 }
 
-.facilitiesContainer {
+.facilities {
   height: 2rem !important;
 }

@@ -1,8 +1,10 @@
 import { searchVenueURL } from "../../config";
 
+// Function to search venues
 async function searchVenue(query) {
   try {
-    const response = await fetch(`${searchVenueURL.replace("<query>", query)}`);
+    const url = searchVenueURL.replace("<query>", encodeURIComponent(query));
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
