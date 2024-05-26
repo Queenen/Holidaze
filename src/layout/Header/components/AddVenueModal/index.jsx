@@ -4,7 +4,7 @@ import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { createVenue } from "../../../../services/authService/POST/createVenue";
-import { getValidImageUrl } from "../../../../utils/imageValidation"; // Import the new image validator
+import { getValidImageUrl } from "../../../../utils/imageValidation";
 
 function AddVenueModal({ closeModal }) {
   const [formData, setFormData] = useState({
