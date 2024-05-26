@@ -5,6 +5,7 @@ import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { editProfile } from "../../../../services/authService/PUT/editProfile";
 import { fetchUserByID } from "../../../../services/authService/GET/fetchSingleProfile";
+import { getValidImageUrl } from "../../../../utils/imageValidation";
 
 function EditProfile({ closeModal }) {
   const [errors, setErrors] = useState({});
@@ -26,10 +27,10 @@ function EditProfile({ closeModal }) {
         setFormData({
           bio: fetchedUser.bio || "",
           venueManager: fetchedUser.venueManager || false,
-          bannerUrl: fetchedUser.banner.url || "",
-          bannerAlt: fetchedUser.banner.alt || "",
-          avatarUrl: fetchedUser.avatar.url || "",
-          avatarAlt: fetchedUser.avatar.alt || "",
+          bannerUrl: fetchedUser.banner?.url || "",
+          bannerAlt: fetchedUser.banner?.alt || "",
+          avatarUrl: fetchedUser.avatar?.url || "",
+          avatarAlt: fetchedUser.avatar?.alt || "",
         });
       }
     };
@@ -37,81 +38,74 @@ function EditProfile({ closeModal }) {
     loadUserData();
   }, []);
 
-  const isValidImageUrl = (url) => {
-    try {
-      new URL(url);
-      return /\.(jpg|jpeg|png|gif)$/i.test(url);
-    } catch (e) {
-      return false;
-    }
-  };
-
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+    const newFormData = {
+      ...formData,
       [name]: type === "checkbox" ? checked : value,
-    }));
+    };
+    setFormData(newFormData);
 
-    setErrors((prevErrors) => {
-      const newErrors = { ...prevErrors };
-      if (name === "bannerUrl") {
-        if (value.trim() && !formData.bannerAlt.trim()) {
-          newErrors.bannerAlt = "Please add an alt description for the banner.";
-        } else {
-          delete newErrors.bannerAlt;
-        }
-        if (value.trim() && !isValidImageUrl(value.trim())) {
-          newErrors.bannerUrl =
-            "Please provide a valid image URL for the banner.";
-        } else {
-          delete newErrors.bannerUrl;
-        }
+    const newErrors = { ...errors };
+
+    if (name === "bannerUrl") {
+      const validUrl = await getValidImageUrl(value.trim());
+      if (value.trim() && !formData.bannerAlt.trim()) {
+        newErrors.bannerAlt = "Please add an alt description for the banner.";
+      } else {
+        delete newErrors.bannerAlt;
       }
-
-      if (name === "bannerAlt") {
-        if (value.trim() && !formData.bannerUrl.trim()) {
-          newErrors.bannerUrl = "Please provide a URL for the banner.";
-        } else {
-          delete newErrors.bannerUrl;
-        }
+      if (value.trim() && validUrl !== value.trim()) {
+        newErrors.bannerUrl =
+          "Please provide a valid image URL for the banner.";
+      } else {
+        delete newErrors.bannerUrl;
       }
+    }
 
-      if (name === "avatarUrl") {
-        if (value.trim() && !formData.avatarAlt.trim()) {
-          newErrors.avatarAlt = "Please add an alt description for the avatar.";
-        } else {
-          delete newErrors.avatarAlt;
-        }
-        if (value.trim() && !isValidImageUrl(value.trim())) {
-          newErrors.avatarUrl =
-            "Please provide a valid image URL for the avatar.";
-        } else {
-          delete newErrors.avatarUrl;
-        }
+    if (name === "bannerAlt") {
+      if (value.trim() && !formData.bannerUrl.trim()) {
+        newErrors.bannerUrl = "Please provide a URL for the banner.";
+      } else {
+        delete newErrors.bannerUrl;
       }
+    }
 
-      if (name === "avatarAlt") {
-        if (value.trim() && !formData.avatarUrl.trim()) {
-          newErrors.avatarUrl = "Please provide a URL for the avatar.";
-        } else {
-          delete newErrors.avatarUrl;
-        }
+    if (name === "avatarUrl") {
+      const validUrl = await getValidImageUrl(value.trim());
+      if (value.trim() && !formData.avatarAlt.trim()) {
+        newErrors.avatarAlt = "Please add an alt description for the avatar.";
+      } else {
+        delete newErrors.avatarAlt;
       }
-
-      if (name === "bio") {
-        if (value.trim().length > 160) {
-          newErrors.bio = "The bio length cannot exceed 160 characters.";
-        } else {
-          delete newErrors.bio;
-        }
+      if (value.trim() && validUrl !== value.trim()) {
+        newErrors.avatarUrl =
+          "Please provide a valid image URL for the avatar.";
+      } else {
+        delete newErrors.avatarUrl;
       }
+    }
 
-      return newErrors;
-    });
+    if (name === "avatarAlt") {
+      if (value.trim() && !formData.avatarUrl.trim()) {
+        newErrors.avatarUrl = "Please provide a URL for the avatar.";
+      } else {
+        delete newErrors.avatarUrl;
+      }
+    }
+
+    if (name === "bio") {
+      if (value.trim().length > 160) {
+        newErrors.bio = "The bio length cannot exceed 160 characters.";
+      } else {
+        delete newErrors.bio;
+      }
+    }
+
+    setErrors(newErrors);
   };
 
-  const validateForm = () => {
+  const validateForm = async () => {
     const newErrors = {};
 
     if (formData.avatarUrl.trim() && !formData.avatarAlt.trim()) {
@@ -122,11 +116,12 @@ function EditProfile({ closeModal }) {
       newErrors.avatarUrl = "Please provide a URL for the avatar.";
     }
 
-    if (
-      formData.avatarUrl.trim() &&
-      !isValidImageUrl(formData.avatarUrl.trim())
-    ) {
-      newErrors.avatarUrl = "Please provide a valid image URL for the avatar.";
+    if (formData.avatarUrl.trim()) {
+      const validUrl = await getValidImageUrl(formData.avatarUrl.trim());
+      if (validUrl !== formData.avatarUrl.trim()) {
+        newErrors.avatarUrl =
+          "Please provide a valid image URL for the avatar.";
+      }
     }
 
     if (formData.bannerUrl.trim() && !formData.bannerAlt.trim()) {
@@ -137,11 +132,12 @@ function EditProfile({ closeModal }) {
       newErrors.bannerUrl = "Please provide a URL for the banner.";
     }
 
-    if (
-      formData.bannerUrl.trim() &&
-      !isValidImageUrl(formData.bannerUrl.trim())
-    ) {
-      newErrors.bannerUrl = "Please provide a valid image URL for the banner.";
+    if (formData.bannerUrl.trim()) {
+      const validUrl = await getValidImageUrl(formData.bannerUrl.trim());
+      if (validUrl !== formData.bannerUrl.trim()) {
+        newErrors.bannerUrl =
+          "Please provide a valid image URL for the banner.";
+      }
     }
 
     if (formData.bio.trim().length > 160) {
@@ -160,7 +156,7 @@ function EditProfile({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!(await validateForm())) {
       alert("Validation failed");
       return;
     }
