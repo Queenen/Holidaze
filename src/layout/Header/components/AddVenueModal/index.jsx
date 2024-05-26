@@ -4,6 +4,7 @@ import { FormContainer, FormGroup } from "../../../../components/Form";
 import { Input, TextArea } from "../../../../components/Input";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { createVenue } from "../../../../services/authService/POST/createVenue";
+import { getValidImageUrl } from "../../../../utils/imageValidation"; // Import the new image validator
 
 function AddVenueModal({ closeModal }) {
   const [formData, setFormData] = useState({
@@ -29,40 +30,30 @@ function AddVenueModal({ closeModal }) {
   const { broadcastSessionChange } = useUserStatus();
   const [errors, setErrors] = useState({ apiErrors: [] });
 
-  const isValidImageUrl = (url) => {
-    try {
-      const parsedUrl = new URL(url);
-      return (
-        (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") &&
-        /\.(jpg|jpeg|png|gif)$/i.test(url)
-      );
-    } catch (e) {
-      return false;
-    }
-  };
-
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+    const newFormData = {
+      ...formData,
       [name]: type === "checkbox" ? checked : value,
-    }));
+    };
+    setFormData(newFormData);
 
-    setErrors((prevErrors) => {
-      const newErrors = { ...prevErrors };
-      if (name === "mediaUrls") {
-        const urls = value.split(",").map((url) => url.trim());
-        for (const url of urls) {
-          if (!isValidImageUrl(url)) {
-            newErrors.mediaUrls = "Please provide valid image URLs.";
-            break;
-          } else {
-            delete newErrors.mediaUrls;
-          }
+    const newErrors = { ...errors };
+
+    if (name === "mediaUrls") {
+      const urls = value.split(",").map((url) => url.trim());
+      for (const url of urls) {
+        const validUrl = await getValidImageUrl(url);
+        if (validUrl !== url) {
+          newErrors.mediaUrls = "Please provide valid image URLs.";
+          break;
+        } else {
+          delete newErrors.mediaUrls;
         }
       }
-      return newErrors;
-    });
+    }
+
+    setErrors(newErrors);
   };
 
   const validateForm = () => {
@@ -104,13 +95,13 @@ function AddVenueModal({ closeModal }) {
       return;
     }
 
-    const media = formData.mediaUrls
-      .split(",")
-      .filter((url) => url.trim())
-      .map((url) => ({
-        url: url.trim(),
+    const mediaUrls = formData.mediaUrls.split(",").map((url) => url.trim());
+    const media = await Promise.all(
+      mediaUrls.map(async (url) => ({
+        url: await getValidImageUrl(url),
         alt: formData.mediaAlt.trim(),
-      }));
+      }))
+    );
 
     const location = {
       address: formData.address,
