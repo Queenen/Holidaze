@@ -107,7 +107,7 @@ const VenueCarousel = ({
                   </p>
                 </div>
               </div>
-              <Carousel.Caption className="p-4 px-lg-5 d-flex flex-column gap-3">
+              <Carousel.Caption className="p-3 px-lg-5 d-flex flex-column gap-3">
                 {showEditButton && (
                   <div
                     className={styles.editBtn}
