@@ -71,7 +71,7 @@ function NavBar({ handleSignInOutClick, toggleAddVenueModal }) {
         </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav
-            className={`me-auto order-md-0 text-center gap-md-3`}
+            className={`me-auto order-md-0 text-center gap-md-3 mt-3 mt-md-0`}
             onClick={closeNavbar}
           >
             {role === "manager" && (
