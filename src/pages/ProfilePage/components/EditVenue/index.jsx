@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../../components/Button";
 import { useUserStatus } from "../../../../context/UserStatus";
 import { FormContainer, FormGroup } from "../../../../components/Form";
@@ -9,40 +9,68 @@ import { getValidImageUrl } from "../../../../utils/imageValidation";
 
 function EditVenue({ closeModal, venueData }) {
   const [formData, setFormData] = useState({
-    venueName: venueData.name || "",
-    description: venueData.description || "",
-    mediaUrls: venueData.media
-      ? venueData.media.map((media) => media.url).join(", ")
-      : "",
-    mediaAlt:
-      venueData.media && venueData.media.length > 0
-        ? venueData.media[0].alt
-        : "",
-    price: venueData.price !== undefined ? venueData.price.toString() : "",
-    maxGuests:
-      venueData.maxGuests !== undefined ? venueData.maxGuests.toString() : "",
-    rating: venueData.rating !== undefined ? venueData.rating.toString() : "",
-    wifi: venueData.meta ? venueData.meta.wifi : false,
-    parking: venueData.meta ? venueData.meta.parking : false,
-    breakfast: venueData.meta ? venueData.meta.breakfast : false,
-    pets: venueData.meta ? venueData.meta.pets : false,
-    address: venueData.location ? venueData.location.address : "",
-    city: venueData.location ? venueData.location.city : "",
-    zip: venueData.location ? venueData.location.zip : "",
-    country: venueData.location ? venueData.location.country : "",
-    continent: venueData.location ? venueData.location.continent : "",
-    lat:
-      venueData.location && venueData.location.lat !== null
-        ? venueData.location.lat.toString()
-        : "",
-    lng:
-      venueData.location && venueData.location.lng !== null
-        ? venueData.location.lng.toString()
-        : "",
+    venueName: "",
+    description: "",
+    mediaUrls: "",
+    mediaAlt: "",
+    price: "",
+    maxGuests: "",
+    rating: "",
+    wifi: false,
+    parking: false,
+    breakfast: false,
+    pets: false,
+    address: "",
+    city: "",
+    zip: "",
+    country: "",
+    continent: "",
+    lat: "",
+    lng: "",
   });
 
   const { broadcastSessionChange } = useUserStatus();
   const [errors, setErrors] = useState({ apiErrors: [] });
+
+  useEffect(() => {
+    if (venueData) {
+      setFormData({
+        venueName: venueData.name || "",
+        description: venueData.description || "",
+        mediaUrls: venueData.media
+          ? venueData.media.map((media) => media.url).join(", ")
+          : "",
+        mediaAlt:
+          venueData.media && venueData.media.length > 0
+            ? venueData.media[0].alt || venueData.name || ""
+            : "",
+        price: venueData.price !== undefined ? venueData.price.toString() : "",
+        maxGuests:
+          venueData.maxGuests !== undefined
+            ? venueData.maxGuests.toString()
+            : "",
+        rating:
+          venueData.rating !== undefined ? venueData.rating.toString() : "",
+        wifi: venueData.meta ? venueData.meta.wifi : false,
+        parking: venueData.meta ? venueData.meta.parking : false,
+        breakfast: venueData.meta ? venueData.meta.breakfast : false,
+        pets: venueData.meta ? venueData.meta.pets : false,
+        address: venueData.location ? venueData.location.address : "",
+        city: venueData.location ? venueData.location.city : "",
+        zip: venueData.location ? venueData.location.zip : "",
+        country: venueData.location ? venueData.location.country : "",
+        continent: venueData.location ? venueData.location.continent : "",
+        lat:
+          venueData.location && venueData.location.lat !== null
+            ? venueData.location.lat.toString()
+            : "",
+        lng:
+          venueData.location && venueData.location.lng !== null
+            ? venueData.location.lng.toString()
+            : "",
+      });
+    }
+  }, [venueData]);
 
   const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
@@ -137,11 +165,14 @@ function EditVenue({ closeModal, venueData }) {
       return;
     }
 
+    // Ensure mediaAlt is set to venueName if it's empty and mediaUrls has values
+    const mediaAlt = formData.mediaAlt.trim() || formData.venueName.trim();
+
     const mediaUrls = formData.mediaUrls.split(",").map((url) => url.trim());
     const media = await Promise.all(
       mediaUrls.map(async (url) => ({
         url: await getValidImageUrl(url),
-        alt: formData.mediaAlt.trim(),
+        alt: mediaAlt,
       }))
     );
 
@@ -228,6 +259,7 @@ function EditVenue({ closeModal, venueData }) {
       }
     }
   };
+
   return (
     <FormContainer
       formHeading="Edit Venue"
