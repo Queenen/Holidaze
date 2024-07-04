@@ -40,7 +40,7 @@ function AddVenueModal({ closeModal }) {
 
     const newErrors = { ...errors };
 
-    if (name === "mediaUrls") {
+    if (name === "mediaUrls" && value) {
       const urls = value.split(",").map((url) => url.trim());
       for (const url of urls) {
         const validUrl = await getValidImageUrl(url);
@@ -74,6 +74,8 @@ function AddVenueModal({ closeModal }) {
       newErrors.lat = "Latitude must be a valid number";
     if (formData.lng && isNaN(formData.lng))
       newErrors.lng = "Longitude must be a valid number";
+
+    // Only require mediaAlt if mediaUrls is provided
     if (formData.mediaUrls && !formData.mediaAlt.trim())
       newErrors.mediaAlt =
         "Media alt text is required when media URLs are provided";
@@ -95,7 +97,9 @@ function AddVenueModal({ closeModal }) {
       return;
     }
 
-    const mediaUrls = formData.mediaUrls.split(",").map((url) => url.trim());
+    const mediaUrls = formData.mediaUrls
+      ? formData.mediaUrls.split(",").map((url) => url.trim())
+      : [];
     const media = await Promise.all(
       mediaUrls.map(async (url) => ({
         url: await getValidImageUrl(url),
